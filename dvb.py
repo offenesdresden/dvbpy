@@ -37,7 +37,7 @@ def monitor(stop, offset=0, limit=10, city='Dresden'):
         ]
         
         
-def process_single_trip(songle_trip):
+def process_single_trip(single_trip):
     
     def process_leg(leg):
 
