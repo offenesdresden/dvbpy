@@ -84,8 +84,14 @@ dvb.find('zellesch')
 }]
 ```
 
-City is not always set, as it's not returned by the API for every stop.
+The fields `city` and `coords` are optional as they are not available for every stop. So don't forget to check for their existance first.
 
-By the way, stop names in queries are very forgiving. As long as the server sees it as a unique hit, it'll work. 'Helmholtzstraße' finds the same data as 'helmholtzstrasse', 'Nürnberger Platz' = 'nuernbergerplatz' etc.
+```python
+[stop for stop in dvb.find('Post') if 'city' in stop if stop['city'] == 'Dresden']
+```
 
-One last note, be sure not to run whatever it is you're building from inside the network of the TU Dresden. Calls to everything but `dvb.monitor()` will time out. This is unfortunately expected behavior.
+### Other stuff
+
+Stop names in queries are very forgiving. As long as the server sees it as a unique hit, it'll work. 'Helmholtzstraße' finds the same data as 'helmholtzstrasse', 'Nürnberger Platz' = 'nuernbergerplatz' etc.
+
+One last note, be sure not to run whatever it is you're building from inside the network of the TU Dresden. Calls to everything but `dvb.monitor()` will time out. This is unfortunately expected behavior as API calls from these IP ranges are blocked.

@@ -28,8 +28,7 @@ def monitor(stop, offset=0, limit=10, city='Dresden'):
     if response is None:
         return response
     else:
-        connections = [
-        {
+        connections = [{
             'line': line,
             'direction': direction,
             'arrival': arrival
@@ -72,37 +71,43 @@ def find(search, eduroam=False):
     if response is None:
         return response
     else:
-        results = []
-        # there's only a single result
-        if 'point' in response['stopFinder']['points']:
-            stop = response['stopFinder']['points']['point']
-            if 'object' in stop:
-                    results.append({
-                        'name': stop['object'],
-                        'city': stop['posttown'],
-                        'coords': convert_coords(stop['ref']['coords'])
-                    })
-            else:
-                results.append({
-                    'name': stop['name'],
-                    'coords': convert_coords(stop['ref']['coords'])
-                })
-        # multiple results
-        else:
-            for stop in response['stopFinder']['points']:
-                if 'object' in stop:
-                    results.append({
-                        'name': stop['object'],
-                        'city': stop['posttown'],
-                        'coords': convert_coords(stop['ref']['coords'])
-                    })
-                else:
-                    results.append({
-                        'name': stop['name'],
-                        'coords': convert_coords(stop['ref']['coords'])
-                    })
-
+        points = response['stopFinder']['points']
+        results = [
+            # single result
+            find_return_results(points['point'])
+        ] if 'point' in points else [
+            # multiple results
+            find_return_results(stop)
+            for stop in points
+        ]
         return results
+
+
+def find_return_results(stop):
+    if 'object' in stop and 'coords' in stop['ref']:
+        # city and coords are present
+        return {
+            'name': stop['object'],
+            'city': stop['posttown'],
+            'coords': convert_coords(stop['ref']['coords'])
+        }
+    elif 'object' in stop:
+        # city is present
+        return {
+            'name': stop['object'],
+            'city': stop['posttown']
+        }
+    elif 'coords' in stop['ref']:
+        # no city but coords
+        return {
+            'name': stop['name'],
+            'coords': convert_coords(stop['ref']['coords'])
+        }
+    else:
+        # neither city or coords
+        return {
+            'name': stop['name']
+        }
 
 
 def convert_coords(coords):
