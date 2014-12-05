@@ -28,12 +28,12 @@ dvb.monitor(stop, time_offset, num_results, city)
 [{
     'line': '85',
     'direction': 'Striesen',
-    'arrival': '5'
+    'arrival': 5
 },
 {
     'line': '85',
     'direction': 'Löbtau Süd',
-    'arrival': '7'
+    'arrival': 7
 }]
 ```
 

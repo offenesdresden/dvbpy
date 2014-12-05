@@ -31,7 +31,7 @@ def monitor(stop, offset=0, limit=10, city='Dresden'):
         connections = [{
             'line': line,
             'direction': direction,
-            'arrival': arrival
+            'arrival': int(arrival)
         } for line, direction, arrival in response]
         return connections
 
