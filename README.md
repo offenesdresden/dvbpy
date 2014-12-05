@@ -2,11 +2,7 @@
 
 An unofficial python module giving you a few options to query Dresden's public transport system for current bus- and tramstop data.
 
-Install and import the module to get started.
-
-```sh
-$ pip install dvbpy
-```
+dvbpy is not available on PyPI for the time being. Please download it yourself and import it to get started.
 
 ```python
 import dvb
@@ -44,7 +40,7 @@ dvb.monitor(stop, time_offset, num_results, city)
 You can also call `monitor()` without city, num_results or time_offset. City will default to Dresden.
 
 
-### Find routes - WIP
+### Find routes
 
 Query the server for possible routes from one stop to another. Returns multiple possible trips, the bus-/tramlines to be taken, the single stops, their arrival and departure times and their GPS coordinates.
 

@@ -38,7 +38,7 @@ def monitor(stop, offset=0, limit=10, city='Dresden'):
 
 def route(origin, destination, city_origin='Dresden', city_destination='Dresden', time=0, deparr='dep', eduroam=False):
     # VVO Online EFA TripRequest
-    # (GET http://efa.faplino.de/dvb/XML_TRIP_REQUEST2)
+    # (GET http://efa.vvo-online.de:8080/dvb/XML_TRIP_REQUEST2)
 
     if time == 0:
         time = datetime.now()
