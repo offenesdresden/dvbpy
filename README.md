@@ -50,25 +50,61 @@ Query the server for possible routes from one stop to another. Returns multiple 
 
 ```python
 import dvb
+import time
 
 origin = 'Zellescher Weg'
+city_origin = 'Dresden'
 destination = 'Postplatz'
-time = int(time.time())
+city_destination = 'Dresden'
+time = int(time.time()) # a unix timestamp is wanted here
 deparr = 'dep'  # set to 'arr' for arrival time, 'dep' for departure time
 
-dvb.route(origin, destination, time, deparr)
+dvb.route(origin, destination, city_origin, city_destination, time, deparr)
 ```
 
 ```python
-
+{
+    'trips': [{
+        'interchange': 0,
+        'nodes': [{
+            'line': '11',
+            'mode': 'Straßenbahn',
+            'direction': 'Dresden Bühlau Ullersdorfer Platz',
+            'path': [
+                [13.745754, 51.02816],
+                [13.745848, 51.028393],
+                ...
+            ],
+            'departure': {
+                'time': '18:01',
+                'stop': 'Zellescher Weg',
+                'coords': '13745754,51028160'
+            },
+            'arrival': {
+                'time': '18:14',
+                'stop': 'Postplatz',
+                'coords': '13733717,51050544'
+            }
+        }],
+        'duration': '00:13',
+        'departure': '18:01',
+        'arrival': '18:14'
+    },
+    ...
+    }],
+    'origin': 'Dresden, Zellescher Weg',
+    'destination': 'Dresden, Postplatz'
+}
 ```
 
-The path property contains a list consisting of all the coordinates describing the path of this node. Useful for example to draw on a map.
+Everything besides origin and destination is optional and only needs to be included if necessary. City for origin and destination defaults to Dresden, time to now and is handled as the departure time.
+
+The path property contains a list consisting of all the coordinates describing the path of this node. Useful for example if you want to draw it on a map.
 
 
 ### Find stops
 
-Search for a single stop in the network of the DVB. Returns an array of all possible hits including their GPS coordinates.
+Search for a single stop in the network of the DVB.
 
 ```python
 import dvb
