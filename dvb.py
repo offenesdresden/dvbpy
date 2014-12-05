@@ -88,7 +88,7 @@ def route(origin, destination, city_origin='Dresden', city_destination='Dresden'
             print('Failed to access VVO TripRequest. HTTP Error ' + r.status_code)
             response = None
     except requests.exceptions.Timeout:
-        print('Failed to access VVO TripRequest. Connection timed out. Are you in Eduroam?')
+        print('Failed to access VVO TripRequest. Connection timed out. Are you connected to eduroam?')
         response = None
     except requests.exceptions.RequestException as e:
         print('Failed to access VVO TripRequest. Request Exception ' + e)
@@ -186,7 +186,7 @@ def find(search, eduroam=False):
             print('Failed to access VVO StopFinder. HTTP Error ' + r.status_code)
             response = None
     except requests.exceptions.Timeout:
-        print('Failed to access VVO StopFinder. Connection timed out. Are you in Eduroam?')
+        print('Failed to access VVO StopFinder. Connection timed out. Are you connected to eduroam?')
         response = None
     except requests.exceptions.RequestException as e:
         print('Failed to access VVO StopFinder. Request Exception ' + e)

@@ -2,6 +2,8 @@
 
 An unofficial python module giving you a few options to query Dresden's public transport system for current bus- and tramstop data.
 
+In case you're looking for something like this for node.js, check out [dvbjs](https://github.com/kiliankoe/dvbjs).
+
 dvbpy is not available on PyPI for the time being. Please download it yourself and import it to get started.
 
 ```python
@@ -116,7 +118,7 @@ dvb.find('zellesch')
 }]
 ```
 
-The fields `city` and `coords` are optional as they are not available for every stop. So don't forget to check for their existance first.
+The fields `city` and `coords` are optional as they are not available for every stop. So don't forget to check for their existence first.
 
 ```python
 [stop for stop in dvb.find('Post') if 'city' in stop if stop['city'] == 'Dresden']
