@@ -240,3 +240,65 @@ def convert_coords(coords):
         coords[i] = int(coords[i])
         coords[i] /= 1000000
     return coords
+
+
+def pins(swlat, swlng, nelat, nelng, pintypes='stop'):
+    # DVB Map Pins (GET https://www.dvb.de/apps/map/pins)
+
+    try:
+        r = requests.get(
+            url='https://www.dvb.de/apps/map/pins',
+            params={
+                'showlines': 'true',
+                'swlat': swlat,
+                'swlng': swlng,
+                'nelat': nelat,
+                'nelng': nelng,
+                'pintypes': pintypes,
+            },
+        )
+        if r.status_code == 200:
+            response = json.loads(r.content.decode('utf-8'))
+        else:
+            print('Failed to access DVB Maps App. HTTP Error ' + r.status_code)
+            response = None
+    except requests.exceptions.RequestException as e:
+        print('Failed to access DVB Maps App. Request Exception ' + e)
+        response = None
+
+    if response is None:
+        return response
+    else:
+        return [pins_return_results(line, pintypes) for line in response]
+
+
+def pins_return_results(line, pintypes):
+    if pintypes == 'stop':
+        return {
+            'id': int(line.split('|||')[0]),
+            'name': line.split('||')[1].split('|')[1],
+            'coords': [
+                int(line.split('||')[1].split('|')[2]),
+                int(line.split('||')[1].split('|')[3])
+            ],
+            'connections': line.split('||')[2]
+        }
+    elif pintypes == 'platform':
+        return {
+            'name': line.split('||')[1].split('|')[0],
+            'coords': [
+                int(line.split('||')[1].split('|')[1]),
+                int(line.split('||')[1].split('|')[2])
+            ],
+            '?': line.split('||')[1].split('|')[3]
+        }
+    elif pintypes == 'poi' or pintypes == 'rentabike' or pintypes == 'ticketmachine' \
+            or pintypes == 'carsharing' or pintypes == 'parkandride':
+        return {
+            'id': ':'.join(line.split('||')[0].split(':')[:3]),
+            'name': line.split('||')[1].split('|')[0],
+            'coords': [
+                int(line.split('||')[1].split('|')[1]),
+                int(line.split('||')[1].split('|')[2])
+            ]
+        }

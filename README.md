@@ -100,7 +100,7 @@ Everything besides origin and destination is optional and only needs to be inclu
 The path property contains a list consisting of all the coordinates describing the path of this node. Useful for example if you want to draw it on a map.
 
 
-### Find stops
+### Find stops by name
 
 Search for a single stop in the network of the DVB.
 
@@ -124,8 +124,49 @@ The fields `city` and `coords` are optional as they are not available for every 
 [stop for stop in dvb.find('Post') if 'city' in stop if stop['city'] == 'Dresden']
 ```
 
+
+### Find other POIs with coordinates - WIP
+
+Search for all kinds of POIs inside a given square.
+```python
+import dvb
+
+southwest_lat = 5654791
+southwest_lng = 4620310
+northeast_lat = 5657216
+northeast_lng = 4623119
+
+pintypes = 'stop'
+# can be poi, platform, rentabike, ticketmachine, parkandride, carsharing or stop
+
+dvb.pins(southwest_lat, southwest_lng, northeast_lat, northeast_lng, pintypes)
+```
+
+`pintypes` defaults to 'stop' if no other input is given.
+
+```python
+[{
+    'id': 33000732,
+    'name': 'Mommsenstraße',
+    'coords': [5656132, 4621567],
+    'connections': '2:66#3:352~360~366'
+}, {
+    'id': 33000512,
+    'name': 'Stadtgutstraße',
+    'coords': [5655763, 4621918],
+    'connections': '2:85'
+}, {
+    'id': 33000728,
+    'name': 'Staats- und Universitätsbibliothek',
+    'coords': [5656319, 4622011],
+    'connections': '2:61~63'
+},...]
+```
+
+Unfortunately the coordinates (both input and output) are in a format called MDV which appears to be based on Gauß-Krüger, but are pretty much useless in this format. Hopefully this module will soon be able to convert them to something a little more useable.
+
 ### Other stuff
 
 Stop names in queries are very forgiving. As long as the server sees it as a unique hit, it'll work. 'Helmholtzstraße' finds the same data as 'helmholtzstrasse', 'Nürnberger Platz' = 'nuernbergerplatz' etc.
 
-One last note, be sure not to run whatever it is you're building from inside the network of the TU Dresden. Calls to everything but `dvb.monitor()` will time out. This is unfortunately expected behavior as API calls from these IP ranges are blocked.
+One last note, be sure not to run whatever it is you're building from inside the network of the TU Dresden. Calls to `dvb.route()` and `dvb.find()` will time out. This is unfortunately expected behavior as API calls from these IP ranges are blocked.
