@@ -1,6 +1,6 @@
 ## dvbpy
 
-An unofficial python module giving you a few options to query Dresden's public transport system for current bus- and tramstop data.
+An unofficial python module giving you a few options to query a collection of publicly accessible API methods for Dresden's public transport system.
 
 In case you're looking for something like this for node.js, check out [dvbjs](https://github.com/kiliankoe/dvbjs).
 

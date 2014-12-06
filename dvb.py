@@ -21,7 +21,7 @@ def monitor(stop, offset=0, limit=10, city='Dresden'):
         else:
             print('Failed to access VVO monitor. HTTP Error ' + r.status_code)
             response = None
-    except requests.exceptions.RequestException as e:
+    except requests.RequestException as e:
         print('Failed to access VVO monitor. Request Exception ' + e)
         response = None
 
@@ -118,10 +118,10 @@ def route(origin, destination, city_origin='Dresden', city_destination='Dresden'
         else:
             print('Failed to access VVO TripRequest. HTTP Error ' + r.status_code)
             response = None
-    except requests.exceptions.Timeout:
+    except requests.Timeout:
         print('Failed to access VVO TripRequest. Connection timed out. Are you connected to eduroam?')
         response = None
-    except requests.exceptions.RequestException as e:
+    except requests.RequestException as e:
         print('Failed to access VVO TripRequest. Request Exception ' + e)
         response = None
 
@@ -161,10 +161,10 @@ def find(search, eduroam=False):
         else:
             print('Failed to access VVO StopFinder. HTTP Error ' + r.status_code)
             response = None
-    except requests.exceptions.Timeout:
+    except requests.Timeout:
         print('Failed to access VVO StopFinder. Connection timed out. Are you connected to eduroam?')
         response = None
-    except requests.exceptions.RequestException as e:
+    except requests.RequestException as e:
         print('Failed to access VVO StopFinder. Request Exception ' + e)
         response = None
 
@@ -238,7 +238,7 @@ def pins(swlat, swlng, nelat, nelng, pintypes='stop'):
         else:
             print('Failed to access DVB map pins app. HTTP Error ' + r.status_code)
             response = None
-    except requests.exceptions.RequestException as e:
+    except requests.RequestException as e:
         print('Failed to access DVB map pins app. Request Exception ' + e)
         response = None
 
@@ -294,7 +294,7 @@ def poi_coords(poi_id):
         else:
             print('Failed to access DVB map coordinates app. HTTP Error ' + r.status_code)
             response = None
-    except requests.exceptions.RequestException as e:
+    except requests.RequestException as e:
         print('Failed to access DVB map coordinates app. Request Exception ' + e)
         response = None
 
@@ -319,7 +319,7 @@ def address(lat, lng):
         else:
             print('Failed to access DVB map address app. HTTP Error ' + r.status_code)
             response = None
-    except requests.exceptions.RequestException as e:
+    except requests.RequestException as e:
         print('Failed to access DVB map address app. Request Exception ' + e)
         response = None
 
