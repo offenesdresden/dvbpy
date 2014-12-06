@@ -210,8 +210,13 @@ def find_return_results(stop):
 
 
 def convert_coords(coords):
-    for i in coords.split(','):
-        yield int(i) / 1000000
+    # for i in coords.split(','):
+    #     yield int(i) / 1000000
+    coords = coords.split(',')
+    for i in range(len(coords)):
+        coords[i] = int(coords[i])
+        coords[i] /= 1000000
+    return coords
 
 
 def pins(swlat, swlng, nelat, nelng, pintypes='stop'):
