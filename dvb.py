@@ -35,12 +35,10 @@ def monitor(stop, offset=0, limit=10, city='Dresden'):
                 'arrival': int(arrival)
             } for line, direction, arrival in response
         ]
-        
-        
-def process_single_trip(single_trip):
-    
-    def process_leg(leg):
 
+
+def process_single_trip(single_trip):
+    def process_leg(leg):
         path = [convert_coords(a) for a in leg['path'].split(' ')] if 'path' in leg else None
 
         departure = {
@@ -63,7 +61,7 @@ def process_single_trip(single_trip):
             'arrival': arrival,
             'path': path
         }
-        
+
     return {
         'departure': single_trip['legs'][0]['points'][0]['dateTime']['time'],
         'arrival': single_trip['legs'][-1]['points'][-1]['dateTime']['time'],
@@ -73,16 +71,15 @@ def process_single_trip(single_trip):
     }
 
 
-
 def route(origin, destination, city_origin='Dresden', city_destination='Dresden', time=0, deparr='dep', eduroam=False):
     # VVO Online EFA TripRequest
     # (GET http://efa.vvo-online.de:8080/dvb/XML_TRIP_REQUEST2)
 
-    
     time = datetime.now() if time == 0 else datetime.fromtimestamp(int(datetime))
-    
-    url = 'http://efa.faplino.de/dvb/XML_TRIP_REQUEST2' if eduroam else 'http://efa.vvo-online.de:8080/dvb/XML_TRIP_REQUEST2'
-    
+
+    url = 'http://efa.faplino.de/dvb/XML_TRIP_REQUEST2' if eduroam \
+        else 'http://efa.vvo-online.de:8080/dvb/XML_TRIP_REQUEST2'
+
     try:
         r = requests.get(
             url=url,
@@ -143,8 +140,9 @@ def route(origin, destination, city_origin='Dresden', city_destination='Dresden'
 def find(search, eduroam=False):
     # VVO Online EFA Stopfinder
     # (GET http://efa.vvo-online.de:8080/dvb/XML_STOPFINDER_REQUEST)
-    url = 'http://efa.faplino.de/dvb/XML_STOPFINDER_REQUEST' if eduroam else 'http://efa.vvo-online.de:8080/dvb/XML_STOPFINDER_REQUEST'
-    
+    url = 'http://efa.faplino.de/dvb/XML_STOPFINDER_REQUEST' if eduroam \
+        else 'http://efa.vvo-online.de:8080/dvb/XML_STOPFINDER_REQUEST'
+
     try:
         r = requests.get(
             url=url,
