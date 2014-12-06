@@ -165,6 +165,45 @@ dvb.pins(southwest_lat, southwest_lng, northeast_lat, northeast_lng, pintypes)
 
 Unfortunately the coordinates (both input and output) are in a format called MDV which appears to be based on Gauß-Krüger, but are pretty much useless in this format. Hopefully this module will soon be able to convert them to something a little more useable.
 
+
+### Look up coordinates for POI - WIP
+
+Find the coordinates for a given POI id.
+```python
+import dvb
+
+dvb.poi_coords(33000755)
+```
+
+```python
+[5655203, 4623508]
+```
+
+Same coordinates issue as above.
+
+
+### Address for coordinates - WIP
+
+Look up the address for a given set of coordinates.
+```python
+import dvb
+
+lat = 5656350
+lng = 4622580
+
+dvb.address(lat, lng)
+```
+
+```python
+{
+    'address': 'Ackermannstraße 20',
+    'city': 'Dresden'
+}
+```
+
+Same coordinates issue as above
+
+
 ### Other stuff
 
 Stop names in queries are very forgiving. As long as the server sees it as a unique hit, it'll work. 'Helmholtzstraße' finds the same data as 'helmholtzstrasse', 'Nürnberger Platz' = 'nuernbergerplatz' etc.

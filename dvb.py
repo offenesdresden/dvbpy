@@ -216,7 +216,6 @@ def convert_coords(coords):
 
 def pins(swlat, swlng, nelat, nelng, pintypes='stop'):
     # DVB Map Pins (GET https://www.dvb.de/apps/map/pins)
-
     try:
         r = requests.get(
             url='https://www.dvb.de/apps/map/pins',
@@ -232,10 +231,10 @@ def pins(swlat, swlng, nelat, nelng, pintypes='stop'):
         if r.status_code == 200:
             response = json.loads(r.content.decode('utf-8'))
         else:
-            print('Failed to access DVB Maps App. HTTP Error ' + r.status_code)
+            print('Failed to access DVB map pins app. HTTP Error ' + r.status_code)
             response = None
     except requests.exceptions.RequestException as e:
-        print('Failed to access DVB Maps App. Request Exception ' + e)
+        print('Failed to access DVB map pins app. Request Exception ' + e)
         response = None
 
     if response is None:
@@ -274,3 +273,63 @@ def pins_return_results(line, pintypes):
                 int(line.split('||')[1].split('|')[2])
             ]
         }
+
+
+def poi_coords(poi_id):
+    # DVB Map Coordinates (GET https://www.dvb.de/apps/map/coordinates)
+    try:
+        r = requests.get(
+            url='https://www.dvb.de/apps/map/coordinates',
+            params={
+                'id': poi_id,
+            },
+        )
+        if r.status_code == 200:
+            response = json.loads(r.content.decode('utf-8'))
+        else:
+            print('Failed to access DVB map coordinates app. HTTP Error ' + r.status_code)
+            response = None
+    except requests.exceptions.RequestException as e:
+        print('Failed to access DVB map coordinates app. Request Exception ' + e)
+        response = None
+
+    if response is None:
+        return response
+    else:
+        return [int(i) for i in response.split('|')]
+
+
+def address(lat, lng):
+    # DVB Map Address (GET https://www.dvb.de/apps/map/address)
+    try:
+        r = requests.get(
+            url='https://www.dvb.de/apps/map/address',
+            params={
+                'lat': lat,
+                'lng': lng,
+            },
+        )
+        if r.status_code == 200:
+            response = json.loads(r.content.decode('utf-8'))
+        else:
+            print('Failed to access DVB map address app. HTTP Error ' + r.status_code)
+            response = None
+    except requests.exceptions.RequestException as e:
+        print('Failed to access DVB map address app. Request Exception ' + e)
+        response = None
+
+    if response is None:
+        return response
+    else:
+        return process_address(response)
+
+
+def process_address(line):
+    try:
+        return {
+            'city': line.split('|')[0],
+            'address': line.split('|')[1]
+        }
+    except Exception as e:
+        print('Address not found. Error: ' + e.__str__())
+        return None
