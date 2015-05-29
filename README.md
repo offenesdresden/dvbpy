@@ -10,6 +10,12 @@ dvbpy is not available on PyPI for the time being. Please download it yourself a
 import dvb
 ```
 
+### Requirements
+
+dvbpy needs __requests__ for HTTP-Communication and __pyproj__ for geocoordinate transformations
+* `pip install requests`
+* `pip install pyproj`
+
 
 ### Monitor a single stop
 
@@ -125,16 +131,16 @@ The fields `city` and `coords` are optional as they are not available for every 
 ```
 
 
-### Find other POIs with coordinates - WIP
+### Find other POIs with coordinates
 
 Search for all kinds of POIs inside a given square.
 ```python
 import dvb
 
-southwest_lat = 5654791
-southwest_lng = 4620310
-northeast_lat = 5657216
-northeast_lng = 4623119
+southwest_lat = 51.04120
+southwest_lng = 13.70106
+northeast_lat = 51.04615
+northeast_lng = 13.71368
 
 pintypes = 'stop'
 # can be poi, platform, rentabike, ticketmachine, parkandride, carsharing or stop
@@ -145,28 +151,39 @@ dvb.pins(southwest_lat, southwest_lng, northeast_lat, northeast_lng, pintypes)
 `pintypes` defaults to 'stop' if no other input is given.
 
 ```python
-[{
-    'id': 33000732,
-    'name': 'Mommsenstraße',
-    'coords': [5656132, 4621567],
-    'connections': '2:66#3:352~360~366'
-}, {
-    'id': 33000512,
-    'name': 'Stadtgutstraße',
-    'coords': [5655763, 4621918],
-    'connections': '2:85'
-}, {
-    'id': 33000728,
-    'name': 'Staats- und Universitätsbibliothek',
-    'coords': [5656319, 4622011],
-    'connections': '2:61~63'
-},...]
+[  
+   {  
+      "connections":"1:7~8~9~10~11~12",
+      "coords":{  
+         "lat":51.04373256804444,
+         "lng":13.70625638110702
+      },
+      "id":33000143,
+      "name":"Saxoniastraße"
+   },
+   {  
+      "connections":"2:61~90",
+      "coords":{  
+         "lat":51.04159705545878,
+         "lng":13.7053650905211
+      },
+      "id":33000700,
+      "name":"Ebertplatz"
+   },
+   {  
+      "connections":"1:6~7~8~9~10~11~12#2:61~63~90~A#3:333",
+      "coords":{  
+         "lat":51.04372841952444,
+         "lng":13.703461228676069
+      },
+      "id":33000144,
+      "name":"Tharandter Straße"
+   }, ...
+]
 ```
 
-Unfortunately the coordinates (both input and output) are in a format called MDV which appears to be based on Gauß-Krüger, but are pretty much useless in this format. Hopefully this module will soon be able to convert them to something a little more useable.
 
-
-### Look up coordinates for POI - WIP
+### Look up coordinates for POI
 
 Find the coordinates for a given POI id.
 ```python
@@ -176,10 +193,8 @@ dvb.poi_coords(33000755)
 ```
 
 ```python
-[5655203, 4623508]
+{'lat': 51.018745307424005, 'lng': 13.758700156062707}
 ```
-
-Same coordinates issue as above.
 
 
 ### Address for coordinates - WIP
@@ -188,20 +203,18 @@ Look up the address for a given set of coordinates.
 ```python
 import dvb
 
-lat = 5656350
-lng = 4622580
+lat = 51.04373
+lng = 13.70320
 
 dvb.address(lat, lng)
 ```
 
 ```python
 {
-    'address': 'Ackermannstraße 20',
-    'city': 'Dresden'
+	'city': u'Dresden',
+	'address': u'Kesselsdorfer Straße 1'
 }
 ```
-
-Same coordinates issue as above
 
 
 ### Other stuff
