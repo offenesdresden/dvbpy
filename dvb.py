@@ -1,5 +1,6 @@
 import requests
 import json
+import pyproj
 from datetime import datetime
 
 
@@ -222,6 +223,8 @@ def convert_coords(coords):
 def pins(swlat, swlng, nelat, nelng, pintypes='stop'):
     # DVB Map Pins (GET https://www.dvb.de/apps/map/pins)
     try:
+        swlat, swlng = wgs_to_gk4(swlat, swlng)
+        nelat, nelng = wgs_to_gk4(nelat, nelng)
         r = requests.get(
             url='https://www.dvb.de/apps/map/pins',
             params={
@@ -253,19 +256,19 @@ def pins_return_results(line, pintypes):
         return {
             'id': int(line.split('|||')[0]),
             'name': line.split('||')[1].split('|')[1],
-            'coords': [
+            'coords': pincoords_to_object(
                 int(line.split('||')[1].split('|')[2]),
                 int(line.split('||')[1].split('|')[3])
-            ],
+            ),
             'connections': line.split('||')[2]
         }
     elif pintypes == 'platform':
         return {
             'name': line.split('||')[1].split('|')[0],
-            'coords': [
+            'coords': pincoords_to_object(
                 int(line.split('||')[1].split('|')[1]),
                 int(line.split('||')[1].split('|')[2])
-            ],
+            ),
             '?': line.split('||')[1].split('|')[3]
         }
     elif pintypes == 'poi' or pintypes == 'rentabike' or pintypes == 'ticketmachine' \
@@ -273,10 +276,10 @@ def pins_return_results(line, pintypes):
         return {
             'id': ':'.join(line.split('||')[0].split(':')[:3]),
             'name': line.split('||')[1].split('|')[0],
-            'coords': [
+            'coords': pincoords_to_object(
                 int(line.split('||')[1].split('|')[1]),
                 int(line.split('||')[1].split('|')[2])
-            ]
+            )
         }
 
 
@@ -301,12 +304,18 @@ def poi_coords(poi_id):
     if response is None:
         return response
     else:
-        return [int(i) for i in response.split('|')]
+        coords = [int(i) for i in response.split('|')]
+        lat, lng = gk4_to_wgs(coords[0], coords[1])
+        return {
+            'lat': lat,
+            'lng': lng
+        }
 
 
 def address(lat, lng):
     # DVB Map Address (GET https://www.dvb.de/apps/map/address)
     try:
+        lat, lng = wgs_to_gk4(lat, lng)
         r = requests.get(
             url='https://www.dvb.de/apps/map/address',
             params={
@@ -338,3 +347,25 @@ def process_address(line):
     except Exception as e:
         print('Address not found. Error: ' + e.__str__())
         return None
+
+def wgs_to_gk4(lat, lng):
+    #transforms coordinates from WGS84 to Gauss-Kruger zone 4
+    wgs = pyproj.Proj(init='epsg:4326')
+    gk4 = pyproj.Proj(init='epsg:5678')
+    lngOut, latOut = pyproj.transform(wgs,gk4,lng,lat)
+    return int(latOut), int(lngOut)
+
+def gk4_to_wgs(lat, lng):
+    #transforms coordinates from Gauss-Kruger zone 4 to WGS84
+    wgs = pyproj.Proj(init='epsg:4326')
+    gk4 = pyproj.Proj(init='epsg:5678')
+    lngOut, latOut = pyproj.transform(gk4,wgs,lng,lat)
+    return latOut, lngOut
+
+def pincoords_to_object (lat, lng):
+    lat, lng = gk4_to_wgs(lat, lng)
+    return {
+        'lat': lat,
+        'lng': lng
+    }
+
