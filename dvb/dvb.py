@@ -20,21 +20,17 @@ def monitor(stop, offset=0, limit=10, city='Dresden'):
         if r.status_code == 200:
             response = json.loads(r.content.decode('utf-8'))
         else:
-            print('Failed to access VVO monitor. HTTP Error ' + r.status_code)
-            response = None
+            raise requests.HTTPError('HTTP Status: {}'.format(r.status_code))
     except requests.RequestException as e:
-        print('Failed to access VVO monitor. Request Exception ' + e)
+        print('Failed to access VVO monitor. Request Exception', e)
         response = None
 
-    if response is None:
-        return response
-    else:
-        return [
-            {
-                'line': line,
-                'direction': direction,
-                'arrival': 0 if arrival == '' else int(arrival)
-            } for line, direction, arrival in response
+    return None if response is None else [
+        {
+            'line': line,
+            'direction': direction,
+            'arrival': 0 if arrival == '' else int(arrival)
+        } for line, direction, arrival in response
         ]
 
 
@@ -117,25 +113,21 @@ def route(origin, destination, city_origin='Dresden', city_destination='Dresden'
         if r.status_code == 200:
             response = json.loads(r.content.decode('utf-8'))
         else:
-            print('Failed to access VVO TripRequest. HTTP Error ' + r.status_code)
-            response = None
+            raise requests.HTTPError('HTTP Status: {}'.format(r.status_code))
     except requests.Timeout:
         print('Failed to access VVO TripRequest. Connection timed out. Are you connected to eduroam?')
         response = None
     except requests.RequestException as e:
-        print('Failed to access VVO TripRequest. Request Exception ' + e)
+        print('Failed to access VVO TripRequest. Request Exception', e)
         response = None
 
-    if response is None:
-        return response
-    else:
-        return {
-            'origin': response['origin']['points']['point']['name'],
-            'destination': response['destination']['points']['point']['name'],
-            'trips': [
-                process_single_trip(single_trip) for single_trip in response['trips']
+    return None if response is None else {
+        'origin': response['origin']['points']['point']['name'],
+        'destination': response['destination']['points']['point']['name'],
+        'trips': [
+            process_single_trip(single_trip) for single_trip in response['trips']
             ]
-        }
+    }
 
 
 def find(search, eduroam=False):
@@ -160,13 +152,12 @@ def find(search, eduroam=False):
         if r.status_code == 200:
             response = json.loads(r.content.decode('utf-8'))
         else:
-            print('Failed to access VVO StopFinder. HTTP Error ' + r.status_code)
-            response = None
+            raise requests.HTTPError('HTTP Status: {}'.format(r.status_code))
     except requests.Timeout:
         print('Failed to access VVO StopFinder. Connection timed out. Are you connected to eduroam?')
         response = None
     except requests.RequestException as e:
-        print('Failed to access VVO StopFinder. Request Exception ' + e)
+        print('Failed to access VVO StopFinder. Request Exception', e)
         response = None
 
     if response is None:
@@ -180,7 +171,7 @@ def find(search, eduroam=False):
             # multiple results
             find_return_results(stop)
             for stop in points
-        ]
+            ]
 
 
 def find_return_results(stop):
@@ -239,16 +230,12 @@ def pins(swlat, swlng, nelat, nelng, pintypes='stop'):
         if r.status_code == 200:
             response = json.loads(r.content.decode('utf-8'))
         else:
-            print('Failed to access DVB map pins app. HTTP Error ' + r.status_code)
-            response = None
+            raise requests.HTTPError('HTTP Status: {}'.format(r.status_code))
     except requests.RequestException as e:
-        print('Failed to access DVB map pins app. Request Exception ' + e)
+        print('Failed to access DVB map pins app. Request Exception', e)
         response = None
 
-    if response is None:
-        return response
-    else:
-        return [pins_return_results(line, pintypes) for line in response]
+    return None if response is None else [pins_return_results(line, pintypes) for line in response]
 
 
 def pins_return_results(line, pintypes):
@@ -295,10 +282,9 @@ def poi_coords(poi_id):
         if r.status_code == 200:
             response = json.loads(r.content.decode('utf-8'))
         else:
-            print('Failed to access DVB map coordinates app. HTTP Error ' + r.status_code)
-            response = None
+            raise requests.HTTPError('HTTP Status: {}'.format(r.status_code))
     except requests.RequestException as e:
-        print('Failed to access DVB map coordinates app. Request Exception ' + e)
+        print('Failed to access DVB map coordinates app. Request Exception', e)
         response = None
 
     if response is None:
@@ -326,16 +312,12 @@ def address(lat, lng):
         if r.status_code == 200:
             response = json.loads(r.content.decode('utf-8'))
         else:
-            print('Failed to access DVB map address app. HTTP Error ' + r.status_code)
-            response = None
+            raise requests.HTTPError('HTTP Status: {}'.format(r.status_code))
     except requests.RequestException as e:
-        print('Failed to access DVB map address app. Request Exception ' + e)
+        print('Failed to access DVB map address app. Request Exception', e)
         response = None
 
-    if response is None:
-        return response
-    else:
-        return process_address(response)
+    return None if response is None else process_address(response)
 
 
 def process_address(line):
@@ -345,24 +327,27 @@ def process_address(line):
             'address': line.split('|')[1]
         }
     except Exception as e:
-        print('Address not found. Error: ' + e.__str__())
+        print('Address not found. Error:', e)
         return None
 
+
 def wgs_to_gk4(lat, lng):
-    #transforms coordinates from WGS84 to Gauss-Kruger zone 4
+    # transforms coordinates from WGS84 to Gauss-Kruger zone 4
     wgs = pyproj.Proj(init='epsg:4326')
     gk4 = pyproj.Proj(init='epsg:5678')
-    lngOut, latOut = pyproj.transform(wgs,gk4,lng,lat)
+    lngOut, latOut = pyproj.transform(wgs, gk4, lng, lat)
     return int(latOut), int(lngOut)
 
+
 def gk4_to_wgs(lat, lng):
-    #transforms coordinates from Gauss-Kruger zone 4 to WGS84
+    # transforms coordinates from Gauss-Kruger zone 4 to WGS84
     wgs = pyproj.Proj(init='epsg:4326')
     gk4 = pyproj.Proj(init='epsg:5678')
-    lngOut, latOut = pyproj.transform(gk4,wgs,lng,lat)
+    lngOut, latOut = pyproj.transform(gk4, wgs, lng, lat)
     return latOut, lngOut
 
-def pincoords_to_object (lat, lng):
+
+def pincoords_to_object(lat, lng):
     lat, lng = gk4_to_wgs(lat, lng)
     return {
         'lat': lat,
