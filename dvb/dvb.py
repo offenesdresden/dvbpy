@@ -33,7 +33,7 @@ def monitor(stop, offset=0, limit=10, city='Dresden'):
             {
                 'line': line,
                 'direction': direction,
-                'arrival': int(arrival)
+                'arrival': 0 if arrival == '' else int(arrival)
             } for line, direction, arrival in response
         ]
 
@@ -368,4 +368,3 @@ def pincoords_to_object (lat, lng):
         'lat': lat,
         'lng': lng
     }
-
