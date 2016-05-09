@@ -5,8 +5,16 @@ from datetime import datetime
 
 
 def monitor(stop, offset=0, limit=10, city='Dresden'):
-    # VVO Online Monitor
-    # (GET http://widgets.vvo-online.de/abfahrtsmonitor/Abfahrten.do)
+    """
+    VVO Online Monitor
+    (GET http://widgets.vvo-online.de/abfahrtsmonitor/Abfahrten.do)
+
+    :param stop: Name of Stop
+    :param offset: Minimum time of arrival
+    :param limit: Count of returned results
+    :param city: Name of City
+    :return: Dict of stops
+    """
     try:
         r = requests.get(
             url='http://widgets.vvo-online.de/abfahrtsmonitor/Abfahrten.do',
@@ -68,11 +76,23 @@ def process_single_trip(single_trip):
     }
 
 
-def route(origin, destination, city_origin='Dresden', city_destination='Dresden', time=0, deparr='dep', eduroam=False):
-    # VVO Online EFA TripRequest
-    # (GET http://efa.vvo-online.de:8080/dvb/XML_TRIP_REQUEST2)
+def route(origin, destination, city_origin='Dresden', city_destination='Dresden', time=None, deparr='dep', eduroam=False):
+    # TODO: add deparr description and check time description
+    """
+    VVO Online EFA TripRequest
+    (GET http://efa.vvo-online.de:8080/dvb/XML_TRIP_REQUEST2)
 
-    time = datetime.now() if time == 0 else datetime.fromtimestamp(int(datetime))
+    :param origin: Origin of route
+    :param destination: Destination of route
+    :param city_origin: City of origin
+    :param city_destination: City of destination
+    :param time: Timestamp of departure
+    :param deparr:
+    :param eduroam: Request from eduroam
+    :return: List of single trips
+    """
+
+    time = datetime.now() if time is None else datetime.fromtimestamp(int(datetime))
 
     url = 'http://efa.faplino.de/dvb/XML_TRIP_REQUEST2' if eduroam \
         else 'http://efa.vvo-online.de:8080/dvb/XML_TRIP_REQUEST2'
@@ -131,8 +151,15 @@ def route(origin, destination, city_origin='Dresden', city_destination='Dresden'
 
 
 def find(search, eduroam=False):
-    # VVO Online EFA Stopfinder
-    # (GET http://efa.vvo-online.de:8080/dvb/XML_STOPFINDER_REQUEST)
+    """
+    VVO Online EFA Stopfinder
+    (GET http://efa.vvo-online.de:8080/dvb/XML_STOPFINDER_REQUEST)
+
+    :param search: Stop to find
+    :param eduroam: Request from eduroam
+    :return: All matching stops
+    """
+
     url = 'http://efa.faplino.de/dvb/XML_STOPFINDER_REQUEST' if eduroam \
         else 'http://efa.vvo-online.de:8080/dvb/XML_STOPFINDER_REQUEST'
 
@@ -162,16 +189,16 @@ def find(search, eduroam=False):
 
     if response is None:
         return response
-    else:
-        points = response['stopFinder']['points']
-        return [
-            # single result
-            find_return_results(points['point'])
-        ] if 'point' in points else [
-            # multiple results
-            find_return_results(stop)
-            for stop in points
-            ]
+
+    points = response['stopFinder']['points']
+    return [
+        # single result
+        find_return_results(points['point'])
+    ] if 'point' in points else [
+        # multiple results
+        find_return_results(stop)
+        for stop in points
+        ]
 
 
 def find_return_results(stop):
@@ -212,7 +239,18 @@ def convert_coords(coords):
 
 
 def pins(swlat, swlng, nelat, nelng, pintypes='stop'):
-    # DVB Map Pins (GET https://www.dvb.de/apps/map/pins)
+    # TODO: complete docstrings
+    """
+    DVB Map Pins
+    (GET https://www.dvb.de/apps/map/pins)
+
+    :param swlat:
+    :param swlng:
+    :param nelat:
+    :param nelng:
+    :param pintypes:
+    :return:
+    """
     try:
         swlat, swlng = wgs_to_gk4(swlat, swlng)
         nelat, nelng = wgs_to_gk4(nelat, nelng)
@@ -271,7 +309,13 @@ def pins_return_results(line, pintypes):
 
 
 def poi_coords(poi_id):
-    # DVB Map Coordinates (GET https://www.dvb.de/apps/map/coordinates)
+    """
+    DVB Map Coordinates
+    (GET https://www.dvb.de/apps/map/coordinates)
+
+    :param poi_id: Id of poi
+    :return: Coordinates of poi
+    """
     try:
         r = requests.get(
             url='https://www.dvb.de/apps/map/coordinates',
@@ -289,17 +333,24 @@ def poi_coords(poi_id):
 
     if response is None:
         return response
-    else:
-        coords = [int(i) for i in response.split('|')]
-        lat, lng = gk4_to_wgs(coords[0], coords[1])
-        return {
-            'lat': lat,
-            'lng': lng
-        }
+
+    coords = [int(i) for i in response.split('|')]
+    lat, lng = gk4_to_wgs(coords[0], coords[1])
+    return {
+        'lat': lat,
+        'lng': lng
+    }
 
 
 def address(lat, lng):
-    # DVB Map Address (GET https://www.dvb.de/apps/map/address)
+    """
+    DVB Map Address
+    (GET https://www.dvb.de/apps/map/address)
+
+    :param lat: Latitude
+    :param lng: Longitude
+    :return: Dict of address
+    """
     try:
         lat, lng = wgs_to_gk4(lat, lng)
         r = requests.get(
