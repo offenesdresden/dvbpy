@@ -6,21 +6,21 @@ collection of publicly accessible API methods for Dresden's public
 transport system.
 
 In case you're looking for something like this for node.js, check out
-`dvbjs <https://github.com/kiliankoe/dvbjs>`__.
+`dvbjs <https://github.com/kiliankoe/dvbjs>`__. Or Swift?
+See `DVB <https://github.com/kiliankoe/DVB>`__.
 
-dvbpy is not available on PyPI for the time being. Please download it
-yourself and import it to get started.
+Get dvbpy from PyPi :)
+
+.. code:: shell
+
+    pip install dvbpy
+
+And then just import it.
 
 .. code:: python
 
     import dvb
 
-Requirements
-~~~~~~~~~~~~
-
-dvbpy needs **requests** for HTTP-Communication and **pyproj** for
-geocoordinate transformations \* ``pip install requests`` \*
-``pip install pyproj``
 
 Monitor a single stop
 ~~~~~~~~~~~~~~~~~~~~~
@@ -169,28 +169,28 @@ Search for all kinds of POIs inside a given square.
 
 .. code:: python
 
-    [  
-       {  
+    [
+       {
           "connections":"1:7~8~9~10~11~12",
-          "coords":{  
+          "coords":{
              "lat":51.04373256804444,
              "lng":13.70625638110702
           },
           "id":33000143,
           "name":"Saxoniastraße"
        },
-       {  
+       {
           "connections":"2:61~90",
-          "coords":{  
+          "coords":{
              "lat":51.04159705545878,
              "lng":13.7053650905211
           },
           "id":33000700,
           "name":"Ebertplatz"
        },
-       {  
+       {
           "connections":"1:6~7~8~9~10~11~12#2:61~63~90~A#3:333",
-          "coords":{  
+          "coords":{
              "lat":51.04372841952444,
              "lng":13.703461228676069
           },
