@@ -1,0 +1,613 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>dvb &mdash; dvbpy 1.1 documentation</title>
+  
+
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  
+  
+    <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  
+
+  
+
+  
+    <link rel="top" title="dvbpy 1.1 documentation" href="../index.html"/>
+        <link rel="up" title="Module code" href="index.html"/> 
+
+  
+  <script src="../_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="../index.html" class="icon icon-home"> dvbpy
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                1.1
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+                <ul>
+<li class="toctree-l1"><a class="reference internal" href="../README.html">dvbpy</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../Code.html">Functions</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+        <a href="../index.html">dvbpy</a>
+      </nav>
+
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href="../index.html">Docs</a> &raquo;</li>
+      
+          <li><a href="index.html">Module code</a> &raquo;</li>
+      
+    <li>dvb</li>
+      <li class="wy-breadcrumbs-aside">
+        
+          
+        
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for dvb</h1><div class="highlight"><pre>
+<span></span><span class="kn">import</span> <span class="nn">requests</span>
+<span class="kn">import</span> <span class="nn">json</span>
+<span class="kn">import</span> <span class="nn">pyproj</span>
+<span class="kn">from</span> <span class="nn">datetime</span> <span class="kn">import</span> <span class="n">datetime</span>
+
+
+<div class="viewcode-block" id="monitor"><a class="viewcode-back" href="../Code.html#dvb.monitor">[docs]</a><span class="k">def</span> <span class="nf">monitor</span><span class="p">(</span><span class="n">stop</span><span class="p">,</span> <span class="n">offset</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">limit</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">city</span><span class="o">=</span><span class="s1">&#39;Dresden&#39;</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">raw</span><span class="o">=</span><span class="bp">False</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    VVO Online Monitor</span>
+<span class="sd">    (GET http://widgets.vvo-online.de/abfahrtsmonitor/Abfahrten.do)</span>
+
+<span class="sd">    :param stop: Name of Stop</span>
+<span class="sd">    :param offset: Minimum time of arrival</span>
+<span class="sd">    :param limit: Count of returned results</span>
+<span class="sd">    :param city: Name of City</span>
+<span class="sd">    :param raw: Return raw response</span>
+<span class="sd">    :return: Dict of stops</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">r</span> <span class="o">=</span> <span class="n">requests</span><span class="o">.</span><span class="n">get</span><span class="p">(</span>
+            <span class="n">url</span><span class="o">=</span><span class="s1">&#39;http://widgets.vvo-online.de/abfahrtsmonitor/Abfahrten.do&#39;</span><span class="p">,</span>
+            <span class="n">params</span><span class="o">=</span><span class="p">{</span>
+                <span class="s1">&#39;ort&#39;</span><span class="p">:</span> <span class="n">city</span><span class="p">,</span>
+                <span class="s1">&#39;hst&#39;</span><span class="p">:</span> <span class="n">stop</span><span class="p">,</span>
+                <span class="s1">&#39;vz&#39;</span><span class="p">:</span> <span class="n">offset</span><span class="p">,</span>
+                <span class="s1">&#39;lim&#39;</span><span class="p">:</span> <span class="n">limit</span><span class="p">,</span>
+            <span class="p">},</span>
+        <span class="p">)</span>
+        <span class="k">if</span> <span class="n">r</span><span class="o">.</span><span class="n">status_code</span> <span class="o">==</span> <span class="mi">200</span><span class="p">:</span>
+            <span class="n">response</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span><span class="n">r</span><span class="o">.</span><span class="n">content</span><span class="o">.</span><span class="n">decode</span><span class="p">(</span><span class="s1">&#39;utf-8&#39;</span><span class="p">))</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="n">requests</span><span class="o">.</span><span class="n">HTTPError</span><span class="p">(</span><span class="s1">&#39;HTTP Status: {}&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">r</span><span class="o">.</span><span class="n">status_code</span><span class="p">))</span>
+    <span class="k">except</span> <span class="n">requests</span><span class="o">.</span><span class="n">RequestException</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+        <span class="k">print</span><span class="p">(</span><span class="s1">&#39;Failed to access VVO monitor. Request Exception&#39;</span><span class="p">,</span> <span class="n">e</span><span class="p">)</span>
+        <span class="n">response</span> <span class="o">=</span> <span class="bp">None</span>
+
+    <span class="k">if</span> <span class="n">response</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
+        <span class="k">return</span> <span class="bp">None</span>
+    <span class="k">return</span> <span class="n">response</span> <span class="k">if</span> <span class="n">raw</span> <span class="k">else</span> <span class="p">[</span>
+        <span class="p">{</span>
+            <span class="s1">&#39;line&#39;</span><span class="p">:</span> <span class="n">line</span><span class="p">,</span>
+            <span class="s1">&#39;direction&#39;</span><span class="p">:</span> <span class="n">direction</span><span class="p">,</span>
+            <span class="s1">&#39;arrival&#39;</span><span class="p">:</span> <span class="mi">0</span> <span class="k">if</span> <span class="n">arrival</span> <span class="o">==</span> <span class="s1">&#39;&#39;</span> <span class="k">else</span> <span class="nb">int</span><span class="p">(</span><span class="n">arrival</span><span class="p">)</span>
+        <span class="p">}</span> <span class="k">for</span> <span class="n">line</span><span class="p">,</span> <span class="n">direction</span><span class="p">,</span> <span class="n">arrival</span> <span class="ow">in</span> <span class="n">response</span>
+        <span class="p">]</span></div>
+
+
+<span class="k">def</span> <span class="nf">process_single_trip</span><span class="p">(</span><span class="n">single_trip</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">process_leg</span><span class="p">(</span><span class="n">leg</span><span class="p">):</span>
+        <span class="n">path</span> <span class="o">=</span> <span class="p">[</span><span class="n">convert_coords</span><span class="p">(</span><span class="n">a</span><span class="p">)</span> <span class="k">for</span> <span class="n">a</span> <span class="ow">in</span> <span class="n">leg</span><span class="p">[</span><span class="s1">&#39;path&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39; &#39;</span><span class="p">)]</span> <span class="k">if</span> <span class="s1">&#39;path&#39;</span> <span class="ow">in</span> <span class="n">leg</span> <span class="k">else</span> <span class="bp">None</span>
+
+        <span class="n">departure</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="s1">&#39;stop&#39;</span><span class="p">:</span> <span class="n">leg</span><span class="p">[</span><span class="s1">&#39;points&#39;</span><span class="p">][</span><span class="mi">0</span><span class="p">][</span><span class="s1">&#39;nameWO&#39;</span><span class="p">],</span>
+            <span class="s1">&#39;time&#39;</span><span class="p">:</span> <span class="n">leg</span><span class="p">[</span><span class="s1">&#39;points&#39;</span><span class="p">][</span><span class="mi">0</span><span class="p">][</span><span class="s1">&#39;dateTime&#39;</span><span class="p">][</span><span class="s1">&#39;time&#39;</span><span class="p">],</span>
+            <span class="s1">&#39;coords&#39;</span><span class="p">:</span> <span class="n">leg</span><span class="p">[</span><span class="s1">&#39;points&#39;</span><span class="p">][</span><span class="mi">0</span><span class="p">][</span><span class="s1">&#39;ref&#39;</span><span class="p">][</span><span class="s1">&#39;coords&#39;</span><span class="p">]</span>
+        <span class="p">}</span>
+
+        <span class="n">arrival</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="s1">&#39;stop&#39;</span><span class="p">:</span> <span class="n">leg</span><span class="p">[</span><span class="s1">&#39;points&#39;</span><span class="p">][</span><span class="mi">1</span><span class="p">][</span><span class="s1">&#39;nameWO&#39;</span><span class="p">],</span>
+            <span class="s1">&#39;time&#39;</span><span class="p">:</span> <span class="n">leg</span><span class="p">[</span><span class="s1">&#39;points&#39;</span><span class="p">][</span><span class="mi">1</span><span class="p">][</span><span class="s1">&#39;dateTime&#39;</span><span class="p">][</span><span class="s1">&#39;time&#39;</span><span class="p">],</span>
+            <span class="s1">&#39;coords&#39;</span><span class="p">:</span> <span class="n">leg</span><span class="p">[</span><span class="s1">&#39;points&#39;</span><span class="p">][</span><span class="mi">1</span><span class="p">][</span><span class="s1">&#39;ref&#39;</span><span class="p">][</span><span class="s1">&#39;coords&#39;</span><span class="p">]</span>
+        <span class="p">}</span>
+
+        <span class="k">return</span> <span class="p">{</span>
+            <span class="s1">&#39;mode&#39;</span><span class="p">:</span> <span class="n">leg</span><span class="p">[</span><span class="s1">&#39;mode&#39;</span><span class="p">][</span><span class="s1">&#39;product&#39;</span><span class="p">],</span>
+            <span class="s1">&#39;line&#39;</span><span class="p">:</span> <span class="n">leg</span><span class="p">[</span><span class="s1">&#39;mode&#39;</span><span class="p">][</span><span class="s1">&#39;number&#39;</span><span class="p">],</span>
+            <span class="s1">&#39;direction&#39;</span><span class="p">:</span> <span class="n">leg</span><span class="p">[</span><span class="s1">&#39;mode&#39;</span><span class="p">][</span><span class="s1">&#39;destination&#39;</span><span class="p">],</span>
+            <span class="s1">&#39;departure&#39;</span><span class="p">:</span> <span class="n">departure</span><span class="p">,</span>
+            <span class="s1">&#39;arrival&#39;</span><span class="p">:</span> <span class="n">arrival</span><span class="p">,</span>
+            <span class="s1">&#39;path&#39;</span><span class="p">:</span> <span class="n">path</span>
+        <span class="p">}</span>
+
+    <span class="k">return</span> <span class="p">{</span>
+        <span class="s1">&#39;departure&#39;</span><span class="p">:</span> <span class="n">single_trip</span><span class="p">[</span><span class="s1">&#39;legs&#39;</span><span class="p">][</span><span class="mi">0</span><span class="p">][</span><span class="s1">&#39;points&#39;</span><span class="p">][</span><span class="mi">0</span><span class="p">][</span><span class="s1">&#39;dateTime&#39;</span><span class="p">][</span><span class="s1">&#39;time&#39;</span><span class="p">],</span>
+        <span class="s1">&#39;arrival&#39;</span><span class="p">:</span> <span class="n">single_trip</span><span class="p">[</span><span class="s1">&#39;legs&#39;</span><span class="p">][</span><span class="o">-</span><span class="mi">1</span><span class="p">][</span><span class="s1">&#39;points&#39;</span><span class="p">][</span><span class="o">-</span><span class="mi">1</span><span class="p">][</span><span class="s1">&#39;dateTime&#39;</span><span class="p">][</span><span class="s1">&#39;time&#39;</span><span class="p">],</span>
+        <span class="s1">&#39;duration&#39;</span><span class="p">:</span> <span class="n">single_trip</span><span class="p">[</span><span class="s1">&#39;duration&#39;</span><span class="p">],</span>
+        <span class="s1">&#39;interchange&#39;</span><span class="p">:</span> <span class="nb">int</span><span class="p">(</span><span class="n">single_trip</span><span class="p">[</span><span class="s1">&#39;interchange&#39;</span><span class="p">]),</span>
+        <span class="s1">&#39;nodes&#39;</span><span class="p">:</span> <span class="p">[</span><span class="n">process_leg</span><span class="p">(</span><span class="n">leg</span><span class="p">)</span> <span class="k">for</span> <span class="n">leg</span> <span class="ow">in</span> <span class="n">single_trip</span><span class="p">[</span><span class="s1">&#39;legs&#39;</span><span class="p">]]</span>
+    <span class="p">}</span>
+
+
+<div class="viewcode-block" id="route"><a class="viewcode-back" href="../Code.html#dvb.route">[docs]</a><span class="k">def</span> <span class="nf">route</span><span class="p">(</span><span class="n">origin</span><span class="p">,</span> <span class="n">destination</span><span class="p">,</span> <span class="n">city_origin</span><span class="o">=</span><span class="s1">&#39;Dresden&#39;</span><span class="p">,</span> <span class="n">city_destination</span><span class="o">=</span><span class="s1">&#39;Dresden&#39;</span><span class="p">,</span> <span class="n">time</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span>
+          <span class="n">deparr</span><span class="o">=</span><span class="s1">&#39;dep&#39;</span><span class="p">,</span> <span class="n">eduroam</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">raw</span><span class="o">=</span><span class="bp">False</span><span class="p">):</span>
+    <span class="c1"># TODO: add deparr description and check time description</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    VVO Online EFA TripRequest</span>
+<span class="sd">    (GET http://efa.vvo-online.de:8080/dvb/XML_TRIP_REQUEST2)</span>
+
+<span class="sd">    :param origin: Origin of route</span>
+<span class="sd">    :param destination: Destination of route</span>
+<span class="sd">    :param city_origin: City of origin</span>
+<span class="sd">    :param city_destination: City of destination</span>
+<span class="sd">    :param time: Timestamp of departure</span>
+<span class="sd">    :param deparr:</span>
+<span class="sd">    :param eduroam: Request from eduroam</span>
+<span class="sd">    :param raw: Return raw response</span>
+<span class="sd">    :return: List of single trips</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">time</span> <span class="o">=</span> <span class="n">datetime</span><span class="o">.</span><span class="n">now</span><span class="p">()</span> <span class="k">if</span> <span class="n">time</span> <span class="ow">is</span> <span class="bp">None</span> <span class="k">else</span> <span class="n">datetime</span><span class="o">.</span><span class="n">fromtimestamp</span><span class="p">(</span><span class="nb">int</span><span class="p">(</span><span class="n">datetime</span><span class="p">))</span>
+
+    <span class="n">url</span> <span class="o">=</span> <span class="s1">&#39;http://efa.faplino.de/dvb/XML_TRIP_REQUEST2&#39;</span> <span class="k">if</span> <span class="n">eduroam</span> \
+        <span class="k">else</span> <span class="s1">&#39;http://efa.vvo-online.de:8080/dvb/XML_TRIP_REQUEST2&#39;</span>
+
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">r</span> <span class="o">=</span> <span class="n">requests</span><span class="o">.</span><span class="n">get</span><span class="p">(</span>
+            <span class="n">url</span><span class="o">=</span><span class="n">url</span><span class="p">,</span>
+            <span class="n">params</span><span class="o">=</span><span class="p">{</span>
+                <span class="s1">&#39;sessionID&#39;</span><span class="p">:</span> <span class="s1">&#39;0&#39;</span><span class="p">,</span>
+                <span class="s1">&#39;requestID&#39;</span><span class="p">:</span> <span class="s1">&#39;0&#39;</span><span class="p">,</span>
+                <span class="s1">&#39;language&#39;</span><span class="p">:</span> <span class="s1">&#39;de&#39;</span><span class="p">,</span>
+                <span class="s1">&#39;execInst&#39;</span><span class="p">:</span> <span class="s1">&#39;normal&#39;</span><span class="p">,</span>
+                <span class="s1">&#39;command&#39;</span><span class="p">:</span> <span class="s1">&#39;&#39;</span><span class="p">,</span>
+                <span class="s1">&#39;ptOptionsActive&#39;</span><span class="p">:</span> <span class="s1">&#39;-1&#39;</span><span class="p">,</span>
+                <span class="s1">&#39;itOptionsActive&#39;</span><span class="p">:</span> <span class="s1">&#39;&#39;</span><span class="p">,</span>
+                <span class="s1">&#39;itDateDay&#39;</span><span class="p">:</span> <span class="n">time</span><span class="o">.</span><span class="n">day</span><span class="p">,</span>
+                <span class="s1">&#39;itDateMonth&#39;</span><span class="p">:</span> <span class="n">time</span><span class="o">.</span><span class="n">month</span><span class="p">,</span>
+                <span class="s1">&#39;itDateYear&#39;</span><span class="p">:</span> <span class="n">time</span><span class="o">.</span><span class="n">year</span><span class="p">,</span>
+                <span class="s1">&#39;place_origin&#39;</span><span class="p">:</span> <span class="n">city_origin</span><span class="p">,</span>
+                <span class="s1">&#39;placeState_origin&#39;</span><span class="p">:</span> <span class="s1">&#39;empty&#39;</span><span class="p">,</span>
+                <span class="s1">&#39;type_origin&#39;</span><span class="p">:</span> <span class="s1">&#39;stop&#39;</span><span class="p">,</span>
+                <span class="s1">&#39;name_origin&#39;</span><span class="p">:</span> <span class="n">origin</span><span class="p">,</span>
+                <span class="s1">&#39;nameState_origin&#39;</span><span class="p">:</span> <span class="s1">&#39;empty&#39;</span><span class="p">,</span>
+                <span class="s1">&#39;place_destination&#39;</span><span class="p">:</span> <span class="n">city_destination</span><span class="p">,</span>
+                <span class="s1">&#39;placeState_destination&#39;</span><span class="p">:</span> <span class="s1">&#39;empty&#39;</span><span class="p">,</span>
+                <span class="s1">&#39;type_destination&#39;</span><span class="p">:</span> <span class="s1">&#39;stop&#39;</span><span class="p">,</span>
+                <span class="s1">&#39;name_destination&#39;</span><span class="p">:</span> <span class="n">destination</span><span class="p">,</span>
+                <span class="s1">&#39;nameState_destination&#39;</span><span class="p">:</span> <span class="s1">&#39;empty&#39;</span><span class="p">,</span>
+                <span class="s1">&#39;itdTripDateTimeDepArr&#39;</span><span class="p">:</span> <span class="n">deparr</span><span class="p">,</span>
+                <span class="s1">&#39;itdTimeHour&#39;</span><span class="p">:</span> <span class="n">time</span><span class="o">.</span><span class="n">hour</span><span class="p">,</span>
+                <span class="s1">&#39;idtTimeMinute&#39;</span><span class="p">:</span> <span class="n">time</span><span class="o">.</span><span class="n">minute</span><span class="p">,</span>
+                <span class="s1">&#39;outputFormat&#39;</span><span class="p">:</span> <span class="s1">&#39;JSON&#39;</span><span class="p">,</span>
+                <span class="s1">&#39;coordOutputFormat&#39;</span><span class="p">:</span> <span class="s1">&#39;WGS84&#39;</span><span class="p">,</span>
+                <span class="s1">&#39;coordOutputFormatTail&#39;</span><span class="p">:</span> <span class="s1">&#39;0&#39;</span><span class="p">,</span>
+            <span class="p">},</span>
+            <span class="n">timeout</span><span class="o">=</span><span class="mi">10</span>
+        <span class="p">)</span>
+        <span class="k">if</span> <span class="n">r</span><span class="o">.</span><span class="n">status_code</span> <span class="o">==</span> <span class="mi">200</span><span class="p">:</span>
+            <span class="n">response</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span><span class="n">r</span><span class="o">.</span><span class="n">content</span><span class="o">.</span><span class="n">decode</span><span class="p">(</span><span class="s1">&#39;utf-8&#39;</span><span class="p">))</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="n">requests</span><span class="o">.</span><span class="n">HTTPError</span><span class="p">(</span><span class="s1">&#39;HTTP Status: {}&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">r</span><span class="o">.</span><span class="n">status_code</span><span class="p">))</span>
+    <span class="k">except</span> <span class="n">requests</span><span class="o">.</span><span class="n">Timeout</span><span class="p">:</span>
+        <span class="k">print</span><span class="p">(</span><span class="s1">&#39;Failed to access VVO TripRequest. Connection timed out. Are you connected to eduroam?&#39;</span><span class="p">)</span>
+        <span class="n">response</span> <span class="o">=</span> <span class="bp">None</span>
+    <span class="k">except</span> <span class="n">requests</span><span class="o">.</span><span class="n">RequestException</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+        <span class="k">print</span><span class="p">(</span><span class="s1">&#39;Failed to access VVO TripRequest. Request Exception&#39;</span><span class="p">,</span> <span class="n">e</span><span class="p">)</span>
+        <span class="n">response</span> <span class="o">=</span> <span class="bp">None</span>
+
+    <span class="k">if</span> <span class="n">response</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
+        <span class="k">return</span> <span class="bp">None</span>
+
+    <span class="k">return</span> <span class="n">response</span> <span class="k">if</span> <span class="n">raw</span> <span class="k">else</span> <span class="p">{</span>
+        <span class="s1">&#39;origin&#39;</span><span class="p">:</span> <span class="n">response</span><span class="p">[</span><span class="s1">&#39;origin&#39;</span><span class="p">][</span><span class="s1">&#39;points&#39;</span><span class="p">][</span><span class="s1">&#39;point&#39;</span><span class="p">][</span><span class="s1">&#39;name&#39;</span><span class="p">],</span>
+        <span class="s1">&#39;destination&#39;</span><span class="p">:</span> <span class="n">response</span><span class="p">[</span><span class="s1">&#39;destination&#39;</span><span class="p">][</span><span class="s1">&#39;points&#39;</span><span class="p">][</span><span class="s1">&#39;point&#39;</span><span class="p">][</span><span class="s1">&#39;name&#39;</span><span class="p">],</span>
+        <span class="s1">&#39;trips&#39;</span><span class="p">:</span> <span class="p">[</span>
+            <span class="n">process_single_trip</span><span class="p">(</span><span class="n">single_trip</span><span class="p">)</span> <span class="k">for</span> <span class="n">single_trip</span> <span class="ow">in</span> <span class="n">response</span><span class="p">[</span><span class="s1">&#39;trips&#39;</span><span class="p">]</span>
+            <span class="p">]</span>
+    <span class="p">}</span></div>
+
+
+<div class="viewcode-block" id="find"><a class="viewcode-back" href="../Code.html#dvb.find">[docs]</a><span class="k">def</span> <span class="nf">find</span><span class="p">(</span><span class="n">search</span><span class="p">,</span> <span class="n">eduroam</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">raw</span><span class="o">=</span><span class="bp">False</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    VVO Online EFA Stopfinder</span>
+<span class="sd">    (GET http://efa.vvo-online.de:8080/dvb/XML_STOPFINDER_REQUEST)</span>
+
+<span class="sd">    :param search: Stop to find</span>
+<span class="sd">    :param eduroam: Request from eduroam</span>
+<span class="sd">    :param raw: Return raw response</span>
+<span class="sd">    :return: All matching stops</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">url</span> <span class="o">=</span> <span class="s1">&#39;http://efa.faplino.de/dvb/XML_STOPFINDER_REQUEST&#39;</span> <span class="k">if</span> <span class="n">eduroam</span> \
+        <span class="k">else</span> <span class="s1">&#39;http://efa.vvo-online.de:8080/dvb/XML_STOPFINDER_REQUEST&#39;</span>
+
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">r</span> <span class="o">=</span> <span class="n">requests</span><span class="o">.</span><span class="n">get</span><span class="p">(</span>
+            <span class="n">url</span><span class="o">=</span><span class="n">url</span><span class="p">,</span>
+            <span class="n">params</span><span class="o">=</span><span class="p">{</span>
+                <span class="s1">&#39;locationServerActive&#39;</span><span class="p">:</span> <span class="s1">&#39;1&#39;</span><span class="p">,</span>
+                <span class="s1">&#39;outputFormat&#39;</span><span class="p">:</span> <span class="s1">&#39;JSON&#39;</span><span class="p">,</span>
+                <span class="s1">&#39;type_sf&#39;</span><span class="p">:</span> <span class="s1">&#39;any&#39;</span><span class="p">,</span>
+                <span class="s1">&#39;name_sf&#39;</span><span class="p">:</span> <span class="n">search</span><span class="p">,</span>
+                <span class="s1">&#39;coordOutputFormat&#39;</span><span class="p">:</span> <span class="s1">&#39;WGS84&#39;</span><span class="p">,</span>
+                <span class="s1">&#39;coordOutputFormatTail&#39;</span><span class="p">:</span> <span class="s1">&#39;0&#39;</span><span class="p">,</span>
+            <span class="p">},</span>
+            <span class="n">timeout</span><span class="o">=</span><span class="mi">10</span>
+        <span class="p">)</span>
+        <span class="k">if</span> <span class="n">r</span><span class="o">.</span><span class="n">status_code</span> <span class="o">==</span> <span class="mi">200</span><span class="p">:</span>
+            <span class="n">response</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span><span class="n">r</span><span class="o">.</span><span class="n">content</span><span class="o">.</span><span class="n">decode</span><span class="p">(</span><span class="s1">&#39;utf-8&#39;</span><span class="p">))</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="n">requests</span><span class="o">.</span><span class="n">HTTPError</span><span class="p">(</span><span class="s1">&#39;HTTP Status: {}&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">r</span><span class="o">.</span><span class="n">status_code</span><span class="p">))</span>
+    <span class="k">except</span> <span class="n">requests</span><span class="o">.</span><span class="n">Timeout</span><span class="p">:</span>
+        <span class="k">print</span><span class="p">(</span><span class="s1">&#39;Failed to access VVO StopFinder. Connection timed out. Are you connected to eduroam?&#39;</span><span class="p">)</span>
+        <span class="n">response</span> <span class="o">=</span> <span class="bp">None</span>
+    <span class="k">except</span> <span class="n">requests</span><span class="o">.</span><span class="n">RequestException</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+        <span class="k">print</span><span class="p">(</span><span class="s1">&#39;Failed to access VVO StopFinder. Request Exception&#39;</span><span class="p">,</span> <span class="n">e</span><span class="p">)</span>
+        <span class="n">response</span> <span class="o">=</span> <span class="bp">None</span>
+
+    <span class="k">if</span> <span class="n">response</span> <span class="ow">is</span> <span class="bp">None</span> <span class="ow">or</span> <span class="n">raw</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">response</span>
+
+    <span class="n">points</span> <span class="o">=</span> <span class="n">response</span><span class="p">[</span><span class="s1">&#39;stopFinder&#39;</span><span class="p">][</span><span class="s1">&#39;points&#39;</span><span class="p">]</span>
+    <span class="k">return</span> <span class="p">[</span>
+        <span class="c1"># single result</span>
+        <span class="n">find_return_results</span><span class="p">(</span><span class="n">points</span><span class="p">[</span><span class="s1">&#39;point&#39;</span><span class="p">])</span>
+    <span class="p">]</span> <span class="k">if</span> <span class="s1">&#39;point&#39;</span> <span class="ow">in</span> <span class="n">points</span> <span class="k">else</span> <span class="p">[</span>
+        <span class="c1"># multiple results</span>
+        <span class="n">find_return_results</span><span class="p">(</span><span class="n">stop</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">stop</span> <span class="ow">in</span> <span class="n">points</span>
+        <span class="p">]</span></div>
+
+
+<span class="k">def</span> <span class="nf">find_return_results</span><span class="p">(</span><span class="n">stop</span><span class="p">):</span>
+    <span class="k">if</span> <span class="s1">&#39;object&#39;</span> <span class="ow">in</span> <span class="n">stop</span> <span class="ow">and</span> <span class="s1">&#39;coords&#39;</span> <span class="ow">in</span> <span class="n">stop</span><span class="p">[</span><span class="s1">&#39;ref&#39;</span><span class="p">]:</span>
+        <span class="c1"># city and coords</span>
+        <span class="k">return</span> <span class="p">{</span>
+            <span class="s1">&#39;name&#39;</span><span class="p">:</span> <span class="n">stop</span><span class="p">[</span><span class="s1">&#39;object&#39;</span><span class="p">],</span>
+            <span class="s1">&#39;city&#39;</span><span class="p">:</span> <span class="n">stop</span><span class="p">[</span><span class="s1">&#39;posttown&#39;</span><span class="p">],</span>
+            <span class="s1">&#39;coords&#39;</span><span class="p">:</span> <span class="n">convert_coords</span><span class="p">(</span><span class="n">stop</span><span class="p">[</span><span class="s1">&#39;ref&#39;</span><span class="p">][</span><span class="s1">&#39;coords&#39;</span><span class="p">])</span>
+        <span class="p">}</span>
+    <span class="k">elif</span> <span class="s1">&#39;object&#39;</span> <span class="ow">in</span> <span class="n">stop</span><span class="p">:</span>
+        <span class="c1"># only city, no coords</span>
+        <span class="k">return</span> <span class="p">{</span>
+            <span class="s1">&#39;name&#39;</span><span class="p">:</span> <span class="n">stop</span><span class="p">[</span><span class="s1">&#39;object&#39;</span><span class="p">],</span>
+            <span class="s1">&#39;city&#39;</span><span class="p">:</span> <span class="n">stop</span><span class="p">[</span><span class="s1">&#39;posttown&#39;</span><span class="p">]</span>
+        <span class="p">}</span>
+    <span class="k">elif</span> <span class="s1">&#39;coords&#39;</span> <span class="ow">in</span> <span class="n">stop</span><span class="p">[</span><span class="s1">&#39;ref&#39;</span><span class="p">]:</span>
+        <span class="c1"># only coords, no city</span>
+        <span class="k">return</span> <span class="p">{</span>
+            <span class="s1">&#39;name&#39;</span><span class="p">:</span> <span class="n">stop</span><span class="p">[</span><span class="s1">&#39;name&#39;</span><span class="p">],</span>
+            <span class="s1">&#39;coords&#39;</span><span class="p">:</span> <span class="n">convert_coords</span><span class="p">(</span><span class="n">stop</span><span class="p">[</span><span class="s1">&#39;ref&#39;</span><span class="p">][</span><span class="s1">&#39;coords&#39;</span><span class="p">])</span>
+        <span class="p">}</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="c1"># neither city or coords</span>
+        <span class="k">return</span> <span class="p">{</span>
+            <span class="s1">&#39;name&#39;</span><span class="p">:</span> <span class="n">stop</span><span class="p">[</span><span class="s1">&#39;name&#39;</span><span class="p">]</span>
+        <span class="p">}</span>
+
+
+<span class="k">def</span> <span class="nf">convert_coords</span><span class="p">(</span><span class="n">coords</span><span class="p">):</span>
+    <span class="c1"># for i in coords.split(&#39;,&#39;):</span>
+    <span class="c1">#     yield int(i) / 1000000</span>
+    <span class="n">coords</span> <span class="o">=</span> <span class="n">coords</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;,&#39;</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">coords</span><span class="p">)):</span>
+        <span class="n">coords</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">coords</span><span class="p">[</span><span class="n">i</span><span class="p">])</span>
+        <span class="n">coords</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">/=</span> <span class="mi">1000000</span>
+    <span class="k">return</span> <span class="n">coords</span>
+
+
+<div class="viewcode-block" id="pins"><a class="viewcode-back" href="../Code.html#dvb.pins">[docs]</a><span class="k">def</span> <span class="nf">pins</span><span class="p">(</span><span class="n">swlat</span><span class="p">,</span> <span class="n">swlng</span><span class="p">,</span> <span class="n">nelat</span><span class="p">,</span> <span class="n">nelng</span><span class="p">,</span> <span class="n">pintypes</span><span class="o">=</span><span class="s1">&#39;stop&#39;</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">raw</span><span class="o">=</span><span class="bp">False</span><span class="p">):</span>
+    <span class="c1"># TODO: complete docstrings</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    DVB Map Pins</span>
+<span class="sd">    (GET https://www.dvb.de/apps/map/pins)</span>
+
+<span class="sd">    :param swlat:</span>
+<span class="sd">    :param swlng:</span>
+<span class="sd">    :param nelat:</span>
+<span class="sd">    :param nelng:</span>
+<span class="sd">    :param pintypes:</span>
+<span class="sd">    :param raw: Return raw response</span>
+<span class="sd">    :return:</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">swlat</span><span class="p">,</span> <span class="n">swlng</span> <span class="o">=</span> <span class="n">wgs_to_gk4</span><span class="p">(</span><span class="n">swlat</span><span class="p">,</span> <span class="n">swlng</span><span class="p">)</span>
+        <span class="n">nelat</span><span class="p">,</span> <span class="n">nelng</span> <span class="o">=</span> <span class="n">wgs_to_gk4</span><span class="p">(</span><span class="n">nelat</span><span class="p">,</span> <span class="n">nelng</span><span class="p">)</span>
+        <span class="n">r</span> <span class="o">=</span> <span class="n">requests</span><span class="o">.</span><span class="n">get</span><span class="p">(</span>
+            <span class="n">url</span><span class="o">=</span><span class="s1">&#39;https://www.dvb.de/apps/map/pins&#39;</span><span class="p">,</span>
+            <span class="n">params</span><span class="o">=</span><span class="p">{</span>
+                <span class="s1">&#39;showlines&#39;</span><span class="p">:</span> <span class="s1">&#39;true&#39;</span><span class="p">,</span>
+                <span class="s1">&#39;swlat&#39;</span><span class="p">:</span> <span class="n">swlat</span><span class="p">,</span>
+                <span class="s1">&#39;swlng&#39;</span><span class="p">:</span> <span class="n">swlng</span><span class="p">,</span>
+                <span class="s1">&#39;nelat&#39;</span><span class="p">:</span> <span class="n">nelat</span><span class="p">,</span>
+                <span class="s1">&#39;nelng&#39;</span><span class="p">:</span> <span class="n">nelng</span><span class="p">,</span>
+                <span class="s1">&#39;pintypes&#39;</span><span class="p">:</span> <span class="n">pintypes</span><span class="p">,</span>
+            <span class="p">},</span>
+        <span class="p">)</span>
+        <span class="k">if</span> <span class="n">r</span><span class="o">.</span><span class="n">status_code</span> <span class="o">==</span> <span class="mi">200</span><span class="p">:</span>
+            <span class="n">response</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span><span class="n">r</span><span class="o">.</span><span class="n">content</span><span class="o">.</span><span class="n">decode</span><span class="p">(</span><span class="s1">&#39;utf-8&#39;</span><span class="p">))</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="n">requests</span><span class="o">.</span><span class="n">HTTPError</span><span class="p">(</span><span class="s1">&#39;HTTP Status: {}&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">r</span><span class="o">.</span><span class="n">status_code</span><span class="p">))</span>
+    <span class="k">except</span> <span class="n">requests</span><span class="o">.</span><span class="n">RequestException</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+        <span class="k">print</span><span class="p">(</span><span class="s1">&#39;Failed to access DVB map pins app. Request Exception&#39;</span><span class="p">,</span> <span class="n">e</span><span class="p">)</span>
+        <span class="n">response</span> <span class="o">=</span> <span class="bp">None</span>
+
+    <span class="k">if</span> <span class="n">response</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
+        <span class="k">return</span> <span class="bp">None</span>
+
+    <span class="k">return</span> <span class="n">response</span> <span class="k">if</span> <span class="n">raw</span> <span class="k">else</span> <span class="p">[</span><span class="n">pins_return_results</span><span class="p">(</span><span class="n">line</span><span class="p">,</span> <span class="n">pintypes</span><span class="p">)</span> <span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="n">response</span><span class="p">]</span></div>
+
+
+<span class="k">def</span> <span class="nf">pins_return_results</span><span class="p">(</span><span class="n">line</span><span class="p">,</span> <span class="n">pintypes</span><span class="p">):</span>
+    <span class="k">if</span> <span class="n">pintypes</span> <span class="o">==</span> <span class="s1">&#39;stop&#39;</span><span class="p">:</span>
+        <span class="k">return</span> <span class="p">{</span>
+            <span class="s1">&#39;id&#39;</span><span class="p">:</span> <span class="nb">int</span><span class="p">(</span><span class="n">line</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;|||&#39;</span><span class="p">)[</span><span class="mi">0</span><span class="p">]),</span>
+            <span class="s1">&#39;name&#39;</span><span class="p">:</span> <span class="n">line</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;||&#39;</span><span class="p">)[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;|&#39;</span><span class="p">)[</span><span class="mi">1</span><span class="p">],</span>
+            <span class="s1">&#39;coords&#39;</span><span class="p">:</span> <span class="n">pincoords_to_object</span><span class="p">(</span>
+                <span class="nb">int</span><span class="p">(</span><span class="n">line</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;||&#39;</span><span class="p">)[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;|&#39;</span><span class="p">)[</span><span class="mi">2</span><span class="p">]),</span>
+                <span class="nb">int</span><span class="p">(</span><span class="n">line</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;||&#39;</span><span class="p">)[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;|&#39;</span><span class="p">)[</span><span class="mi">3</span><span class="p">])</span>
+            <span class="p">),</span>
+            <span class="s1">&#39;connections&#39;</span><span class="p">:</span> <span class="n">line</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;||&#39;</span><span class="p">)[</span><span class="mi">2</span><span class="p">]</span>
+        <span class="p">}</span>
+    <span class="k">elif</span> <span class="n">pintypes</span> <span class="o">==</span> <span class="s1">&#39;platform&#39;</span><span class="p">:</span>
+        <span class="k">return</span> <span class="p">{</span>
+            <span class="s1">&#39;name&#39;</span><span class="p">:</span> <span class="n">line</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;||&#39;</span><span class="p">)[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;|&#39;</span><span class="p">)[</span><span class="mi">0</span><span class="p">],</span>
+            <span class="s1">&#39;coords&#39;</span><span class="p">:</span> <span class="n">pincoords_to_object</span><span class="p">(</span>
+                <span class="nb">int</span><span class="p">(</span><span class="n">line</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;||&#39;</span><span class="p">)[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;|&#39;</span><span class="p">)[</span><span class="mi">1</span><span class="p">]),</span>
+                <span class="nb">int</span><span class="p">(</span><span class="n">line</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;||&#39;</span><span class="p">)[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;|&#39;</span><span class="p">)[</span><span class="mi">2</span><span class="p">])</span>
+            <span class="p">),</span>
+            <span class="s1">&#39;?&#39;</span><span class="p">:</span> <span class="n">line</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;||&#39;</span><span class="p">)[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;|&#39;</span><span class="p">)[</span><span class="mi">3</span><span class="p">]</span>
+        <span class="p">}</span>
+    <span class="k">elif</span> <span class="n">pintypes</span> <span class="o">==</span> <span class="s1">&#39;poi&#39;</span> <span class="ow">or</span> <span class="n">pintypes</span> <span class="o">==</span> <span class="s1">&#39;rentabike&#39;</span> <span class="ow">or</span> <span class="n">pintypes</span> <span class="o">==</span> <span class="s1">&#39;ticketmachine&#39;</span> \
+            <span class="ow">or</span> <span class="n">pintypes</span> <span class="o">==</span> <span class="s1">&#39;carsharing&#39;</span> <span class="ow">or</span> <span class="n">pintypes</span> <span class="o">==</span> <span class="s1">&#39;parkandride&#39;</span><span class="p">:</span>
+        <span class="k">return</span> <span class="p">{</span>
+            <span class="s1">&#39;id&#39;</span><span class="p">:</span> <span class="s1">&#39;:&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">line</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;||&#39;</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;:&#39;</span><span class="p">)[:</span><span class="mi">3</span><span class="p">]),</span>
+            <span class="s1">&#39;name&#39;</span><span class="p">:</span> <span class="n">line</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;||&#39;</span><span class="p">)[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;|&#39;</span><span class="p">)[</span><span class="mi">0</span><span class="p">],</span>
+            <span class="s1">&#39;coords&#39;</span><span class="p">:</span> <span class="n">pincoords_to_object</span><span class="p">(</span>
+                <span class="nb">int</span><span class="p">(</span><span class="n">line</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;||&#39;</span><span class="p">)[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;|&#39;</span><span class="p">)[</span><span class="mi">1</span><span class="p">]),</span>
+                <span class="nb">int</span><span class="p">(</span><span class="n">line</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;||&#39;</span><span class="p">)[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;|&#39;</span><span class="p">)[</span><span class="mi">2</span><span class="p">])</span>
+            <span class="p">)</span>
+        <span class="p">}</span>
+
+
+<div class="viewcode-block" id="poi_coords"><a class="viewcode-back" href="../Code.html#dvb.poi_coords">[docs]</a><span class="k">def</span> <span class="nf">poi_coords</span><span class="p">(</span><span class="n">poi_id</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">raw</span><span class="o">=</span><span class="bp">False</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    DVB Map Coordinates</span>
+<span class="sd">    (GET https://www.dvb.de/apps/map/coordinates)</span>
+
+<span class="sd">    :param poi_id: Id of poi</span>
+<span class="sd">    :param raw: Return raw response</span>
+<span class="sd">    :return: Coordinates of poi</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">r</span> <span class="o">=</span> <span class="n">requests</span><span class="o">.</span><span class="n">get</span><span class="p">(</span>
+            <span class="n">url</span><span class="o">=</span><span class="s1">&#39;https://www.dvb.de/apps/map/coordinates&#39;</span><span class="p">,</span>
+            <span class="n">params</span><span class="o">=</span><span class="p">{</span>
+                <span class="s1">&#39;id&#39;</span><span class="p">:</span> <span class="n">poi_id</span><span class="p">,</span>
+            <span class="p">},</span>
+        <span class="p">)</span>
+        <span class="k">if</span> <span class="n">r</span><span class="o">.</span><span class="n">status_code</span> <span class="o">==</span> <span class="mi">200</span><span class="p">:</span>
+            <span class="n">response</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span><span class="n">r</span><span class="o">.</span><span class="n">content</span><span class="o">.</span><span class="n">decode</span><span class="p">(</span><span class="s1">&#39;utf-8&#39;</span><span class="p">))</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="n">requests</span><span class="o">.</span><span class="n">HTTPError</span><span class="p">(</span><span class="s1">&#39;HTTP Status: {}&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">r</span><span class="o">.</span><span class="n">status_code</span><span class="p">))</span>
+    <span class="k">except</span> <span class="n">requests</span><span class="o">.</span><span class="n">RequestException</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+        <span class="k">print</span><span class="p">(</span><span class="s1">&#39;Failed to access DVB map coordinates app. Request Exception&#39;</span><span class="p">,</span> <span class="n">e</span><span class="p">)</span>
+        <span class="n">response</span> <span class="o">=</span> <span class="bp">None</span>
+
+    <span class="k">if</span> <span class="n">response</span> <span class="ow">is</span> <span class="bp">None</span> <span class="ow">or</span> <span class="n">raw</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">response</span>
+
+    <span class="n">coords</span> <span class="o">=</span> <span class="p">[</span><span class="nb">int</span><span class="p">(</span><span class="n">i</span><span class="p">)</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">response</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;|&#39;</span><span class="p">)]</span>
+    <span class="n">lat</span><span class="p">,</span> <span class="n">lng</span> <span class="o">=</span> <span class="n">gk4_to_wgs</span><span class="p">(</span><span class="n">coords</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">coords</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+    <span class="k">return</span> <span class="p">{</span>
+        <span class="s1">&#39;lat&#39;</span><span class="p">:</span> <span class="n">lat</span><span class="p">,</span>
+        <span class="s1">&#39;lng&#39;</span><span class="p">:</span> <span class="n">lng</span>
+    <span class="p">}</span></div>
+
+
+<div class="viewcode-block" id="address"><a class="viewcode-back" href="../Code.html#dvb.address">[docs]</a><span class="k">def</span> <span class="nf">address</span><span class="p">(</span><span class="n">lat</span><span class="p">,</span> <span class="n">lng</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">raw</span><span class="o">=</span><span class="bp">False</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    DVB Map Address</span>
+<span class="sd">    (GET https://www.dvb.de/apps/map/address)</span>
+
+<span class="sd">    :param lat: Latitude</span>
+<span class="sd">    :param lng: Longitude</span>
+<span class="sd">    :param raw: Return raw response</span>
+<span class="sd">    :return: Dict of address</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">lat</span><span class="p">,</span> <span class="n">lng</span> <span class="o">=</span> <span class="n">wgs_to_gk4</span><span class="p">(</span><span class="n">lat</span><span class="p">,</span> <span class="n">lng</span><span class="p">)</span>
+        <span class="n">r</span> <span class="o">=</span> <span class="n">requests</span><span class="o">.</span><span class="n">get</span><span class="p">(</span>
+            <span class="n">url</span><span class="o">=</span><span class="s1">&#39;https://www.dvb.de/apps/map/address&#39;</span><span class="p">,</span>
+            <span class="n">params</span><span class="o">=</span><span class="p">{</span>
+                <span class="s1">&#39;lat&#39;</span><span class="p">:</span> <span class="n">lat</span><span class="p">,</span>
+                <span class="s1">&#39;lng&#39;</span><span class="p">:</span> <span class="n">lng</span><span class="p">,</span>
+            <span class="p">},</span>
+        <span class="p">)</span>
+        <span class="k">if</span> <span class="n">r</span><span class="o">.</span><span class="n">status_code</span> <span class="o">==</span> <span class="mi">200</span><span class="p">:</span>
+            <span class="n">response</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span><span class="n">r</span><span class="o">.</span><span class="n">content</span><span class="o">.</span><span class="n">decode</span><span class="p">(</span><span class="s1">&#39;utf-8&#39;</span><span class="p">))</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="n">requests</span><span class="o">.</span><span class="n">HTTPError</span><span class="p">(</span><span class="s1">&#39;HTTP Status: {}&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">r</span><span class="o">.</span><span class="n">status_code</span><span class="p">))</span>
+    <span class="k">except</span> <span class="n">requests</span><span class="o">.</span><span class="n">RequestException</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+        <span class="k">print</span><span class="p">(</span><span class="s1">&#39;Failed to access DVB map address app. Request Exception&#39;</span><span class="p">,</span> <span class="n">e</span><span class="p">)</span>
+        <span class="n">response</span> <span class="o">=</span> <span class="bp">None</span>
+
+    <span class="k">if</span> <span class="n">response</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
+        <span class="k">return</span> <span class="bp">None</span>
+    <span class="k">return</span> <span class="n">response</span> <span class="k">if</span> <span class="n">raw</span> <span class="k">else</span> <span class="n">process_address</span><span class="p">(</span><span class="n">response</span><span class="p">)</span></div>
+
+
+<span class="k">def</span> <span class="nf">process_address</span><span class="p">(</span><span class="n">line</span><span class="p">):</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="k">return</span> <span class="p">{</span>
+            <span class="s1">&#39;city&#39;</span><span class="p">:</span> <span class="n">line</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;|&#39;</span><span class="p">)[</span><span class="mi">0</span><span class="p">],</span>
+            <span class="s1">&#39;address&#39;</span><span class="p">:</span> <span class="n">line</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;|&#39;</span><span class="p">)[</span><span class="mi">1</span><span class="p">]</span>
+        <span class="p">}</span>
+    <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+        <span class="k">print</span><span class="p">(</span><span class="s1">&#39;Address not found. Error:&#39;</span><span class="p">,</span> <span class="n">e</span><span class="p">)</span>
+        <span class="k">return</span> <span class="bp">None</span>
+
+
+<span class="k">def</span> <span class="nf">wgs_to_gk4</span><span class="p">(</span><span class="n">lat</span><span class="p">,</span> <span class="n">lng</span><span class="p">):</span>
+    <span class="c1"># transforms coordinates from WGS84 to Gauss-Kruger zone 4</span>
+    <span class="n">wgs</span> <span class="o">=</span> <span class="n">pyproj</span><span class="o">.</span><span class="n">Proj</span><span class="p">(</span><span class="n">init</span><span class="o">=</span><span class="s1">&#39;epsg:4326&#39;</span><span class="p">)</span>
+    <span class="n">gk4</span> <span class="o">=</span> <span class="n">pyproj</span><span class="o">.</span><span class="n">Proj</span><span class="p">(</span><span class="n">init</span><span class="o">=</span><span class="s1">&#39;epsg:5678&#39;</span><span class="p">)</span>
+    <span class="n">lngOut</span><span class="p">,</span> <span class="n">latOut</span> <span class="o">=</span> <span class="n">pyproj</span><span class="o">.</span><span class="n">transform</span><span class="p">(</span><span class="n">wgs</span><span class="p">,</span> <span class="n">gk4</span><span class="p">,</span> <span class="n">lng</span><span class="p">,</span> <span class="n">lat</span><span class="p">)</span>
+    <span class="k">return</span> <span class="nb">int</span><span class="p">(</span><span class="n">latOut</span><span class="p">),</span> <span class="nb">int</span><span class="p">(</span><span class="n">lngOut</span><span class="p">)</span>
+
+
+<span class="k">def</span> <span class="nf">gk4_to_wgs</span><span class="p">(</span><span class="n">lat</span><span class="p">,</span> <span class="n">lng</span><span class="p">):</span>
+    <span class="c1"># transforms coordinates from Gauss-Kruger zone 4 to WGS84</span>
+    <span class="n">wgs</span> <span class="o">=</span> <span class="n">pyproj</span><span class="o">.</span><span class="n">Proj</span><span class="p">(</span><span class="n">init</span><span class="o">=</span><span class="s1">&#39;epsg:4326&#39;</span><span class="p">)</span>
+    <span class="n">gk4</span> <span class="o">=</span> <span class="n">pyproj</span><span class="o">.</span><span class="n">Proj</span><span class="p">(</span><span class="n">init</span><span class="o">=</span><span class="s1">&#39;epsg:5678&#39;</span><span class="p">)</span>
+    <span class="n">lngOut</span><span class="p">,</span> <span class="n">latOut</span> <span class="o">=</span> <span class="n">pyproj</span><span class="o">.</span><span class="n">transform</span><span class="p">(</span><span class="n">gk4</span><span class="p">,</span> <span class="n">wgs</span><span class="p">,</span> <span class="n">lng</span><span class="p">,</span> <span class="n">lat</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">latOut</span><span class="p">,</span> <span class="n">lngOut</span>
+
+
+<span class="k">def</span> <span class="nf">pincoords_to_object</span><span class="p">(</span><span class="n">lat</span><span class="p">,</span> <span class="n">lng</span><span class="p">):</span>
+    <span class="n">lat</span><span class="p">,</span> <span class="n">lng</span> <span class="o">=</span> <span class="n">gk4_to_wgs</span><span class="p">(</span><span class="n">lat</span><span class="p">,</span> <span class="n">lng</span><span class="p">)</span>
+    <span class="k">return</span> <span class="p">{</span>
+        <span class="s1">&#39;lat&#39;</span><span class="p">:</span> <span class="n">lat</span><span class="p">,</span>
+        <span class="s1">&#39;lng&#39;</span><span class="p">:</span> <span class="n">lng</span>
+    <span class="p">}</span>
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2016, kiliankoe.
+
+    </p>
+  </div> 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'../',
+            VERSION:'1.1',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true
+        };
+    </script>
+      <script type="text/javascript" src="../_static/jquery.js"></script>
+      <script type="text/javascript" src="../_static/underscore.js"></script>
+      <script type="text/javascript" src="../_static/doctools.js"></script>
+
+  
+
+  
+  
+    <script type="text/javascript" src="../_static/js/theme.js"></script>
+  
+
+  
+  
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.StickyNav.enable();
+      });
+  </script>
+   
+
+</body>
+</html>

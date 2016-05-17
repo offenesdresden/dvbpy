@@ -1,0 +1,424 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>dvbpy &mdash; dvbpy 1.1 documentation</title>
+  
+
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  
+  
+    <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  
+
+  
+
+  
+    <link rel="top" title="dvbpy 1.1 documentation" href="index.html"/>
+        <link rel="next" title="Functions" href="Code.html"/>
+        <link rel="prev" title="Welcome to dvb’s documentation!" href="index.html"/> 
+
+  
+  <script src="_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="index.html" class="icon icon-home"> dvbpy
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                1.1
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+                <ul class="current">
+<li class="toctree-l1 current"><a class="current reference internal" href="#">dvbpy</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#monitor-a-single-stop">Monitor a single stop</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#find-routes">Find routes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#find-stops-by-name">Find stops by name</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#find-other-pois-with-coordinates">Find other POIs with coordinates</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#look-up-coordinates-for-poi">Look up coordinates for POI</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#address-for-coordinates-wip">Address for coordinates - WIP</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#other-stuff">Other stuff</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="Code.html">Functions</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+        <a href="index.html">dvbpy</a>
+      </nav>
+
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          
+
+ 
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href="index.html">Docs</a> &raquo;</li>
+      
+    <li>dvbpy</li>
+      <li class="wy-breadcrumbs-aside">
+        
+          
+            <a href="_sources/README.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="dvbpy">
+<h1>dvbpy<a class="headerlink" href="#dvbpy" title="Permalink to this headline">¶</a></h1>
+<p>An unofficial python module giving you a few options to query a
+collection of publicly accessible API methods for Dresden&#8217;s public
+transport system.</p>
+<p>In case you&#8217;re looking for something like this for node.js, check out
+<a class="reference external" href="https://github.com/kiliankoe/dvbjs">dvbjs</a>. Or Swift?
+See <a class="reference external" href="https://github.com/kiliankoe/DVB">DVB</a>.</p>
+<p>Get dvbpy from PyPi :)</p>
+<div class="code shell highlight-default"><div class="highlight"><pre><span></span><span class="n">pip</span> <span class="n">install</span> <span class="n">dvbpy</span>
+</pre></div>
+</div>
+<p>And then just import it.</p>
+<div class="code python highlight-default"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">dvb</span>
+</pre></div>
+</div>
+<div class="section" id="monitor-a-single-stop">
+<h2>Monitor a single stop<a class="headerlink" href="#monitor-a-single-stop" title="Permalink to this headline">¶</a></h2>
+<p>Monitor a single stop to see every bus or tram leaving this stop after
+the specified time offset.</p>
+<div class="code python highlight-default"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">dvb</span>
+
+<span class="n">stop</span> <span class="o">=</span> <span class="s1">&#39;Helmholtzstraße&#39;</span>
+<span class="n">time_offset</span> <span class="o">=</span> <span class="mi">0</span> <span class="c1"># how many minutes in the future, 0 for now</span>
+<span class="n">num_results</span> <span class="o">=</span> <span class="mi">2</span>
+<span class="n">city</span> <span class="o">=</span> <span class="s1">&#39;Dresden&#39;</span>
+
+<span class="n">dvb</span><span class="o">.</span><span class="n">monitor</span><span class="p">(</span><span class="n">stop</span><span class="p">,</span> <span class="n">time_offset</span><span class="p">,</span> <span class="n">num_results</span><span class="p">,</span> <span class="n">city</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="code python highlight-default"><div class="highlight"><pre><span></span><span class="p">[{</span>
+    <span class="s1">&#39;line&#39;</span><span class="p">:</span> <span class="s1">&#39;85&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;direction&#39;</span><span class="p">:</span> <span class="s1">&#39;Striesen&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;arrival&#39;</span><span class="p">:</span> <span class="mi">5</span>
+<span class="p">},</span>
+<span class="p">{</span>
+    <span class="s1">&#39;line&#39;</span><span class="p">:</span> <span class="s1">&#39;85&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;direction&#39;</span><span class="p">:</span> <span class="s1">&#39;Löbtau Süd&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;arrival&#39;</span><span class="p">:</span> <span class="mi">7</span>
+<span class="p">}]</span>
+</pre></div>
+</div>
+<p>You can also call <code class="docutils literal"><span class="pre">monitor()</span></code> without city, num_results or
+time_offset. City will default to Dresden.</p>
+</div>
+<div class="section" id="find-routes">
+<h2>Find routes<a class="headerlink" href="#find-routes" title="Permalink to this headline">¶</a></h2>
+<p>Query the server for possible routes from one stop to another. Returns
+multiple possible trips, the bus-/tramlines to be taken, the single
+stops, their arrival and departure times and their GPS coordinates.</p>
+<div class="code python highlight-default"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">dvb</span>
+<span class="kn">import</span> <span class="nn">time</span>
+
+<span class="n">origin</span> <span class="o">=</span> <span class="s1">&#39;Zellescher Weg&#39;</span>
+<span class="n">city_origin</span> <span class="o">=</span> <span class="s1">&#39;Dresden&#39;</span>
+<span class="n">destination</span> <span class="o">=</span> <span class="s1">&#39;Postplatz&#39;</span>
+<span class="n">city_destination</span> <span class="o">=</span> <span class="s1">&#39;Dresden&#39;</span>
+<span class="n">time</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">())</span> <span class="c1"># a unix timestamp is wanted here</span>
+<span class="n">deparr</span> <span class="o">=</span> <span class="s1">&#39;dep&#39;</span>  <span class="c1"># set to &#39;arr&#39; for arrival time, &#39;dep&#39; for departure time</span>
+
+<span class="n">dvb</span><span class="o">.</span><span class="n">route</span><span class="p">(</span><span class="n">origin</span><span class="p">,</span> <span class="n">destination</span><span class="p">,</span> <span class="n">city_origin</span><span class="p">,</span> <span class="n">city_destination</span><span class="p">,</span> <span class="n">time</span><span class="p">,</span> <span class="n">deparr</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="code python highlight-default"><div class="highlight"><pre><span></span><span class="p">{</span>
+    <span class="s1">&#39;trips&#39;</span><span class="p">:</span> <span class="p">[{</span>
+        <span class="s1">&#39;interchange&#39;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
+        <span class="s1">&#39;nodes&#39;</span><span class="p">:</span> <span class="p">[{</span>
+            <span class="s1">&#39;line&#39;</span><span class="p">:</span> <span class="s1">&#39;11&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;mode&#39;</span><span class="p">:</span> <span class="s1">&#39;Straßenbahn&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;direction&#39;</span><span class="p">:</span> <span class="s1">&#39;Dresden Bühlau Ullersdorfer Platz&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;path&#39;</span><span class="p">:</span> <span class="p">[</span>
+                <span class="p">[</span><span class="mf">13.745754</span><span class="p">,</span> <span class="mf">51.02816</span><span class="p">],</span>
+                <span class="p">[</span><span class="mf">13.745848</span><span class="p">,</span> <span class="mf">51.028393</span><span class="p">],</span>
+                <span class="o">...</span>
+            <span class="p">],</span>
+            <span class="s1">&#39;departure&#39;</span><span class="p">:</span> <span class="p">{</span>
+                <span class="s1">&#39;time&#39;</span><span class="p">:</span> <span class="s1">&#39;18:01&#39;</span><span class="p">,</span>
+                <span class="s1">&#39;stop&#39;</span><span class="p">:</span> <span class="s1">&#39;Zellescher Weg&#39;</span><span class="p">,</span>
+                <span class="s1">&#39;coords&#39;</span><span class="p">:</span> <span class="s1">&#39;13745754,51028160&#39;</span>
+            <span class="p">},</span>
+            <span class="s1">&#39;arrival&#39;</span><span class="p">:</span> <span class="p">{</span>
+                <span class="s1">&#39;time&#39;</span><span class="p">:</span> <span class="s1">&#39;18:14&#39;</span><span class="p">,</span>
+                <span class="s1">&#39;stop&#39;</span><span class="p">:</span> <span class="s1">&#39;Postplatz&#39;</span><span class="p">,</span>
+                <span class="s1">&#39;coords&#39;</span><span class="p">:</span> <span class="s1">&#39;13733717,51050544&#39;</span>
+            <span class="p">}</span>
+        <span class="p">}],</span>
+        <span class="s1">&#39;duration&#39;</span><span class="p">:</span> <span class="s1">&#39;00:13&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;departure&#39;</span><span class="p">:</span> <span class="s1">&#39;18:01&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;arrival&#39;</span><span class="p">:</span> <span class="s1">&#39;18:14&#39;</span>
+    <span class="p">},</span>
+    <span class="o">...</span>
+    <span class="p">}],</span>
+    <span class="s1">&#39;origin&#39;</span><span class="p">:</span> <span class="s1">&#39;Dresden, Zellescher Weg&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;destination&#39;</span><span class="p">:</span> <span class="s1">&#39;Dresden, Postplatz&#39;</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>Everything besides origin and destination is optional and only needs to
+be included if necessary. City for origin and destination defaults to
+Dresden, time to now and is handled as the departure time.</p>
+<p>The path property contains a list consisting of all the coordinates
+describing the path of this node. Useful for example if you want to draw
+it on a map.</p>
+</div>
+<div class="section" id="find-stops-by-name">
+<h2>Find stops by name<a class="headerlink" href="#find-stops-by-name" title="Permalink to this headline">¶</a></h2>
+<p>Search for a single stop in the network of the DVB.</p>
+<div class="code python highlight-default"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">dvb</span>
+
+<span class="n">dvb</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="s1">&#39;zellesch&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="code python highlight-default"><div class="highlight"><pre><span></span><span class="p">[{</span>
+    <span class="s1">&#39;name&#39;</span><span class="p">:</span> <span class="s1">&#39;Zellescher Weg&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;city&#39;</span><span class="p">:</span> <span class="s1">&#39;Dresden&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;coords&#39;</span><span class="p">:</span> <span class="p">[</span><span class="mf">51.028366</span><span class="p">,</span> <span class="mf">13.745847</span><span class="p">]</span>
+<span class="p">}]</span>
+</pre></div>
+</div>
+<p>The fields <code class="docutils literal"><span class="pre">city</span></code> and <code class="docutils literal"><span class="pre">coords</span></code> are optional as they are not
+available for every stop. So don&#8217;t forget to check for their existence
+first.</p>
+<div class="code python highlight-default"><div class="highlight"><pre><span></span><span class="p">[</span><span class="n">stop</span> <span class="k">for</span> <span class="n">stop</span> <span class="ow">in</span> <span class="n">dvb</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="s1">&#39;Post&#39;</span><span class="p">)</span> <span class="k">if</span> <span class="s1">&#39;city&#39;</span> <span class="ow">in</span> <span class="n">stop</span> <span class="k">if</span> <span class="n">stop</span><span class="p">[</span><span class="s1">&#39;city&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="s1">&#39;Dresden&#39;</span><span class="p">]</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="find-other-pois-with-coordinates">
+<h2>Find other POIs with coordinates<a class="headerlink" href="#find-other-pois-with-coordinates" title="Permalink to this headline">¶</a></h2>
+<p>Search for all kinds of POIs inside a given square.</p>
+<div class="code python highlight-default"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">dvb</span>
+
+<span class="n">southwest_lat</span> <span class="o">=</span> <span class="mf">51.04120</span>
+<span class="n">southwest_lng</span> <span class="o">=</span> <span class="mf">13.70106</span>
+<span class="n">northeast_lat</span> <span class="o">=</span> <span class="mf">51.04615</span>
+<span class="n">northeast_lng</span> <span class="o">=</span> <span class="mf">13.71368</span>
+
+<span class="n">pintypes</span> <span class="o">=</span> <span class="s1">&#39;stop&#39;</span>
+<span class="c1"># can be poi, platform, rentabike, ticketmachine, parkandride, carsharing or stop</span>
+
+<span class="n">dvb</span><span class="o">.</span><span class="n">pins</span><span class="p">(</span><span class="n">southwest_lat</span><span class="p">,</span> <span class="n">southwest_lng</span><span class="p">,</span> <span class="n">northeast_lat</span><span class="p">,</span> <span class="n">northeast_lng</span><span class="p">,</span> <span class="n">pintypes</span><span class="p">)</span>
+</pre></div>
+</div>
+<p><code class="docutils literal"><span class="pre">pintypes</span></code> defaults to &#8216;stop&#8217; if no other input is given.</p>
+<div class="code python highlight-default"><div class="highlight"><pre><span></span><span class="p">[</span>
+   <span class="p">{</span>
+      <span class="s2">&quot;connections&quot;</span><span class="p">:</span><span class="s2">&quot;1:7~8~9~10~11~12&quot;</span><span class="p">,</span>
+      <span class="s2">&quot;coords&quot;</span><span class="p">:{</span>
+         <span class="s2">&quot;lat&quot;</span><span class="p">:</span><span class="mf">51.04373256804444</span><span class="p">,</span>
+         <span class="s2">&quot;lng&quot;</span><span class="p">:</span><span class="mf">13.70625638110702</span>
+      <span class="p">},</span>
+      <span class="s2">&quot;id&quot;</span><span class="p">:</span><span class="mi">33000143</span><span class="p">,</span>
+      <span class="s2">&quot;name&quot;</span><span class="p">:</span><span class="s2">&quot;Saxoniastraße&quot;</span>
+   <span class="p">},</span>
+   <span class="p">{</span>
+      <span class="s2">&quot;connections&quot;</span><span class="p">:</span><span class="s2">&quot;2:61~90&quot;</span><span class="p">,</span>
+      <span class="s2">&quot;coords&quot;</span><span class="p">:{</span>
+         <span class="s2">&quot;lat&quot;</span><span class="p">:</span><span class="mf">51.04159705545878</span><span class="p">,</span>
+         <span class="s2">&quot;lng&quot;</span><span class="p">:</span><span class="mf">13.7053650905211</span>
+      <span class="p">},</span>
+      <span class="s2">&quot;id&quot;</span><span class="p">:</span><span class="mi">33000700</span><span class="p">,</span>
+      <span class="s2">&quot;name&quot;</span><span class="p">:</span><span class="s2">&quot;Ebertplatz&quot;</span>
+   <span class="p">},</span>
+   <span class="p">{</span>
+      <span class="s2">&quot;connections&quot;</span><span class="p">:</span><span class="s2">&quot;1:6~7~8~9~10~11~12#2:61~63~90~A#3:333&quot;</span><span class="p">,</span>
+      <span class="s2">&quot;coords&quot;</span><span class="p">:{</span>
+         <span class="s2">&quot;lat&quot;</span><span class="p">:</span><span class="mf">51.04372841952444</span><span class="p">,</span>
+         <span class="s2">&quot;lng&quot;</span><span class="p">:</span><span class="mf">13.703461228676069</span>
+      <span class="p">},</span>
+      <span class="s2">&quot;id&quot;</span><span class="p">:</span><span class="mi">33000144</span><span class="p">,</span>
+      <span class="s2">&quot;name&quot;</span><span class="p">:</span><span class="s2">&quot;Tharandter Straße&quot;</span>
+   <span class="p">},</span> <span class="o">...</span>
+<span class="p">]</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="look-up-coordinates-for-poi">
+<h2>Look up coordinates for POI<a class="headerlink" href="#look-up-coordinates-for-poi" title="Permalink to this headline">¶</a></h2>
+<p>Find the coordinates for a given POI id.</p>
+<div class="code python highlight-default"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">dvb</span>
+
+<span class="n">dvb</span><span class="o">.</span><span class="n">poi_coords</span><span class="p">(</span><span class="mi">33000755</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="code python highlight-default"><div class="highlight"><pre><span></span><span class="p">{</span><span class="s1">&#39;lat&#39;</span><span class="p">:</span> <span class="mf">51.018745307424005</span><span class="p">,</span> <span class="s1">&#39;lng&#39;</span><span class="p">:</span> <span class="mf">13.758700156062707</span><span class="p">}</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="address-for-coordinates-wip">
+<h2>Address for coordinates - WIP<a class="headerlink" href="#address-for-coordinates-wip" title="Permalink to this headline">¶</a></h2>
+<p>Look up the address for a given set of coordinates.</p>
+<div class="code python highlight-default"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">dvb</span>
+
+<span class="n">lat</span> <span class="o">=</span> <span class="mf">51.04373</span>
+<span class="n">lng</span> <span class="o">=</span> <span class="mf">13.70320</span>
+
+<span class="n">dvb</span><span class="o">.</span><span class="n">address</span><span class="p">(</span><span class="n">lat</span><span class="p">,</span> <span class="n">lng</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="code python highlight-default"><div class="highlight"><pre><span></span><span class="p">{</span>
+    <span class="s1">&#39;city&#39;</span><span class="p">:</span> <span class="s1">u&#39;Dresden&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;address&#39;</span><span class="p">:</span> <span class="s1">u&#39;Kesselsdorfer Straße 1&#39;</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="other-stuff">
+<h2>Other stuff<a class="headerlink" href="#other-stuff" title="Permalink to this headline">¶</a></h2>
+<p>Stop names in queries are very forgiving. As long as the server sees it
+as a unique hit, it&#8217;ll work. &#8216;Helmholtzstraße&#8217; finds the same data as
+&#8216;helmholtzstrasse&#8217;, &#8216;Nürnberger Platz&#8217; = &#8216;nuernbergerplatz&#8217; etc.</p>
+<p>One last note, be sure not to run whatever it is you&#8217;re building from
+inside the network of the TU Dresden. Calls to <code class="docutils literal"><span class="pre">dvb.route()</span></code> and
+<code class="docutils literal"><span class="pre">dvb.find()</span></code> will time out. This is unfortunately expected behavior as
+API calls from these IP ranges are blocked.</p>
+</div>
+</div>
+
+
+           </div>
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="Code.html" class="btn btn-neutral float-right" title="Functions" accesskey="n">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="index.html" class="btn btn-neutral" title="Welcome to dvb’s documentation!" accesskey="p"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2016, kiliankoe.
+
+    </p>
+  </div> 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'./',
+            VERSION:'1.1',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true
+        };
+    </script>
+      <script type="text/javascript" src="_static/jquery.js"></script>
+      <script type="text/javascript" src="_static/underscore.js"></script>
+      <script type="text/javascript" src="_static/doctools.js"></script>
+
+  
+
+  
+  
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+  
+
+  
+  
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.StickyNav.enable();
+      });
+  </script>
+   
+
+</body>
+</html>
