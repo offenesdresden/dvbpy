@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 #
-# dvb documentation build configuration file, created by
+# dvbpy documentation build configuration file, created by
 # sphinx-quickstart on Tue May 17 18:22:48 2016.
 #
 # This file is execfile()d with the current directory set to its
@@ -54,7 +54,7 @@ source_suffix = '.rst'
 master_doc = 'index'
 
 # General information about the project.
-project = 'dvb'
+project = 'dvbpy'
 copyright = '2016, kiliankoe'
 author = 'kiliankoe'
 
@@ -98,7 +98,7 @@ exclude_patterns = ['_build', 'Thumbs.db', '.DS_Store']
 
 # If true, sectionauthor and moduleauthor directives will be shown in the
 # output. They are ignored by default.
-#show_authors = False
+show_authors = True
 
 # The name of the Pygments (syntax highlighting) style to use.
 pygments_style = 'sphinx'
@@ -182,7 +182,7 @@ html_static_path = ['_static']
 #html_show_sourcelink = True
 
 # If true, "Created using Sphinx" is shown in the HTML footer. Default is True.
-#html_show_sphinx = True
+html_show_sphinx = False
 
 # If true, "(C) Copyright ..." is shown in the HTML footer. Default is True.
 #html_show_copyright = True
