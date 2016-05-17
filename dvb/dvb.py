@@ -4,7 +4,7 @@ import pyproj
 from datetime import datetime
 
 
-def monitor(stop, offset=0, limit=10, city='Dresden'):
+def monitor(stop, offset=0, limit=10, city='Dresden', *, raw=False):
     """
     VVO Online Monitor
     (GET http://widgets.vvo-online.de/abfahrtsmonitor/Abfahrten.do)
@@ -13,6 +13,7 @@ def monitor(stop, offset=0, limit=10, city='Dresden'):
     :param offset: Minimum time of arrival
     :param limit: Count of returned results
     :param city: Name of City
+    :param raw: Return raw response
     :return: Dict of stops
     """
     try:
@@ -33,7 +34,9 @@ def monitor(stop, offset=0, limit=10, city='Dresden'):
         print('Failed to access VVO monitor. Request Exception', e)
         response = None
 
-    return None if response is None else [
+    if response is None:
+        return None
+    return response if raw else [
         {
             'line': line,
             'direction': direction,
@@ -76,7 +79,8 @@ def process_single_trip(single_trip):
     }
 
 
-def route(origin, destination, city_origin='Dresden', city_destination='Dresden', time=None, deparr='dep', eduroam=False):
+def route(origin, destination, city_origin='Dresden', city_destination='Dresden', time=None,
+          deparr='dep', eduroam=False, *, raw=False):
     # TODO: add deparr description and check time description
     """
     VVO Online EFA TripRequest
@@ -89,6 +93,7 @@ def route(origin, destination, city_origin='Dresden', city_destination='Dresden'
     :param time: Timestamp of departure
     :param deparr:
     :param eduroam: Request from eduroam
+    :param raw: Return raw response
     :return: List of single trips
     """
 
@@ -141,7 +146,10 @@ def route(origin, destination, city_origin='Dresden', city_destination='Dresden'
         print('Failed to access VVO TripRequest. Request Exception', e)
         response = None
 
-    return None if response is None else {
+    if response is None:
+        return None
+
+    return response if raw else {
         'origin': response['origin']['points']['point']['name'],
         'destination': response['destination']['points']['point']['name'],
         'trips': [
@@ -150,13 +158,14 @@ def route(origin, destination, city_origin='Dresden', city_destination='Dresden'
     }
 
 
-def find(search, eduroam=False):
+def find(search, eduroam=False, *, raw=False):
     """
     VVO Online EFA Stopfinder
     (GET http://efa.vvo-online.de:8080/dvb/XML_STOPFINDER_REQUEST)
 
     :param search: Stop to find
     :param eduroam: Request from eduroam
+    :param raw: Return raw response
     :return: All matching stops
     """
 
@@ -187,7 +196,7 @@ def find(search, eduroam=False):
         print('Failed to access VVO StopFinder. Request Exception', e)
         response = None
 
-    if response is None:
+    if response is None or raw:
         return response
 
     points = response['stopFinder']['points']
@@ -238,7 +247,7 @@ def convert_coords(coords):
     return coords
 
 
-def pins(swlat, swlng, nelat, nelng, pintypes='stop'):
+def pins(swlat, swlng, nelat, nelng, pintypes='stop', *, raw=False):
     # TODO: complete docstrings
     """
     DVB Map Pins
@@ -249,6 +258,7 @@ def pins(swlat, swlng, nelat, nelng, pintypes='stop'):
     :param nelat:
     :param nelng:
     :param pintypes:
+    :param raw: Return raw response
     :return:
     """
     try:
@@ -273,7 +283,10 @@ def pins(swlat, swlng, nelat, nelng, pintypes='stop'):
         print('Failed to access DVB map pins app. Request Exception', e)
         response = None
 
-    return None if response is None else [pins_return_results(line, pintypes) for line in response]
+    if response is None:
+        return None
+
+    return response if raw else [pins_return_results(line, pintypes) for line in response]
 
 
 def pins_return_results(line, pintypes):
@@ -308,12 +321,13 @@ def pins_return_results(line, pintypes):
         }
 
 
-def poi_coords(poi_id):
+def poi_coords(poi_id, *, raw=False):
     """
     DVB Map Coordinates
     (GET https://www.dvb.de/apps/map/coordinates)
 
     :param poi_id: Id of poi
+    :param raw: Return raw response
     :return: Coordinates of poi
     """
     try:
@@ -331,7 +345,7 @@ def poi_coords(poi_id):
         print('Failed to access DVB map coordinates app. Request Exception', e)
         response = None
 
-    if response is None:
+    if response is None or raw:
         return response
 
     coords = [int(i) for i in response.split('|')]
@@ -342,13 +356,14 @@ def poi_coords(poi_id):
     }
 
 
-def address(lat, lng):
+def address(lat, lng, *, raw=False):
     """
     DVB Map Address
     (GET https://www.dvb.de/apps/map/address)
 
     :param lat: Latitude
     :param lng: Longitude
+    :param raw: Return raw response
     :return: Dict of address
     """
     try:
@@ -368,7 +383,9 @@ def address(lat, lng):
         print('Failed to access DVB map address app. Request Exception', e)
         response = None
 
-    return None if response is None else process_address(response)
+    if response is None:
+        return None
+    return response if raw else process_address(response)
 
 
 def process_address(line):
