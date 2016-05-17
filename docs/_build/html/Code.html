@@ -1,0 +1,346 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Functions &mdash; dvbpy 1.1 documentation</title>
+  
+
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  
+  
+    <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  
+
+  
+
+  
+    <link rel="top" title="dvbpy 1.1 documentation" href="index.html"/>
+        <link rel="prev" title="dvbpy" href="README.html"/> 
+
+  
+  <script src="_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="index.html" class="icon icon-home"> dvbpy
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                1.1
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+                <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="README.html">dvbpy</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Functions</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+        <a href="index.html">dvbpy</a>
+      </nav>
+
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          
+
+ 
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href="index.html">Docs</a> &raquo;</li>
+      
+    <li>Functions</li>
+      <li class="wy-breadcrumbs-aside">
+        
+          
+            <a href="_sources/Code.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="module-dvb">
+<span id="functions"></span><h1>Functions<a class="headerlink" href="#module-dvb" title="Permalink to this headline">¶</a></h1>
+<dl class="function">
+<dt id="dvb.address">
+<code class="descclassname">dvb.</code><code class="descname">address</code><span class="sig-paren">(</span><em>lat</em>, <em>lng</em>, <em>*</em>, <em>raw=False</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/dvb.html#address"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#dvb.address" title="Permalink to this definition">¶</a></dt>
+<dd><p>DVB Map Address
+(GET <a class="reference external" href="https://www.dvb.de/apps/map/address">https://www.dvb.de/apps/map/address</a>)</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>lat</strong> &#8211; Latitude</li>
+<li><strong>lng</strong> &#8211; Longitude</li>
+<li><strong>raw</strong> &#8211; Return raw response</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">Dict of address</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="dvb.find">
+<code class="descclassname">dvb.</code><code class="descname">find</code><span class="sig-paren">(</span><em>search</em>, <em>eduroam=False</em>, <em>*</em>, <em>raw=False</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/dvb.html#find"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#dvb.find" title="Permalink to this definition">¶</a></dt>
+<dd><p>VVO Online EFA Stopfinder
+(GET <a class="reference external" href="http://efa.vvo-online.de:8080/dvb/XML_STOPFINDER_REQUEST">http://efa.vvo-online.de:8080/dvb/XML_STOPFINDER_REQUEST</a>)</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>search</strong> &#8211; Stop to find</li>
+<li><strong>eduroam</strong> &#8211; Request from eduroam</li>
+<li><strong>raw</strong> &#8211; Return raw response</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">All matching stops</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="dvb.monitor">
+<code class="descclassname">dvb.</code><code class="descname">monitor</code><span class="sig-paren">(</span><em>stop</em>, <em>offset=0</em>, <em>limit=10</em>, <em>city='Dresden'</em>, <em>*</em>, <em>raw=False</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/dvb.html#monitor"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#dvb.monitor" title="Permalink to this definition">¶</a></dt>
+<dd><p>VVO Online Monitor
+(GET <a class="reference external" href="http://widgets.vvo-online.de/abfahrtsmonitor/Abfahrten.do">http://widgets.vvo-online.de/abfahrtsmonitor/Abfahrten.do</a>)</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>stop</strong> &#8211; Name of Stop</li>
+<li><strong>offset</strong> &#8211; Minimum time of arrival</li>
+<li><strong>limit</strong> &#8211; Count of returned results</li>
+<li><strong>city</strong> &#8211; Name of City</li>
+<li><strong>raw</strong> &#8211; Return raw response</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">Dict of stops</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="dvb.pins">
+<code class="descclassname">dvb.</code><code class="descname">pins</code><span class="sig-paren">(</span><em>swlat</em>, <em>swlng</em>, <em>nelat</em>, <em>nelng</em>, <em>pintypes='stop'</em>, <em>*</em>, <em>raw=False</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/dvb.html#pins"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#dvb.pins" title="Permalink to this definition">¶</a></dt>
+<dd><p>DVB Map Pins
+(GET <a class="reference external" href="https://www.dvb.de/apps/map/pins">https://www.dvb.de/apps/map/pins</a>)</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>swlat</strong> &#8211; </li>
+<li><strong>swlng</strong> &#8211; </li>
+<li><strong>nelat</strong> &#8211; </li>
+<li><strong>nelng</strong> &#8211; </li>
+<li><strong>pintypes</strong> &#8211; </li>
+<li><strong>raw</strong> &#8211; Return raw response</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last"></p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="dvb.poi_coords">
+<code class="descclassname">dvb.</code><code class="descname">poi_coords</code><span class="sig-paren">(</span><em>poi_id</em>, <em>*</em>, <em>raw=False</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/dvb.html#poi_coords"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#dvb.poi_coords" title="Permalink to this definition">¶</a></dt>
+<dd><p>DVB Map Coordinates
+(GET <a class="reference external" href="https://www.dvb.de/apps/map/coordinates">https://www.dvb.de/apps/map/coordinates</a>)</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>poi_id</strong> &#8211; Id of poi</li>
+<li><strong>raw</strong> &#8211; Return raw response</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">Coordinates of poi</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="dvb.route">
+<code class="descclassname">dvb.</code><code class="descname">route</code><span class="sig-paren">(</span><em>origin</em>, <em>destination</em>, <em>city_origin='Dresden'</em>, <em>city_destination='Dresden'</em>, <em>time=None</em>, <em>deparr='dep'</em>, <em>eduroam=False</em>, <em>*</em>, <em>raw=False</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/dvb.html#route"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#dvb.route" title="Permalink to this definition">¶</a></dt>
+<dd><p>VVO Online EFA TripRequest
+(GET <a class="reference external" href="http://efa.vvo-online.de:8080/dvb/XML_TRIP_REQUEST2">http://efa.vvo-online.de:8080/dvb/XML_TRIP_REQUEST2</a>)</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>origin</strong> &#8211; Origin of route</li>
+<li><strong>destination</strong> &#8211; Destination of route</li>
+<li><strong>city_origin</strong> &#8211; City of origin</li>
+<li><strong>city_destination</strong> &#8211; City of destination</li>
+<li><strong>time</strong> &#8211; Timestamp of departure</li>
+<li><strong>deparr</strong> &#8211; </li>
+<li><strong>eduroam</strong> &#8211; Request from eduroam</li>
+<li><strong>raw</strong> &#8211; Return raw response</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">List of single trips</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</div>
+
+
+           </div>
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+      
+        <a href="README.html" class="btn btn-neutral" title="dvbpy" accesskey="p"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2016, kiliankoe.
+
+    </p>
+  </div> 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'./',
+            VERSION:'1.1',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true
+        };
+    </script>
+      <script type="text/javascript" src="_static/jquery.js"></script>
+      <script type="text/javascript" src="_static/underscore.js"></script>
+      <script type="text/javascript" src="_static/doctools.js"></script>
+
+  
+
+  
+  
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+  
+
+  
+  
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.StickyNav.enable();
+      });
+  </script>
+   
+
+</body>
+</html>
