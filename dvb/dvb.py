@@ -81,7 +81,6 @@ def process_single_trip(single_trip):
 
 def route(origin, destination, city_origin='Dresden', city_destination='Dresden', time=None,
           deparr='dep', eduroam=False, *, raw=False):
-    # TODO: add deparr description and check time description
     """
     VVO Online EFA TripRequest
     (GET http://efa.vvo-online.de:8080/dvb/XML_TRIP_REQUEST2)
@@ -90,12 +89,14 @@ def route(origin, destination, city_origin='Dresden', city_destination='Dresden'
     :param destination: Destination of route
     :param city_origin: City of origin
     :param city_destination: City of destination
-    :param time: Timestamp of departure
-    :param deparr:
+    :param time: Unix timestamp of departure
+    :param deparr: 'dep' for departure time (default), or 'arr' for arrival
     :param eduroam: Request from eduroam
     :param raw: Return raw response
     :return: List of single trips
     """
+
+    assert deparr == 'dep' or deparr == 'arr'
 
     time = datetime.now() if time is None else datetime.fromtimestamp(int(datetime))
 
@@ -248,16 +249,15 @@ def convert_coords(coords):
 
 
 def pins(swlat, swlng, nelat, nelng, pintypes='stop', *, raw=False):
-    # TODO: complete docstrings
     """
     DVB Map Pins
     (GET https://www.dvb.de/apps/map/pins)
 
-    :param swlat:
-    :param swlng:
-    :param nelat:
-    :param nelng:
-    :param pintypes:
+    :param swlat: South-West Bounding Box Latitude
+    :param swlng: South-West Bounding Box Longitude
+    :param nelat: North-East Bounding Box Latitude
+    :param nelng: North-East Bounding Box Longitude
+    :param pintypes: Types to search for, defaults to 'stop'
     :param raw: Return raw response
     :return:
     """
