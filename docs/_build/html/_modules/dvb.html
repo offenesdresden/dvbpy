@@ -211,7 +211,6 @@
 
 <div class="viewcode-block" id="route"><a class="viewcode-back" href="../Code.html#dvb.route">[docs]</a><span class="k">def</span> <span class="nf">route</span><span class="p">(</span><span class="n">origin</span><span class="p">,</span> <span class="n">destination</span><span class="p">,</span> <span class="n">city_origin</span><span class="o">=</span><span class="s1">&#39;Dresden&#39;</span><span class="p">,</span> <span class="n">city_destination</span><span class="o">=</span><span class="s1">&#39;Dresden&#39;</span><span class="p">,</span> <span class="n">time</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span>
           <span class="n">deparr</span><span class="o">=</span><span class="s1">&#39;dep&#39;</span><span class="p">,</span> <span class="n">eduroam</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">raw</span><span class="o">=</span><span class="bp">False</span><span class="p">):</span>
-    <span class="c1"># TODO: add deparr description and check time description</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    VVO Online EFA TripRequest</span>
 <span class="sd">    (GET http://efa.vvo-online.de:8080/dvb/XML_TRIP_REQUEST2)</span>
@@ -220,12 +219,14 @@
 <span class="sd">    :param destination: Destination of route</span>
 <span class="sd">    :param city_origin: City of origin</span>
 <span class="sd">    :param city_destination: City of destination</span>
-<span class="sd">    :param time: Timestamp of departure</span>
-<span class="sd">    :param deparr:</span>
+<span class="sd">    :param time: Unix timestamp of departure</span>
+<span class="sd">    :param deparr: &#39;dep&#39; for departure time (default), or &#39;arr&#39; for arrival</span>
 <span class="sd">    :param eduroam: Request from eduroam</span>
 <span class="sd">    :param raw: Return raw response</span>
 <span class="sd">    :return: List of single trips</span>
 <span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">assert</span> <span class="n">deparr</span> <span class="o">==</span> <span class="s1">&#39;dep&#39;</span> <span class="ow">or</span> <span class="n">deparr</span> <span class="o">==</span> <span class="s1">&#39;arr&#39;</span>
 
     <span class="n">time</span> <span class="o">=</span> <span class="n">datetime</span><span class="o">.</span><span class="n">now</span><span class="p">()</span> <span class="k">if</span> <span class="n">time</span> <span class="ow">is</span> <span class="bp">None</span> <span class="k">else</span> <span class="n">datetime</span><span class="o">.</span><span class="n">fromtimestamp</span><span class="p">(</span><span class="nb">int</span><span class="p">(</span><span class="n">datetime</span><span class="p">))</span>
 
@@ -378,16 +379,15 @@
 
 
 <div class="viewcode-block" id="pins"><a class="viewcode-back" href="../Code.html#dvb.pins">[docs]</a><span class="k">def</span> <span class="nf">pins</span><span class="p">(</span><span class="n">swlat</span><span class="p">,</span> <span class="n">swlng</span><span class="p">,</span> <span class="n">nelat</span><span class="p">,</span> <span class="n">nelng</span><span class="p">,</span> <span class="n">pintypes</span><span class="o">=</span><span class="s1">&#39;stop&#39;</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">raw</span><span class="o">=</span><span class="bp">False</span><span class="p">):</span>
-    <span class="c1"># TODO: complete docstrings</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    DVB Map Pins</span>
 <span class="sd">    (GET https://www.dvb.de/apps/map/pins)</span>
 
-<span class="sd">    :param swlat:</span>
-<span class="sd">    :param swlng:</span>
-<span class="sd">    :param nelat:</span>
-<span class="sd">    :param nelng:</span>
-<span class="sd">    :param pintypes:</span>
+<span class="sd">    :param swlat: South-West Bounding Box Latitude</span>
+<span class="sd">    :param swlng: South-West Bounding Box Longitude</span>
+<span class="sd">    :param nelat: North-East Bounding Box Latitude</span>
+<span class="sd">    :param nelng: North-East Bounding Box Longitude</span>
+<span class="sd">    :param pintypes: Types to search for, defaults to &#39;stop&#39;</span>
 <span class="sd">    :param raw: Return raw response</span>
 <span class="sd">    :return:</span>
 <span class="sd">    &quot;&quot;&quot;</span>
