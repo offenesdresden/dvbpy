@@ -2,6 +2,13 @@ import requests
 import json
 import pyproj
 from datetime import datetime
+import numpy as np
+
+class InterPos():
+    NO = None
+    FRONT = 0
+    MIDDLE = 1
+    BACK = 2
 
 
 def monitor(stop, offset=0, limit=10, city='Dresden', *, raw=False):
@@ -80,7 +87,7 @@ def process_single_trip(single_trip):
 
 
 def route(origin, destination, city_origin='Dresden', city_destination='Dresden', time=None,
-          deparr='dep', eduroam=False, *, raw=False):
+          deparr='dep', eduroam=False, recommendations=False, *, raw=False):
     """
     VVO Online EFA TripRequest
     (GET http://efa.vvo-online.de:8080/dvb/XML_TRIP_REQUEST2)
@@ -150,13 +157,58 @@ def route(origin, destination, city_origin='Dresden', city_destination='Dresden'
     if response is None:
         return None
 
-    return response if raw else {
+    if raw:
+        return response
+
+    prettified = {
         'origin': response['origin']['points']['point']['name'],
         'destination': response['destination']['points']['point']['name'],
         'trips': [
             process_single_trip(single_trip) for single_trip in response['trips']
             ]
     }
+
+    if recommendations:
+        prettified['trips'] = [interchange_prediction(trip) for trip in prettified['trips']]
+
+    return prettified
+
+def interchange_prediction(trip):
+
+    proj = pyproj.Proj(init='epsg:4326')
+
+    # getting all intersections (interchanges), contains exactly three points
+    interchanges = [(incoming['path'][-2], # last point en route of the arriving route
+                [int(x) / 1000000 for x in incoming['arrival']['coords'].split(',')], # stop point of the arriving route
+                [int(x) / 1000000 for x in outgoing['departure']['coords'].split(',')]) # start point of the departing route
+                for incoming, outgoing in zip(trip['nodes'][:-1], trip['nodes'][1:])]
+
+    # projecting into x/y
+    interchanges = [[proj(*point) for point in path] for path in interchanges]
+
+    for i, interchange in enumerate(interchanges):
+        a = np.subtract(interchange[1], interchange[0]) # direction of the arriving route
+
+        b = np.subtract(interchange[2], interchange[1]) # direction of the walk to the departing route
+
+        if not np.any(b):
+            # same point for interchange, so why do you even care?
+            trip['nodes'][i]['recommendation'] = InterPos.MIDDLE
+        else:
+            b = b / np.linalg.norm(b)
+            a = a / np.linalg.norm(a)
+
+            # angle between the two directions, 0° - 180°
+            deg = np.degrees(np.arccos(np.dot(a,b)))
+
+            if deg > 90:
+                # departing route is "behind" your arrriving route
+                trip['nodes'][i]['recommendation'] = InterPos.BACK
+            else:
+                # departing route is "in front" of your arriving route
+                trip['nodes'][i]['recommendation'] = InterPos.FRONT
+
+    return trip
 
 
 def find(search, eduroam=False, *, raw=False):
