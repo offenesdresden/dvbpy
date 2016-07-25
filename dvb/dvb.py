@@ -98,7 +98,7 @@ def route(origin, destination, city_origin='Dresden', city_destination='Dresden'
 
     assert deparr == 'dep' or deparr == 'arr'
 
-    time = datetime.now() if time is None else datetime.fromtimestamp(int(datetime))
+    time = datetime.now() if time is None else datetime.fromtimestamp(int(time))
 
     url = 'http://efa.faplino.de/dvb/XML_TRIP_REQUEST2' if eduroam \
         else 'http://efa.vvo-online.de:8080/dvb/XML_TRIP_REQUEST2'
