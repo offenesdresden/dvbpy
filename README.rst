@@ -9,6 +9,8 @@ In case you're looking for something like this for node.js, check out
 `dvbjs <https://github.com/kiliankoe/dvbjs>`__. Or Swift?
 See `DVB <https://github.com/kiliankoe/DVB>`__.
 
+The documentation is located `here <https://kiliankoe.github.io/dvbpy/>`__.
+
 Get dvbpy from PyPi :)
 
 .. code:: shell
