@@ -32,5 +32,5 @@ bus- and tramstop data in python',
     keywords='dvb vvo tram bus public transport dresden',
     packages=find_packages(),
 
-    install_requires=['requests==2.5.0', 'pyproj'],
+    install_requires=['requests==2.5.0', 'pyproj', 'numpy'],
 )
