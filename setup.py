@@ -10,7 +10,7 @@ with open(path.join(here, 'README.rst'), encoding='utf-8') as f:
 setup(
     name='dvb',
 
-    version='1.2',
+    version='1.3',
 
     description='query Dresden\'s public transport system for current \
 bus- and tramstop data in python',
@@ -32,5 +32,5 @@ bus- and tramstop data in python',
     keywords='dvb vvo tram bus public transport dresden',
     packages=find_packages(),
 
-    install_requires=['requests==2.5.0', 'pyproj'],
+    install_requires=['requests==2.5.0', 'pyproj', 'numpy'],
 )

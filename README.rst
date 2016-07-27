@@ -121,6 +121,14 @@ The path property contains a list consisting of all the coordinates
 describing the path of this node. Useful for example if you want to draw
 it on a map.
 
+If you use recommendations for interchanges, each of the nodes (except
+the last one)in every trip will have a ´recommendation´ field. The
+field will tell where you should enter this route to get an optimal
+interchange experience. This is of course only if there are any
+interchanges. The positions are ´0´ for front, ´1´ for middle and
+´2´ for back. If there are no recommendations available ´None´ is
+returned.
+
 Find stops by name
 ~~~~~~~~~~~~~~~~~~
 
