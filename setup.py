@@ -10,7 +10,7 @@ with open(path.join(here, 'README.rst'), encoding='utf-8') as f:
 setup(
     name='dvb',
 
-    version='1.1',
+    version='1.3',
 
     description='query Dresden\'s public transport system for current \
 bus- and tramstop data in python',
