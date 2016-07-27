@@ -131,10 +131,10 @@
 <span></span><span class="kn">import</span> <span class="nn">requests</span>
 <span class="kn">import</span> <span class="nn">json</span>
 <span class="kn">import</span> <span class="nn">pyproj</span>
-<span class="kn">from</span> <span class="nn">datetime</span> <span class="kn">import</span> <span class="n">datetime</span>
+<span class="kn">from</span> <span class="nn">datetime</span> <span class="k">import</span> <span class="n">datetime</span>
 
 
-<div class="viewcode-block" id="monitor"><a class="viewcode-back" href="../Code.html#dvb.monitor">[docs]</a><span class="k">def</span> <span class="nf">monitor</span><span class="p">(</span><span class="n">stop</span><span class="p">,</span> <span class="n">offset</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">limit</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">city</span><span class="o">=</span><span class="s1">&#39;Dresden&#39;</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">raw</span><span class="o">=</span><span class="bp">False</span><span class="p">):</span>
+<div class="viewcode-block" id="monitor"><a class="viewcode-back" href="../Code.html#dvb.monitor">[docs]</a><span class="k">def</span> <span class="nf">monitor</span><span class="p">(</span><span class="n">stop</span><span class="p">,</span> <span class="n">offset</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">limit</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">city</span><span class="o">=</span><span class="s1">&#39;Dresden&#39;</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">raw</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    VVO Online Monitor</span>
 <span class="sd">    (GET http://widgets.vvo-online.de/abfahrtsmonitor/Abfahrten.do)</span>
@@ -159,13 +159,13 @@
         <span class="k">if</span> <span class="n">r</span><span class="o">.</span><span class="n">status_code</span> <span class="o">==</span> <span class="mi">200</span><span class="p">:</span>
             <span class="n">response</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span><span class="n">r</span><span class="o">.</span><span class="n">content</span><span class="o">.</span><span class="n">decode</span><span class="p">(</span><span class="s1">&#39;utf-8&#39;</span><span class="p">))</span>
         <span class="k">else</span><span class="p">:</span>
-            <span class="k">raise</span> <span class="n">requests</span><span class="o">.</span><span class="n">HTTPError</span><span class="p">(</span><span class="s1">&#39;HTTP Status: {}&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">r</span><span class="o">.</span><span class="n">status_code</span><span class="p">))</span>
+            <span class="k">raise</span> <span class="n">requests</span><span class="o">.</span><span class="n">HTTPError</span><span class="p">(</span><span class="s1">&#39;HTTP Status: </span><span class="si">{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">r</span><span class="o">.</span><span class="n">status_code</span><span class="p">))</span>
     <span class="k">except</span> <span class="n">requests</span><span class="o">.</span><span class="n">RequestException</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
-        <span class="k">print</span><span class="p">(</span><span class="s1">&#39;Failed to access VVO monitor. Request Exception&#39;</span><span class="p">,</span> <span class="n">e</span><span class="p">)</span>
-        <span class="n">response</span> <span class="o">=</span> <span class="bp">None</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Failed to access VVO monitor. Request Exception&#39;</span><span class="p">,</span> <span class="n">e</span><span class="p">)</span>
+        <span class="n">response</span> <span class="o">=</span> <span class="kc">None</span>
 
-    <span class="k">if</span> <span class="n">response</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
-        <span class="k">return</span> <span class="bp">None</span>
+    <span class="k">if</span> <span class="n">response</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="k">return</span> <span class="kc">None</span>
     <span class="k">return</span> <span class="n">response</span> <span class="k">if</span> <span class="n">raw</span> <span class="k">else</span> <span class="p">[</span>
         <span class="p">{</span>
             <span class="s1">&#39;line&#39;</span><span class="p">:</span> <span class="n">line</span><span class="p">,</span>
@@ -177,7 +177,7 @@
 
 <span class="k">def</span> <span class="nf">process_single_trip</span><span class="p">(</span><span class="n">single_trip</span><span class="p">):</span>
     <span class="k">def</span> <span class="nf">process_leg</span><span class="p">(</span><span class="n">leg</span><span class="p">):</span>
-        <span class="n">path</span> <span class="o">=</span> <span class="p">[</span><span class="n">convert_coords</span><span class="p">(</span><span class="n">a</span><span class="p">)</span> <span class="k">for</span> <span class="n">a</span> <span class="ow">in</span> <span class="n">leg</span><span class="p">[</span><span class="s1">&#39;path&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39; &#39;</span><span class="p">)]</span> <span class="k">if</span> <span class="s1">&#39;path&#39;</span> <span class="ow">in</span> <span class="n">leg</span> <span class="k">else</span> <span class="bp">None</span>
+        <span class="n">path</span> <span class="o">=</span> <span class="p">[</span><span class="n">convert_coords</span><span class="p">(</span><span class="n">a</span><span class="p">)</span> <span class="k">for</span> <span class="n">a</span> <span class="ow">in</span> <span class="n">leg</span><span class="p">[</span><span class="s1">&#39;path&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39; &#39;</span><span class="p">)]</span> <span class="k">if</span> <span class="s1">&#39;path&#39;</span> <span class="ow">in</span> <span class="n">leg</span> <span class="k">else</span> <span class="kc">None</span>
 
         <span class="n">departure</span> <span class="o">=</span> <span class="p">{</span>
             <span class="s1">&#39;stop&#39;</span><span class="p">:</span> <span class="n">leg</span><span class="p">[</span><span class="s1">&#39;points&#39;</span><span class="p">][</span><span class="mi">0</span><span class="p">][</span><span class="s1">&#39;nameWO&#39;</span><span class="p">],</span>
@@ -209,8 +209,8 @@
     <span class="p">}</span>
 
 
-<div class="viewcode-block" id="route"><a class="viewcode-back" href="../Code.html#dvb.route">[docs]</a><span class="k">def</span> <span class="nf">route</span><span class="p">(</span><span class="n">origin</span><span class="p">,</span> <span class="n">destination</span><span class="p">,</span> <span class="n">city_origin</span><span class="o">=</span><span class="s1">&#39;Dresden&#39;</span><span class="p">,</span> <span class="n">city_destination</span><span class="o">=</span><span class="s1">&#39;Dresden&#39;</span><span class="p">,</span> <span class="n">time</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span>
-          <span class="n">deparr</span><span class="o">=</span><span class="s1">&#39;dep&#39;</span><span class="p">,</span> <span class="n">eduroam</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">raw</span><span class="o">=</span><span class="bp">False</span><span class="p">):</span>
+<div class="viewcode-block" id="route"><a class="viewcode-back" href="../Code.html#dvb.route">[docs]</a><span class="k">def</span> <span class="nf">route</span><span class="p">(</span><span class="n">origin</span><span class="p">,</span> <span class="n">destination</span><span class="p">,</span> <span class="n">city_origin</span><span class="o">=</span><span class="s1">&#39;Dresden&#39;</span><span class="p">,</span> <span class="n">city_destination</span><span class="o">=</span><span class="s1">&#39;Dresden&#39;</span><span class="p">,</span> <span class="n">time</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+          <span class="n">deparr</span><span class="o">=</span><span class="s1">&#39;dep&#39;</span><span class="p">,</span> <span class="n">eduroam</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">raw</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    VVO Online EFA TripRequest</span>
 <span class="sd">    (GET http://efa.vvo-online.de:8080/dvb/XML_TRIP_REQUEST2)</span>
@@ -228,7 +228,7 @@
 
     <span class="k">assert</span> <span class="n">deparr</span> <span class="o">==</span> <span class="s1">&#39;dep&#39;</span> <span class="ow">or</span> <span class="n">deparr</span> <span class="o">==</span> <span class="s1">&#39;arr&#39;</span>
 
-    <span class="n">time</span> <span class="o">=</span> <span class="n">datetime</span><span class="o">.</span><span class="n">now</span><span class="p">()</span> <span class="k">if</span> <span class="n">time</span> <span class="ow">is</span> <span class="bp">None</span> <span class="k">else</span> <span class="n">datetime</span><span class="o">.</span><span class="n">fromtimestamp</span><span class="p">(</span><span class="nb">int</span><span class="p">(</span><span class="n">datetime</span><span class="p">))</span>
+    <span class="n">time</span> <span class="o">=</span> <span class="n">datetime</span><span class="o">.</span><span class="n">now</span><span class="p">()</span> <span class="k">if</span> <span class="n">time</span> <span class="ow">is</span> <span class="kc">None</span> <span class="k">else</span> <span class="n">datetime</span><span class="o">.</span><span class="n">fromtimestamp</span><span class="p">(</span><span class="nb">int</span><span class="p">(</span><span class="n">time</span><span class="p">))</span>
 
     <span class="n">url</span> <span class="o">=</span> <span class="s1">&#39;http://efa.faplino.de/dvb/XML_TRIP_REQUEST2&#39;</span> <span class="k">if</span> <span class="n">eduroam</span> \
         <span class="k">else</span> <span class="s1">&#39;http://efa.vvo-online.de:8080/dvb/XML_TRIP_REQUEST2&#39;</span>
@@ -269,16 +269,16 @@
         <span class="k">if</span> <span class="n">r</span><span class="o">.</span><span class="n">status_code</span> <span class="o">==</span> <span class="mi">200</span><span class="p">:</span>
             <span class="n">response</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span><span class="n">r</span><span class="o">.</span><span class="n">content</span><span class="o">.</span><span class="n">decode</span><span class="p">(</span><span class="s1">&#39;utf-8&#39;</span><span class="p">))</span>
         <span class="k">else</span><span class="p">:</span>
-            <span class="k">raise</span> <span class="n">requests</span><span class="o">.</span><span class="n">HTTPError</span><span class="p">(</span><span class="s1">&#39;HTTP Status: {}&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">r</span><span class="o">.</span><span class="n">status_code</span><span class="p">))</span>
+            <span class="k">raise</span> <span class="n">requests</span><span class="o">.</span><span class="n">HTTPError</span><span class="p">(</span><span class="s1">&#39;HTTP Status: </span><span class="si">{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">r</span><span class="o">.</span><span class="n">status_code</span><span class="p">))</span>
     <span class="k">except</span> <span class="n">requests</span><span class="o">.</span><span class="n">Timeout</span><span class="p">:</span>
-        <span class="k">print</span><span class="p">(</span><span class="s1">&#39;Failed to access VVO TripRequest. Connection timed out. Are you connected to eduroam?&#39;</span><span class="p">)</span>
-        <span class="n">response</span> <span class="o">=</span> <span class="bp">None</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Failed to access VVO TripRequest. Connection timed out. Are you connected to eduroam?&#39;</span><span class="p">)</span>
+        <span class="n">response</span> <span class="o">=</span> <span class="kc">None</span>
     <span class="k">except</span> <span class="n">requests</span><span class="o">.</span><span class="n">RequestException</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
-        <span class="k">print</span><span class="p">(</span><span class="s1">&#39;Failed to access VVO TripRequest. Request Exception&#39;</span><span class="p">,</span> <span class="n">e</span><span class="p">)</span>
-        <span class="n">response</span> <span class="o">=</span> <span class="bp">None</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Failed to access VVO TripRequest. Request Exception&#39;</span><span class="p">,</span> <span class="n">e</span><span class="p">)</span>
+        <span class="n">response</span> <span class="o">=</span> <span class="kc">None</span>
 
-    <span class="k">if</span> <span class="n">response</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
-        <span class="k">return</span> <span class="bp">None</span>
+    <span class="k">if</span> <span class="n">response</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="k">return</span> <span class="kc">None</span>
 
     <span class="k">return</span> <span class="n">response</span> <span class="k">if</span> <span class="n">raw</span> <span class="k">else</span> <span class="p">{</span>
         <span class="s1">&#39;origin&#39;</span><span class="p">:</span> <span class="n">response</span><span class="p">[</span><span class="s1">&#39;origin&#39;</span><span class="p">][</span><span class="s1">&#39;points&#39;</span><span class="p">][</span><span class="s1">&#39;point&#39;</span><span class="p">][</span><span class="s1">&#39;name&#39;</span><span class="p">],</span>
@@ -289,7 +289,7 @@
     <span class="p">}</span></div>
 
 
-<div class="viewcode-block" id="find"><a class="viewcode-back" href="../Code.html#dvb.find">[docs]</a><span class="k">def</span> <span class="nf">find</span><span class="p">(</span><span class="n">search</span><span class="p">,</span> <span class="n">eduroam</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">raw</span><span class="o">=</span><span class="bp">False</span><span class="p">):</span>
+<div class="viewcode-block" id="find"><a class="viewcode-back" href="../Code.html#dvb.find">[docs]</a><span class="k">def</span> <span class="nf">find</span><span class="p">(</span><span class="n">search</span><span class="p">,</span> <span class="n">eduroam</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">raw</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    VVO Online EFA Stopfinder</span>
 <span class="sd">    (GET http://efa.vvo-online.de:8080/dvb/XML_STOPFINDER_REQUEST)</span>
@@ -319,15 +319,15 @@
         <span class="k">if</span> <span class="n">r</span><span class="o">.</span><span class="n">status_code</span> <span class="o">==</span> <span class="mi">200</span><span class="p">:</span>
             <span class="n">response</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span><span class="n">r</span><span class="o">.</span><span class="n">content</span><span class="o">.</span><span class="n">decode</span><span class="p">(</span><span class="s1">&#39;utf-8&#39;</span><span class="p">))</span>
         <span class="k">else</span><span class="p">:</span>
-            <span class="k">raise</span> <span class="n">requests</span><span class="o">.</span><span class="n">HTTPError</span><span class="p">(</span><span class="s1">&#39;HTTP Status: {}&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">r</span><span class="o">.</span><span class="n">status_code</span><span class="p">))</span>
+            <span class="k">raise</span> <span class="n">requests</span><span class="o">.</span><span class="n">HTTPError</span><span class="p">(</span><span class="s1">&#39;HTTP Status: </span><span class="si">{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">r</span><span class="o">.</span><span class="n">status_code</span><span class="p">))</span>
     <span class="k">except</span> <span class="n">requests</span><span class="o">.</span><span class="n">Timeout</span><span class="p">:</span>
-        <span class="k">print</span><span class="p">(</span><span class="s1">&#39;Failed to access VVO StopFinder. Connection timed out. Are you connected to eduroam?&#39;</span><span class="p">)</span>
-        <span class="n">response</span> <span class="o">=</span> <span class="bp">None</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Failed to access VVO StopFinder. Connection timed out. Are you connected to eduroam?&#39;</span><span class="p">)</span>
+        <span class="n">response</span> <span class="o">=</span> <span class="kc">None</span>
     <span class="k">except</span> <span class="n">requests</span><span class="o">.</span><span class="n">RequestException</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
-        <span class="k">print</span><span class="p">(</span><span class="s1">&#39;Failed to access VVO StopFinder. Request Exception&#39;</span><span class="p">,</span> <span class="n">e</span><span class="p">)</span>
-        <span class="n">response</span> <span class="o">=</span> <span class="bp">None</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Failed to access VVO StopFinder. Request Exception&#39;</span><span class="p">,</span> <span class="n">e</span><span class="p">)</span>
+        <span class="n">response</span> <span class="o">=</span> <span class="kc">None</span>
 
-    <span class="k">if</span> <span class="n">response</span> <span class="ow">is</span> <span class="bp">None</span> <span class="ow">or</span> <span class="n">raw</span><span class="p">:</span>
+    <span class="k">if</span> <span class="n">response</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">or</span> <span class="n">raw</span><span class="p">:</span>
         <span class="k">return</span> <span class="n">response</span>
 
     <span class="n">points</span> <span class="o">=</span> <span class="n">response</span><span class="p">[</span><span class="s1">&#39;stopFinder&#39;</span><span class="p">][</span><span class="s1">&#39;points&#39;</span><span class="p">]</span>
@@ -378,7 +378,7 @@
     <span class="k">return</span> <span class="n">coords</span>
 
 
-<div class="viewcode-block" id="pins"><a class="viewcode-back" href="../Code.html#dvb.pins">[docs]</a><span class="k">def</span> <span class="nf">pins</span><span class="p">(</span><span class="n">swlat</span><span class="p">,</span> <span class="n">swlng</span><span class="p">,</span> <span class="n">nelat</span><span class="p">,</span> <span class="n">nelng</span><span class="p">,</span> <span class="n">pintypes</span><span class="o">=</span><span class="s1">&#39;stop&#39;</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">raw</span><span class="o">=</span><span class="bp">False</span><span class="p">):</span>
+<div class="viewcode-block" id="pins"><a class="viewcode-back" href="../Code.html#dvb.pins">[docs]</a><span class="k">def</span> <span class="nf">pins</span><span class="p">(</span><span class="n">swlat</span><span class="p">,</span> <span class="n">swlng</span><span class="p">,</span> <span class="n">nelat</span><span class="p">,</span> <span class="n">nelng</span><span class="p">,</span> <span class="n">pintypes</span><span class="o">=</span><span class="s1">&#39;stop&#39;</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">raw</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    DVB Map Pins</span>
 <span class="sd">    (GET https://www.dvb.de/apps/map/pins)</span>
@@ -408,13 +408,13 @@
         <span class="k">if</span> <span class="n">r</span><span class="o">.</span><span class="n">status_code</span> <span class="o">==</span> <span class="mi">200</span><span class="p">:</span>
             <span class="n">response</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span><span class="n">r</span><span class="o">.</span><span class="n">content</span><span class="o">.</span><span class="n">decode</span><span class="p">(</span><span class="s1">&#39;utf-8&#39;</span><span class="p">))</span>
         <span class="k">else</span><span class="p">:</span>
-            <span class="k">raise</span> <span class="n">requests</span><span class="o">.</span><span class="n">HTTPError</span><span class="p">(</span><span class="s1">&#39;HTTP Status: {}&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">r</span><span class="o">.</span><span class="n">status_code</span><span class="p">))</span>
+            <span class="k">raise</span> <span class="n">requests</span><span class="o">.</span><span class="n">HTTPError</span><span class="p">(</span><span class="s1">&#39;HTTP Status: </span><span class="si">{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">r</span><span class="o">.</span><span class="n">status_code</span><span class="p">))</span>
     <span class="k">except</span> <span class="n">requests</span><span class="o">.</span><span class="n">RequestException</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
-        <span class="k">print</span><span class="p">(</span><span class="s1">&#39;Failed to access DVB map pins app. Request Exception&#39;</span><span class="p">,</span> <span class="n">e</span><span class="p">)</span>
-        <span class="n">response</span> <span class="o">=</span> <span class="bp">None</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Failed to access DVB map pins app. Request Exception&#39;</span><span class="p">,</span> <span class="n">e</span><span class="p">)</span>
+        <span class="n">response</span> <span class="o">=</span> <span class="kc">None</span>
 
-    <span class="k">if</span> <span class="n">response</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
-        <span class="k">return</span> <span class="bp">None</span>
+    <span class="k">if</span> <span class="n">response</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="k">return</span> <span class="kc">None</span>
 
     <span class="k">return</span> <span class="n">response</span> <span class="k">if</span> <span class="n">raw</span> <span class="k">else</span> <span class="p">[</span><span class="n">pins_return_results</span><span class="p">(</span><span class="n">line</span><span class="p">,</span> <span class="n">pintypes</span><span class="p">)</span> <span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="n">response</span><span class="p">]</span></div>
 
@@ -451,7 +451,7 @@
         <span class="p">}</span>
 
 
-<div class="viewcode-block" id="poi_coords"><a class="viewcode-back" href="../Code.html#dvb.poi_coords">[docs]</a><span class="k">def</span> <span class="nf">poi_coords</span><span class="p">(</span><span class="n">poi_id</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">raw</span><span class="o">=</span><span class="bp">False</span><span class="p">):</span>
+<div class="viewcode-block" id="poi_coords"><a class="viewcode-back" href="../Code.html#dvb.poi_coords">[docs]</a><span class="k">def</span> <span class="nf">poi_coords</span><span class="p">(</span><span class="n">poi_id</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">raw</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    DVB Map Coordinates</span>
 <span class="sd">    (GET https://www.dvb.de/apps/map/coordinates)</span>
@@ -470,12 +470,12 @@
         <span class="k">if</span> <span class="n">r</span><span class="o">.</span><span class="n">status_code</span> <span class="o">==</span> <span class="mi">200</span><span class="p">:</span>
             <span class="n">response</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span><span class="n">r</span><span class="o">.</span><span class="n">content</span><span class="o">.</span><span class="n">decode</span><span class="p">(</span><span class="s1">&#39;utf-8&#39;</span><span class="p">))</span>
         <span class="k">else</span><span class="p">:</span>
-            <span class="k">raise</span> <span class="n">requests</span><span class="o">.</span><span class="n">HTTPError</span><span class="p">(</span><span class="s1">&#39;HTTP Status: {}&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">r</span><span class="o">.</span><span class="n">status_code</span><span class="p">))</span>
+            <span class="k">raise</span> <span class="n">requests</span><span class="o">.</span><span class="n">HTTPError</span><span class="p">(</span><span class="s1">&#39;HTTP Status: </span><span class="si">{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">r</span><span class="o">.</span><span class="n">status_code</span><span class="p">))</span>
     <span class="k">except</span> <span class="n">requests</span><span class="o">.</span><span class="n">RequestException</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
-        <span class="k">print</span><span class="p">(</span><span class="s1">&#39;Failed to access DVB map coordinates app. Request Exception&#39;</span><span class="p">,</span> <span class="n">e</span><span class="p">)</span>
-        <span class="n">response</span> <span class="o">=</span> <span class="bp">None</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Failed to access DVB map coordinates app. Request Exception&#39;</span><span class="p">,</span> <span class="n">e</span><span class="p">)</span>
+        <span class="n">response</span> <span class="o">=</span> <span class="kc">None</span>
 
-    <span class="k">if</span> <span class="n">response</span> <span class="ow">is</span> <span class="bp">None</span> <span class="ow">or</span> <span class="n">raw</span><span class="p">:</span>
+    <span class="k">if</span> <span class="n">response</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">or</span> <span class="n">raw</span><span class="p">:</span>
         <span class="k">return</span> <span class="n">response</span>
 
     <span class="n">coords</span> <span class="o">=</span> <span class="p">[</span><span class="nb">int</span><span class="p">(</span><span class="n">i</span><span class="p">)</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">response</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;|&#39;</span><span class="p">)]</span>
@@ -486,7 +486,7 @@
     <span class="p">}</span></div>
 
 
-<div class="viewcode-block" id="address"><a class="viewcode-back" href="../Code.html#dvb.address">[docs]</a><span class="k">def</span> <span class="nf">address</span><span class="p">(</span><span class="n">lat</span><span class="p">,</span> <span class="n">lng</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">raw</span><span class="o">=</span><span class="bp">False</span><span class="p">):</span>
+<div class="viewcode-block" id="address"><a class="viewcode-back" href="../Code.html#dvb.address">[docs]</a><span class="k">def</span> <span class="nf">address</span><span class="p">(</span><span class="n">lat</span><span class="p">,</span> <span class="n">lng</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">raw</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    DVB Map Address</span>
 <span class="sd">    (GET https://www.dvb.de/apps/map/address)</span>
@@ -508,13 +508,13 @@
         <span class="k">if</span> <span class="n">r</span><span class="o">.</span><span class="n">status_code</span> <span class="o">==</span> <span class="mi">200</span><span class="p">:</span>
             <span class="n">response</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span><span class="n">r</span><span class="o">.</span><span class="n">content</span><span class="o">.</span><span class="n">decode</span><span class="p">(</span><span class="s1">&#39;utf-8&#39;</span><span class="p">))</span>
         <span class="k">else</span><span class="p">:</span>
-            <span class="k">raise</span> <span class="n">requests</span><span class="o">.</span><span class="n">HTTPError</span><span class="p">(</span><span class="s1">&#39;HTTP Status: {}&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">r</span><span class="o">.</span><span class="n">status_code</span><span class="p">))</span>
+            <span class="k">raise</span> <span class="n">requests</span><span class="o">.</span><span class="n">HTTPError</span><span class="p">(</span><span class="s1">&#39;HTTP Status: </span><span class="si">{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">r</span><span class="o">.</span><span class="n">status_code</span><span class="p">))</span>
     <span class="k">except</span> <span class="n">requests</span><span class="o">.</span><span class="n">RequestException</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
-        <span class="k">print</span><span class="p">(</span><span class="s1">&#39;Failed to access DVB map address app. Request Exception&#39;</span><span class="p">,</span> <span class="n">e</span><span class="p">)</span>
-        <span class="n">response</span> <span class="o">=</span> <span class="bp">None</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Failed to access DVB map address app. Request Exception&#39;</span><span class="p">,</span> <span class="n">e</span><span class="p">)</span>
+        <span class="n">response</span> <span class="o">=</span> <span class="kc">None</span>
 
-    <span class="k">if</span> <span class="n">response</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
-        <span class="k">return</span> <span class="bp">None</span>
+    <span class="k">if</span> <span class="n">response</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="k">return</span> <span class="kc">None</span>
     <span class="k">return</span> <span class="n">response</span> <span class="k">if</span> <span class="n">raw</span> <span class="k">else</span> <span class="n">process_address</span><span class="p">(</span><span class="n">response</span><span class="p">)</span></div>
 
 
@@ -525,8 +525,8 @@
             <span class="s1">&#39;address&#39;</span><span class="p">:</span> <span class="n">line</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;|&#39;</span><span class="p">)[</span><span class="mi">1</span><span class="p">]</span>
         <span class="p">}</span>
     <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
-        <span class="k">print</span><span class="p">(</span><span class="s1">&#39;Address not found. Error:&#39;</span><span class="p">,</span> <span class="n">e</span><span class="p">)</span>
-        <span class="k">return</span> <span class="bp">None</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Address not found. Error:&#39;</span><span class="p">,</span> <span class="n">e</span><span class="p">)</span>
+        <span class="k">return</span> <span class="kc">None</span>
 
 
 <span class="k">def</span> <span class="nf">wgs_to_gk4</span><span class="p">(</span><span class="n">lat</span><span class="p">,</span> <span class="n">lng</span><span class="p">):</span>
