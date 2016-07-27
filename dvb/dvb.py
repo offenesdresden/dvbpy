@@ -99,6 +99,7 @@ def route(origin, destination, city_origin='Dresden', city_destination='Dresden'
     :param time: Unix timestamp of departure
     :param deparr: 'dep' for departure time (default), or 'arr' for arrival
     :param eduroam: Request from eduroam
+    :param recommendations: Recommendations for interchange
     :param raw: Return raw response
     :return: List of single trips
     """
