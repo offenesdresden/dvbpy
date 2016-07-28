@@ -179,7 +179,7 @@ def interchange_prediction(trip):
     proj = pyproj.Proj(init='epsg:4326')
 
     # getting all intersections (interchanges), contains exactly three points
-    interchanges = [(incoming['path'][-2], # last point en route of the arriving route
+    interchanges = [(incoming['path'][-3], # second to last point en route of the arriving route
                 [int(x) / 1000000 for x in incoming['arrival']['coords'].split(',')], # stop point of the arriving route
                 [int(x) / 1000000 for x in outgoing['departure']['coords'].split(',')]) # start point of the departing route
                 for incoming, outgoing in zip(trip['nodes'][:-1], trip['nodes'][1:])]
