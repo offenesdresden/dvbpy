@@ -15,7 +15,7 @@ Get dvbpy from PyPi :)
 
 .. code:: shell
 
-    pip install dvbpy
+    pip install dvb
 
 And then just import it.
 
