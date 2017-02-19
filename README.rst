@@ -5,9 +5,7 @@ An unofficial python module giving you a few options to query a
 collection of publicly accessible API methods for Dresden's public
 transport system.
 
-In case you're looking for something like this for node.js, check out
-`dvbjs <https://github.com/kiliankoe/dvbjs>`__. Or Swift?
-See `DVB <https://github.com/kiliankoe/DVB>`__.
+Want something like this for another language, look `no further <https://github.com/kiliankoe/vvo#libraries>`__ 🙂
 
 The documentation is located `here <https://kiliankoe.github.io/dvbpy/>`__.
 
