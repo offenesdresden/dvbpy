@@ -22,6 +22,37 @@ def find(query):
     return response
 
 
+def monitor(stopid, timestamp=datetime.now(), is_arrival=False):
+    data = {
+        'stopid': stopid,
+        'timestamp': timestamp.strftime(''),  # TODO
+        'isarrival': is_arrival,
+        'limit': 0,
+        'shorttermchanges': True,
+        'mot': [
+            'Tram',
+            'CityBus',
+            'IntercityBus',
+            'SuburbanRailway',
+            'Train',
+            'Cableway',
+            'Ferry',
+            'HailedSharedTaxi'
+        ]
+    }
+    response = _send_post_request(WEBAPI_BASE_URL + 'dm', data)
+
+    departures = []
+    for departure in response['Departures']:
+        if 'RealTime' in departure:
+            departure['RealTime'] = _parse_datestring(departure['RealTime'])
+        departure['ScheduledTime'] = _parse_datestring(departure['ScheduledTime'])
+        departures.append(departure)
+    response['Departures'] = departures
+
+    return response
+
+
 def _send_post_request(url, data):
     try:
         r = requests.post(url, json=data)
@@ -57,47 +88,6 @@ class InterPos():
     FRONT = 0
     MIDDLE = 1
     BACK = 2
-
-
-def monitor(stop, offset=0, limit=10, city='Dresden', *, raw=False):
-    """
-    VVO Online Monitor
-    (GET http://widgets.vvo-online.de/abfahrtsmonitor/Abfahrten.do)
-
-    :param stop: Name of Stop
-    :param offset: Minimum time of arrival
-    :param limit: Count of returned results
-    :param city: Name of City
-    :param raw: Return raw response
-    :return: Dict of stops
-    """
-    try:
-        r = requests.get(
-            url='http://widgets.vvo-online.de/abfahrtsmonitor/Abfahrten.do',
-            params={
-                'ort': city,
-                'hst': stop,
-                'vz': offset,
-                'lim': limit,
-            },
-        )
-        if r.status_code == 200:
-            response = json.loads(r.content.decode('utf-8'))
-        else:
-            raise requests.HTTPError('HTTP Status: {}'.format(r.status_code))
-    except requests.RequestException as e:
-        print('Failed to access VVO monitor. Request Exception', e)
-        response = None
-
-    if response is None:
-        return None
-    return response if raw else [
-        {
-            'line': line,
-            'direction': direction,
-            'arrival': 0 if arrival == '' else int(arrival)
-        } for line, direction, arrival in response
-        ]
 
 
 def process_single_trip(single_trip):
