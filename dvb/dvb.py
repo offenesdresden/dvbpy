@@ -4,6 +4,54 @@ import pyproj
 from datetime import datetime
 import numpy as np
 
+WEBAPI_BASE_URL = 'https://webapi.vvo-online.de/'
+
+
+def find(query):
+    data = {
+        'limit': 0,
+        'query': query,
+        'stopsOnly': True,
+        'dvb': True,
+    }
+    response = _send_post_request(WEBAPI_BASE_URL + 'tr/pointfinder', data)
+
+    points = [_parse_stopstring(stopstring) for stopstring in response['Points']]
+    response['Points'] = points
+
+    return response
+
+
+def _send_post_request(url, data):
+    try:
+        r = requests.post(url, json=data)
+        if r.status_code == 200:
+            response = json.loads(r.content.decode('utf-8'))
+            response['ExpirationTime'] = _parse_datestring(response['ExpirationTime'])
+            return response
+        else:
+            raise requests.HTTPError('HTTP Status: {}'.format(r.status_code))
+
+    except requests.RequestException as e:
+        print('Failed to access {}. Request exception: {}'.format(url, e))
+        return None
+
+
+def _parse_stopstring(stopstring):
+    components = stopstring.split('|')
+    return {
+        'id': components[0],
+        'region': components[2],
+        'name': components[3],
+        'coords': gk4_to_wgs(components[4], components[5])
+    }
+
+
+def _parse_datestring(datestring):
+    millis = float(datestring.replace('/Date(', '').replace(')/', '').split('+')[0])
+    return datetime.fromtimestamp(millis / 1000)
+
+
 class InterPos():
     NO = None
     FRONT = 0
@@ -210,58 +258,6 @@ def interchange_prediction(trip):
                 trip['nodes'][i]['recommendation'] = InterPos.FRONT
 
     return trip
-
-
-def find(search, eduroam=False, *, raw=False):
-    """
-    VVO Online EFA Stopfinder
-    (GET http://efa.vvo-online.de:8080/dvb/XML_STOPFINDER_REQUEST)
-
-    :param search: Stop to find
-    :param eduroam: Request from eduroam
-    :param raw: Return raw response
-    :return: All matching stops
-    """
-
-    url = 'http://efa.faplino.de/dvb/XML_STOPFINDER_REQUEST' if eduroam \
-        else 'http://efa.vvo-online.de:8080/dvb/XML_STOPFINDER_REQUEST'
-
-    try:
-        r = requests.get(
-            url=url,
-            params={
-                'locationServerActive': '1',
-                'outputFormat': 'JSON',
-                'type_sf': 'any',
-                'name_sf': search,
-                'coordOutputFormat': 'WGS84',
-                'coordOutputFormatTail': '0',
-            },
-            timeout=10
-        )
-        if r.status_code == 200:
-            response = json.loads(r.content.decode('utf-8'))
-        else:
-            raise requests.HTTPError('HTTP Status: {}'.format(r.status_code))
-    except requests.Timeout:
-        print('Failed to access VVO StopFinder. Connection timed out. Are you connected to eduroam?')
-        response = None
-    except requests.RequestException as e:
-        print('Failed to access VVO StopFinder. Request Exception', e)
-        response = None
-
-    if response is None or raw:
-        return response
-
-    points = response['stopFinder']['points']
-    return [
-        # single result
-        find_return_results(points['point'])
-    ] if 'point' in points else [
-        # multiple results
-        find_return_results(stop)
-        for stop in points
-        ]
 
 
 def find_return_results(stop):
