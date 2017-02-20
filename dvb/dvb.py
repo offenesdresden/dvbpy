@@ -32,6 +32,11 @@ def find(query):
     return response
 
 
+def monitor_name(stopname, timestamp=datetime.now(), is_arrival=False, allowed_modes=ALL_TRANSPORT_MODES):
+    response = find(stopname)
+    return monitor(response['Points'][0]['id'], timestamp, is_arrival, allowed_modes)
+
+
 def monitor(stopid, timestamp=datetime.now(), is_arrival=False, allowed_modes=ALL_TRANSPORT_MODES):
     data = {
         'stopid': stopid,
