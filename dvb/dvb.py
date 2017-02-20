@@ -5,6 +5,16 @@ from datetime import datetime
 import numpy as np
 
 WEBAPI_BASE_URL = 'https://webapi.vvo-online.de/'
+ALL_TRANSPORT_MODES = [
+    'Tram',
+    'CityBus',
+    'IntercityBus',
+    'SuburbanRailway',
+    'Train',
+    'Cableway',
+    'Ferry',
+    'HailedSharedTaxi'
+]
 
 
 def find(query):
@@ -22,23 +32,14 @@ def find(query):
     return response
 
 
-def monitor(stopid, timestamp=datetime.now(), is_arrival=False):
+def monitor(stopid, timestamp=datetime.now(), is_arrival=False, allowed_modes=ALL_TRANSPORT_MODES):
     data = {
         'stopid': stopid,
-        'timestamp': timestamp.strftime(''),  # TODO
+        'timestamp': timestamp.isoformat(),
         'isarrival': is_arrival,
         'limit': 0,
         'shorttermchanges': True,
-        'mot': [
-            'Tram',
-            'CityBus',
-            'IntercityBus',
-            'SuburbanRailway',
-            'Train',
-            'Cableway',
-            'Ferry',
-            'HailedSharedTaxi'
-        ]
+        'mot': allowed_modes
     }
     response = _send_post_request(WEBAPI_BASE_URL + 'dm', data)
 
