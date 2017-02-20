@@ -54,6 +54,29 @@ def monitor(stopid, timestamp=datetime.now(), is_arrival=False, allowed_modes=AL
     return response
 
 
+def route_changes():
+    data = {
+        'shortterm': True
+    }
+    response = _send_post_request(WEBAPI_BASE_URL + 'rc', data)
+
+    # omfg, this is a stupid approach
+    changes = []
+    for change in response['Changes']:
+        change['PublishDate'] = _parse_datestring(change['PublishDate'])
+        validity_periods = []
+        for period in change['ValidityPeriods']:
+            period['Begin'] = _parse_datestring(period['Begin'])
+            if 'End' in period:
+                period['End'] = _parse_datestring(period['End'])
+            validity_periods.append(period)
+        change['ValidityPeriods'] = validity_periods
+        changes.append(change)
+    response['Changes'] = changes
+
+    return response
+
+
 def _send_post_request(url, data):
     try:
         r = requests.post(url, json=data)
