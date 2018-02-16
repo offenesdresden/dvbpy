@@ -16,9 +16,7 @@ class MonitorTestCase(unittest.TestCase):
 
     def test_departure_etas(self):
         departure = Departure({'ScheduledTime': '/Date(1518807600000+0100)/',
-                               'RealTime': '/Date(1518807780000+0100)/',
-                               'LineName': '85',
-                               'Direction': 'Löbtau Süd'})
+                               'RealTime': '/Date(1518807780000+0100)/'})
         now = datetime.fromtimestamp(1518807600)
 
         self.assertEqual(departure.scheduled_eta(from_date=now), 0)
