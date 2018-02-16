@@ -10,9 +10,9 @@ class MonitorTestCase(unittest.TestCase):
     def test_gets_response(self):
         response = Departure.fetch(33000013)
         self.assertGreater(len(response['departures']), 0)
-        self.assert_('name' in response)
-        self.assert_('place' in response)
-        self.assert_('expiration_time' in response)
+        self.assertTrue('name' in response)
+        self.assertTrue('place' in response)
+        self.assertTrue('expiration_time' in response)
 
     def test_departure_etas(self):
         departure = Departure({'ScheduledTime': '/Date(1518807600000+0100)/',
