@@ -12,10 +12,10 @@ class MonitorTestCase(unittest.TestCase):
         self.assertGreater(len(departures), 0)
 
     def test_departure_times(self):
-        departure = Departure.from_json({'ScheduledTime': '/Date(1518807600000+0100)/',
-                                         'RealTime': '/Date(1518807780000+0100)/',
-                                         'LineName': '85',
-                                         'Direction': 'Löbtau Süd'})
+        departure = Departure({'ScheduledTime': '/Date(1518807600000+0100)/',
+                               'RealTime': '/Date(1518807780000+0100)/',
+                               'LineName': '85',
+                               'Direction': 'Löbtau Süd'})
         now = datetime.fromtimestamp(1518807600)
 
         self.assertEqual(departure.scheduled_eta(from_date=now), 0)
