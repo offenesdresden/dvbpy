@@ -8,10 +8,13 @@ from dvb.monitor import Departure
 class MonitorTestCase(unittest.TestCase):
     @unittest.skipUnless(os.getenv('TEST_LIVE_DATA'), 'not testing live data')
     def test_gets_response(self):
-        departures = Departure.fetch(33000013)
-        self.assertGreater(len(departures), 0)
+        response = Departure.fetch(33000013)
+        self.assertGreater(len(response['departures']), 0)
+        self.assert_('name' in response)
+        self.assert_('place' in response)
+        self.assert_('expiration_time' in response)
 
-    def test_departure_times(self):
+    def test_departure_etas(self):
         departure = Departure({'ScheduledTime': '/Date(1518807600000+0100)/',
                                'RealTime': '/Date(1518807780000+0100)/',
                                'LineName': '85',

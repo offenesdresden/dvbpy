@@ -2,7 +2,7 @@ import json
 from datetime import datetime
 
 from .network import post
-from .util import sap_date_to_datetime, convert_to_snake_case
+from .util import sap_date_to_datetime
 
 
 class Departure:
@@ -10,17 +10,17 @@ class Departure:
         self._dict = _dict
 
     def __repr__(self):
-        return f'{self.line_name} {self.direction}'
+        return f'{self.line_name} {self.direction} in {self.fancy_eta()}'
 
     @staticmethod
-    def fetch(stop_id: int):
+    def fetch(stop_id: int) -> dict:
         """Fetch a list of departures for a given stop_id"""
         res = post('https://webapi.vvo-online.de/dm', {
             'stopid': stop_id
         })
-        j = json.loads(res)
-        departures = [Departure(dep) for dep in j['Departures']]
-        return departures
+        res['departures'] = [Departure(dep) for dep in res['departures']]
+        res['expiration_time'] = sap_date_to_datetime(res['expiration_time'])
+        return res
 
     @property
     def id(self) -> str or None:
@@ -87,5 +87,8 @@ class Departure:
 
         time_diff = self.real_time - self.scheduled_time
         minute_diff = int(time_diff.seconds / 60)
-        diff_str = str(minute_diff) if minute_diff < 0 else '+' + str(minute_diff)
-        return str(self.scheduled_eta(from_date=from_date)) + diff_str
+        if minute_diff == 0:
+            return str(self.scheduled_eta(from_date=from_date))
+        else:
+            diff_str = str(minute_diff) if minute_diff < 0 else '+' + str(minute_diff)
+            return str(self.scheduled_eta(from_date=from_date)) + diff_str
