@@ -1,6 +1,7 @@
 import json
 from datetime import datetime
 
+from .mode import Mode
 from .network import post
 from .date import sap_date_to_datetime
 
@@ -13,10 +14,21 @@ class Departure:
         return f'{self.line_name} {self.direction} in {self.fancy_eta()}'
 
     @staticmethod
-    def fetch(stop_id: int) -> dict:
+    def fetch(stop_id: int, time: datetime = None, is_arrival: bool = None, limit: int = None,
+              transport_modes: [Mode] = None) -> dict:
         """Fetch a list of departures for a given stop_id"""
+
+        time = datetime.now() if time is None else time
+        is_arrival = False if is_arrival is None else is_arrival
+        limit = 0 if limit is None else limit
+        transport_modes = Mode.all() if transport_modes is None else transport_modes
+
         res = post('https://webapi.vvo-online.de/dm', {
-            'stopid': stop_id
+            'stopid': stop_id,
+            'time': time.isoformat(),
+            'isarrival': is_arrival,
+            'limit': limit,
+            'mot': transport_modes
         })
         res['departures'] = [Departure(dep) for dep in res['departures']]
         res['expiration_time'] = sap_date_to_datetime(res['expiration_time'])
@@ -35,7 +47,7 @@ class Departure:
         return self._dict.get('Direction')
 
     @property
-    def mode(self) -> str or None:
+    def mode(self) -> Mode or None:
         return self._dict.get('Mot')
 
     @property
