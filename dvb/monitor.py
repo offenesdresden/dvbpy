@@ -34,9 +34,13 @@ class Departure:
             'limit': limit,
             'mot': transport_modes
         })
-        res['departures'] = [Departure(dep) for dep in res['departures']]
-        res['expiration_time'] = sap_date_to_datetime(res['expiration_time'])
-        return res
+
+        out = dict()
+        out['departures'] = [Departure(dep) for dep in res['Departures']]
+        out['expiration_time'] = sap_date_to_datetime(res['ExpirationTime'])
+        out['name'] = res['Name']
+        out['place'] = res['Place']
+        return out
 
     @property
     def id(self) -> str or None:

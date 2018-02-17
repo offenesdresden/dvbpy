@@ -37,6 +37,8 @@ class Stop:
             'stopsOnly': True,
             'dvb': True
         })
-        res['points'] = [Stop.from_str(s) for s in res['points']]
-        res['expiration_time'] = sap_date_to_datetime(res['expiration_time'])
-        return res
+
+        out = dict()
+        out['stops'] = [Stop.from_str(s) for s in res['Points']]
+        out['expiration_time'] = sap_date_to_datetime(res['ExpirationTime'])
+        return out
