@@ -41,7 +41,8 @@ class Stop:
         })
 
         out = dict()
-        stops = [Stop.from_str(s) for s in res.get('Points')]
+        points = res.get('Points') if res.get('Points') is not None else []
+        stops = [Stop.from_str(s) for s in points]
         stops = list(filter(lambda s: s is not None, stops))
         out['stops'] = stops
         out['status'] = res.get('PointStatus')
@@ -61,7 +62,8 @@ class Stop:
         })
 
         out = dict()
-        stops = [Stop.from_str(s) for s in res.get('Points')]
+        points = res.get('Points') if res.get('Points') is not None else []
+        stops = [Stop.from_str(s) for s in points]
         stops = list(filter(lambda s: s is not None, stops))
         out['stops'] = stops
         out['status'] = res.get('PointStatus')
