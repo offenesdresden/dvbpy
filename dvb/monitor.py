@@ -7,6 +7,11 @@ from .date import sap_date_to_datetime
 
 
 class Departure:
+    class State:
+        IN_TIME = 'InTime'
+        DELAYED = 'Delayed'
+        # CANCELLED = '?'
+
     def __init__(self, _dict):
         self._dict = _dict
 
@@ -51,7 +56,7 @@ class Departure:
         return self._dict.get('Mot')
 
     @property
-    def state(self) -> str or None:
+    def state(self) -> State or None:
         return self._dict.get('State')
 
     @property
