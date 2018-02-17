@@ -67,6 +67,10 @@ class Departure:
         return sap_date_to_datetime(real_time)
 
     @property
+    def platform(self) -> dict or None:
+        return self._dict.get('Platform')
+
+    @property
     def route_changes(self) -> [str] or None:
         return self._dict.get('RouteChanges')
 
