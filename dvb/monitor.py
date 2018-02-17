@@ -87,8 +87,17 @@ class Departure:
 
         time_diff = self.real_time - self.scheduled_time
         minute_diff = int(time_diff.seconds / 60)
+
+        scheduled_eta = self.scheduled_eta(from_date=from_date)
+        if scheduled_eta > 60:
+            hours = int(scheduled_eta / 60)
+            minutes = scheduled_eta % 60
+            scheduled_eta_str = '{}:{}'.format(hours, minutes)
+        else:
+            scheduled_eta_str = str(scheduled_eta)
+
         if minute_diff == 0:
-            return str(self.scheduled_eta(from_date=from_date))
+            return scheduled_eta_str
         else:
             diff_str = str(minute_diff) if minute_diff < 0 else '+' + str(minute_diff)
-            return str(self.scheduled_eta(from_date=from_date)) + diff_str
+            return scheduled_eta_str + diff_str
