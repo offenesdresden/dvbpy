@@ -1,9 +1,8 @@
-import json
 from datetime import datetime
 
+from .util.date import sap_date_to_datetime
 from .mode import Mode
 from .network import post
-from .date import sap_date_to_datetime
 
 
 class Departure:

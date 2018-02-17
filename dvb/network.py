@@ -2,7 +2,7 @@ import json
 
 import requests
 
-from .util import convert_to_snake_case
+from .util.other import convert_to_snake_case
 
 
 def post(url: str, params: dict = None) -> dict:

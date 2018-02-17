@@ -1,6 +1,6 @@
 import unittest
 
-from dvb.util import *
+from dvb.util.other import convert_to_snake_case
 
 
 class UtilitesTestCase(unittest.TestCase):

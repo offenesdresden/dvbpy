@@ -1,6 +1,6 @@
 import unittest
 
-from dvb.date import *
+from dvb.util.date import *
 
 
 class DateTestCase(unittest.TestCase):
