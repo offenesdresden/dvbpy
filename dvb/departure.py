@@ -113,6 +113,10 @@ class Departure:
         minute_diff = int(time_diff.seconds / 60)
 
         scheduled_eta = self.scheduled_eta(from_date=from_date)
+
+        if from_date > self.scheduled_time:
+            scheduled_eta = -(24 * 60 - scheduled_eta)
+
         if scheduled_eta > 60:
             hours = int(scheduled_eta / 60)
             minutes = scheduled_eta % 60

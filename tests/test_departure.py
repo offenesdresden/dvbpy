@@ -31,6 +31,9 @@ class MonitorTestCase(unittest.TestCase):
         eighteen_fifty_eight = datetime.fromtimestamp(1518803880)  # 16.02.18 18:58
         self.assertEqual(departure.fancy_eta(from_date=eighteen_fifty_eight), '1:02+3')
 
+        twenty_one = datetime.fromtimestamp(1518894060)  # 16.02.18 20:01
+        self.assertEqual(departure.fancy_eta(from_date=twenty_one), '-1+3')
+
     def test_departure_properties(self):
         departure = Departure({'Mot': 'Tram',
                                'LineName': '3',
