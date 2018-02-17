@@ -2,7 +2,7 @@ import json
 from datetime import datetime
 
 from .network import post
-from .util import sap_date_to_datetime
+from .date import sap_date_to_datetime
 
 
 class Departure:
