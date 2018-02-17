@@ -41,11 +41,11 @@ class Stop:
         })
 
         out = dict()
-        stops = [Stop.from_str(s) for s in res['Points'] if 'Points' in res]
+        stops = [Stop.from_str(s) for s in res.get('Points')]
         stops = list(filter(lambda s: s is not None, stops))
         out['stops'] = stops
-        out['status'] = res['PointStatus']
-        out['expiration_time'] = sap_date_to_datetime(res['ExpirationTime'])
+        out['status'] = res.get('PointStatus')
+        out['expiration_time'] = sap_date_to_datetime(res.get('ExpirationTime'))
         return out
 
     @staticmethod
@@ -61,9 +61,9 @@ class Stop:
         })
 
         out = dict()
-        stops = [Stop.from_str(s) for s in res['Points'] if 'Points' in res]
+        stops = [Stop.from_str(s) for s in res.get('Points')]
         stops = list(filter(lambda s: s is not None, stops))
         out['stops'] = stops
-        out['status'] = res['PointStatus']
-        out['expiration_time'] = sap_date_to_datetime(res['ExpirationTime'])
+        out['status'] = res.get('PointStatus')
+        out['expiration_time'] = sap_date_to_datetime(res.get('ExpirationTime'))
         return out

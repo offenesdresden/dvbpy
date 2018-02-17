@@ -36,10 +36,10 @@ class Departure:
         })
 
         out = dict()
-        out['departures'] = [Departure(dep) for dep in res['Departures'] if 'Departures' in res]
-        out['expiration_time'] = sap_date_to_datetime(res['ExpirationTime'])
-        out['name'] = res['Name']
-        out['place'] = res['Place']
+        out['departures'] = [Departure(dep) for dep in res.get('Departures')]
+        out['expiration_time'] = sap_date_to_datetime(res.get('ExpirationTime'))
+        out['name'] = res.get('Name')
+        out['place'] = res.get('Place')
         return out
 
     @property
