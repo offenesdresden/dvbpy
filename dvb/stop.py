@@ -41,7 +41,7 @@ class Stop:
         })
 
         out = dict()
-        stops = [Stop.from_str(s) for s in res['Points']]
+        stops = [Stop.from_str(s) for s in res['Points'] if 'Points' in res]
         stops = list(filter(lambda s: s is not None, stops))
         out['stops'] = stops
         out['status'] = res['PointStatus']
@@ -61,7 +61,7 @@ class Stop:
         })
 
         out = dict()
-        stops = [Stop.from_str(s) for s in res['Points']]
+        stops = [Stop.from_str(s) for s in res['Points'] if 'Points' in res]
         stops = list(filter(lambda s: s is not None, stops))
         out['stops'] = stops
         out['status'] = res['PointStatus']

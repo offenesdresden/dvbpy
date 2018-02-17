@@ -36,7 +36,7 @@ class Departure:
         })
 
         out = dict()
-        out['departures'] = [Departure(dep) for dep in res['Departures']]
+        out['departures'] = [Departure(dep) for dep in res['Departures'] if 'Departures' in res]
         out['expiration_time'] = sap_date_to_datetime(res['ExpirationTime'])
         out['name'] = res['Name']
         out['place'] = res['Place']
