@@ -1,15 +1,17 @@
 from datetime import datetime
+import re
 
 
 def sap_date_to_datetime(sap_str: str) -> datetime or None:
     """Convert date as str in format '/Date(1518807600000+0100)/' to datetime obj"""
     if sap_str is None:
         return None
-    sap_str = sap_str.replace('/Date(', '')
-    sap_str = sap_str.replace(')', '')
-    sap_str = sap_str.split('+')[0]
-    sap_str = sap_str.split('-')[0]  # FIXME
-    timestamp = int(sap_str) / 1000
+
+    pattern = r'\/Date\((\d+)[+-](\d+)\)\/'
+    matches = re.findall(pattern, sap_str)
+    ts_str, tz = matches[0]
+    # interestingly enough the timezone offset doesn't seem to be correct, so we're ignoring it for now 🤔
+    timestamp = int(ts_str) / 1000
     return datetime.fromtimestamp(timestamp)
 
 
