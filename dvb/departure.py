@@ -15,7 +15,7 @@ class Departure:
         self._dict = _dict
 
     def __repr__(self):
-        return f'{self.line_name} {self.direction} in {self.fancy_eta()}'
+        return '{} {} in {}'.format(self.line_name, self.direction, self.fancy_eta())
 
     @staticmethod
     def fetch(stop_id: int, time: datetime = None, is_arrival: bool = None, limit: int = None,
