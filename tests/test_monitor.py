@@ -7,7 +7,7 @@ from dvb.mode import Mode
 
 
 class MonitorTestCase(unittest.TestCase):
-    @unittest.skipUnless(os.getenv('TEST_LIVE_DATA'), 'not testing live data')
+    @unittest.skipUnless(os.getenv('TEST_LIVE_DATA'), 'monitor live tests')
     def test_gets_response(self):
         albert_platz = 33000013
         response = Departure.fetch(albert_platz)
