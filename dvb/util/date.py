@@ -8,6 +8,7 @@ def sap_date_to_datetime(sap_str: str) -> datetime or None:
     sap_str = sap_str.replace('/Date(', '')
     sap_str = sap_str.replace(')', '')
     sap_str = sap_str.split('+')[0]
+    sap_str = sap_str.split('-')[0]  # FIXME
     timestamp = int(sap_str) / 1000
     return datetime.fromtimestamp(timestamp)
 
