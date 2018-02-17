@@ -18,8 +18,8 @@ class Departure:
         return '{} {} in {}'.format(self.line_name, self.direction, self.fancy_eta())
 
     @staticmethod
-    def fetch(stop_id: int, time: datetime = None, is_arrival: bool = None, limit: int = None,
-              transport_modes: [Mode] = None) -> dict:
+    def for_stop(stop_id: int, time: datetime = None, is_arrival: bool = None, limit: int = None,
+                 transport_modes: [Mode] = None) -> dict:
         """Fetch a list of departures for a given stop_id"""
 
         time = datetime.now() if time is None else time
