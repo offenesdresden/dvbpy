@@ -117,7 +117,7 @@ class Departure:
         if from_date > self.scheduled_time:
             scheduled_eta = -(24 * 60 - scheduled_eta)
 
-        if scheduled_eta > 60:
+        if scheduled_eta >= 60:
             hours = int(scheduled_eta / 60)
             minutes = scheduled_eta % 60
             scheduled_eta_str = '{}:{:02}'.format(hours, minutes)
