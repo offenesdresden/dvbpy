@@ -1,5 +1,3 @@
-from .dvb import *
-
 from .stop import *
 from .departure import *
 from .mode import *
