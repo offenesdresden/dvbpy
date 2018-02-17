@@ -2,7 +2,7 @@ import os
 import unittest
 from datetime import datetime
 
-from dvb.monitor import Departure
+from dvb.departure import Departure
 from dvb.mode import Mode
 
 
