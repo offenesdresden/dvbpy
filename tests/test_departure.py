@@ -20,13 +20,13 @@ class MonitorTestCase(unittest.TestCase):
         departure = Departure({'ScheduledTime': '/Date(1518807600000+0100)/',
                                'RealTime': '/Date(1518807780000+0100)/'})
 
-        now = datetime.fromtimestamp(1518807600)  # 16.02.18 20:00
-        self.assertEqual(departure.scheduled_eta(from_date=now), 0)
-        self.assertEqual(departure.eta(from_date=now), 3)
-        self.assertEqual(departure.fancy_eta(from_date=now), '0+3')
+        twenty = datetime.fromtimestamp(1518807600)  # 16.02.18 20:00
+        self.assertEqual(departure.scheduled_eta(from_date=twenty), 0)
+        self.assertEqual(departure.eta(from_date=twenty), 3)
+        self.assertEqual(departure.fancy_eta(from_date=twenty), '0+3')
 
-        previous = datetime.fromtimestamp(1518802200)  # 16.02.18 18:30
-        self.assertEqual(departure.fancy_eta(from_date=previous), '1:30+3')
+        eighteen_thirty = datetime.fromtimestamp(1518802200)  # 16.02.18 18:30
+        self.assertEqual(departure.fancy_eta(from_date=eighteen_thirty), '1:30+3')
 
     def test_departure_properties(self):
         departure = Departure({'Mot': 'Tram',
