@@ -1,6 +1,6 @@
 from .network import post
 from .util.date import sap_date_to_datetime
-from .util.geo import gk4_to_wgs
+from .util.geo import gk4_to_wgs, wgs_to_gk4
 
 
 class Stop:
@@ -18,6 +18,8 @@ class Stop:
     def from_str(val: str):
         components = val.split('|')
         if len(components) != 9:
+            return None
+        if 'coord' in components[0]:
             return None
         ident = int(components[0])
         place = components[2] if components[2] != '' else 'Dresden'
@@ -39,6 +41,29 @@ class Stop:
         })
 
         out = dict()
-        out['stops'] = [Stop.from_str(s) for s in res['Points']]
+        stops = [Stop.from_str(s) for s in res['Points']]
+        stops = list(filter(lambda s: s is not None, stops))
+        out['stops'] = stops
+        out['status'] = res['PointStatus']
+        out['expiration_time'] = sap_date_to_datetime(res['ExpirationTime'])
+        return out
+
+    @staticmethod
+    def find_near(latitude: float, longitude: float, limit: int = None):
+        limit = 0 if limit is None else limit
+
+        (x, y) = wgs_to_gk4(latitude, longitude)
+
+        res = post('https://webapi.vvo-online.de/tr/pointfinder', {
+            'query': 'coord:{}:{}'.format(y, x),
+            'limit': limit,
+            'assignedstops': True,
+        })
+
+        out = dict()
+        stops = [Stop.from_str(s) for s in res['Points']]
+        stops = list(filter(lambda s: s is not None, stops))
+        out['stops'] = stops
+        out['status'] = res['PointStatus']
         out['expiration_time'] = sap_date_to_datetime(res['ExpirationTime'])
         return out
