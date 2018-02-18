@@ -107,14 +107,7 @@ class Departure:
         """Estimated time of arrival as string with offset if real time information is available."""
         from_date = datetime.now() if from_date is None else from_date
 
-        if self.real_time is None:
-            return str(self.scheduled_eta(from_date=from_date))
-
-        time_diff = self.real_time - self.scheduled_time
-        minute_diff = int(time_diff.seconds / 60)
-
         scheduled_eta = self.scheduled_eta(from_date=from_date)
-
         if from_date > self.scheduled_time:
             scheduled_eta = -(24 * 60 - scheduled_eta)
 
@@ -124,6 +117,12 @@ class Departure:
             scheduled_eta_str = '{}:{:02}'.format(hours, minutes)
         else:
             scheduled_eta_str = str(scheduled_eta)
+
+        if self.real_time is None:
+            return scheduled_eta_str
+
+        time_diff = self.real_time - self.scheduled_time
+        minute_diff = int(time_diff.seconds / 60)
 
         if minute_diff == 0:
             return scheduled_eta_str
