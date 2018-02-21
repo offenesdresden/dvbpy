@@ -16,12 +16,12 @@ class Route(JSONBase):
     @staticmethod
     def get(origin_id: int, destination_id: int, time: datetime = None, is_arrival: bool = None,
             allow_short_term_changes: bool = None, mobility_settings: dict = None,
-            standard_settings: dict = None) -> dict:
+            standard_settings: StandardSettings = None) -> dict:
 
         time = datetime.now() if time is None else time
         is_arrival = False if is_arrival is None else is_arrival
         allow_short_term_changes = True if allow_short_term_changes is None else allow_short_term_changes
-        mobility_settings = MobilitySettings.NO_RESTRICTION if mobility_settings is None else mobility_settings
+        mobility_settings = MobilitySettings.no_restriction() if mobility_settings is None else mobility_settings
         standard_settings = StandardSettings() if standard_settings is None else standard_settings
 
         res = post('https://webapi.vvo-online.de/tr/trips', dict(

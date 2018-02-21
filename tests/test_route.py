@@ -1,8 +1,8 @@
 import os
 import unittest
 
-from dvb.route import Route, RegularStop, Platform
 from dvb.mot_type import MotType
+from dvb.route import Route, RegularStop, Platform, StandardSettings, MobilitySettings
 
 
 class RouteTestCase(unittest.TestCase):
@@ -12,6 +12,33 @@ class RouteTestCase(unittest.TestCase):
         alp = 33000013
         route_res = Route.get(mup, alp)
         self.assertGreater(len(route_res['routes']), 0)
+
+    @unittest.skipUnless(os.getenv('TEST_LIVE_DATA'), 'route live tests')
+    def test_complex_gets_response(self):
+        elbepark = 33000588
+        fetscherplatz = 33000062
+
+        mobility_settings = MobilitySettings.individual()
+        mobility_settings['entrance'] = MobilitySettings.IndividualEntranceOptions.NO_STEP
+
+        standard_settings = StandardSettings()
+        standard_settings.walking_speed = StandardSettings.WalkingSpeed.SLOW
+        standard_settings.footpath_to_stop = StandardSettings.FootpathDistanceToStop.TEN
+
+        route_res = Route.get(elbepark, fetscherplatz,
+                              mobility_settings=mobility_settings,
+                              standard_settings=standard_settings)
+        self.assertGreater(len(route_res['routes']), 0)
+
+    def test_request_attrs(self):
+        self.assertTrue('leastChange' in MobilitySettings.individual())
+        self.assertEqual(MobilitySettings.individual()['entrance'], MobilitySettings.IndividualEntranceOptions.ANY)
+
+        standard_settings = StandardSettings()
+        standard_settings.walking_speed = StandardSettings.WalkingSpeed.SLOW
+        self.assertEqual(standard_settings.walking_speed, StandardSettings.WalkingSpeed.SLOW)
+        standard_settings.footpath_to_stop = StandardSettings.FootpathDistanceToStop.TEN
+        self.assertEqual(standard_settings.footpath_to_stop, StandardSettings.FootpathDistanceToStop.TEN)
 
     def test_subtype_deserialization(self):
         route = Route(dict(
