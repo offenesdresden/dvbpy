@@ -1,7 +1,7 @@
 from datetime import datetime
 
 from .util.date import sap_date_to_datetime
-from .mode import Mode
+from .mot_type import MotType
 from .network import post
 
 
@@ -19,13 +19,13 @@ class Departure:
 
     @staticmethod
     def for_stop(stop_id: int, time: datetime = None, is_arrival: bool = None, limit: int = None,
-                 transport_modes: [Mode] = None) -> dict:
+                 transport_modes: [MotType] = None) -> dict:
         """Fetch a list of departures for a given stop_id"""
 
         time = datetime.now() if time is None else time
         is_arrival = False if is_arrival is None else is_arrival
         limit = 0 if limit is None else limit
-        transport_modes = Mode.all() if transport_modes is None else transport_modes
+        transport_modes = MotType.all_request() if transport_modes is None else transport_modes
 
         res = post('https://webapi.vvo-online.de/dm', {
             'stopid': stop_id,
@@ -56,7 +56,7 @@ class Departure:
         return self._dict.get('Direction')
 
     @property
-    def mode(self) -> Mode or None:
+    def mot(self) -> MotType or None:
         return self._dict.get('Mot')
 
     @property
