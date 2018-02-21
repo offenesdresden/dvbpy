@@ -6,7 +6,7 @@ from dvb.mot_type import MotType
 
 
 class RouteTestCase(unittest.TestCase):
-    # @unittest.skipUnless(os.getenv('TEST_LIVE_DATA'), 'route live tests')
+    @unittest.skipUnless(os.getenv('TEST_LIVE_DATA'), 'route live tests')
     def test_gets_response(self):
         mup = 33000134
         alp = 33000013

@@ -24,17 +24,15 @@ class Route(JSONBase):
         mobility_settings = MobilitySettings.NO_RESTRICTION if mobility_settings is None else mobility_settings
         standard_settings = StandardSettings() if standard_settings is None else standard_settings
 
-        res = post('https://webapi.vvo-online.de/tr/trips?format=json', dict(
+        res = post('https://webapi.vvo-online.de/tr/trips', dict(
             origin=str(origin_id),
             destination=str(destination_id),
             time=time.isoformat(),
             isarrivaltime=is_arrival,
             shorttermchanges=allow_short_term_changes,
-            # mobilitySettings=mobility_settings,
-            # standardSettings=standard_settings._dict,
+            mobilitySettings=mobility_settings,
+            standardSettings=standard_settings._dict,
         ))
-
-        print(res)
 
         out = dict()
         routes = res.get('Routes') if res.get('Routes') is not None else []
