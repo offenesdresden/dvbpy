@@ -4,6 +4,7 @@ from .JSONBase import JSONBase
 from .diva import Diva
 from .mot_type import MotType
 from .network import post
+from .stop import Stop
 from .util.date import sap_date_to_datetime
 
 
@@ -17,8 +18,16 @@ class Departure(JSONBase):
         return '{} {} in {}'.format(self.line_name, self.direction, self.fancy_eta())
 
     @staticmethod
-    def for_stop(stop_id: int, time: datetime = None, is_arrival: bool = None, limit: int = None,
-                 transport_modes: [MotType] = None) -> dict:
+    def for_stop_name(stop_name: str, *args, **kwargs):
+        """Fetch a list of departures for a given stop_name. Warning: This sends a stopfinder request first!"""
+        stop_res = Stop.find(stop_name)
+        assert (len(stop_res['stops']) > 0)
+        stop_id = stop_res['stops'][0].id
+        return Departure.for_stop_id(stop_id, *args, **kwargs)
+
+    @staticmethod
+    def for_stop_id(stop_id: int, time: datetime = None, is_arrival: bool = None, limit: int = None,
+                    transport_modes: [MotType] = None) -> dict:
         """Fetch a list of departures for a given stop_id"""
 
         time = datetime.now() if time is None else time

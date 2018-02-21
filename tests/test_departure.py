@@ -10,7 +10,7 @@ class MonitorTestCase(unittest.TestCase):
     @unittest.skipUnless(os.getenv('TEST_LIVE_DATA'), 'monitor live tests')
     def test_gets_response(self):
         albert_platz = 33000013
-        response = Departure.for_stop(albert_platz)
+        response = Departure.for_stop_id(albert_platz)
         self.assertGreater(len(response['departures']), 0)
         self.assertTrue('name' in response)
         self.assertTrue('place' in response)

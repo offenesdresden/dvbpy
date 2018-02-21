@@ -3,6 +3,7 @@ from datetime import datetime
 from dvb.JSONBase import JSONBase
 from dvb.mot_type import MotType
 from dvb.network import post
+from dvb.stop import Stop
 from dvb.util.geo import gk4_to_wgs
 from .mot import Mot
 from .partial_route import PartialRoute
@@ -14,9 +15,20 @@ class Route(JSONBase):
         return f'Route {self.route_id} {self.duration}m'
 
     @staticmethod
+    def get_for_stop_names(origin_name: str, destination_name: str, *args, **kwargs):
+        """Find a route given two stop names. Warning: This sends two stopfinder requests first!"""
+        origin_res = Stop.find(origin_name)
+        assert (len(origin_res['stops']) > 0)
+        destination_res = Stop.find(destination_name)
+        assert (len(destination_res['stops']) > 0)
+
+        return Route.get(origin_res['stops'][0].id, destination_res['stops'][0].id, *args, **kwargs)
+
+    @staticmethod
     def get(origin_id: int, destination_id: int, time: datetime = None, is_arrival: bool = None,
             allow_short_term_changes: bool = None, mobility_settings: dict = None,
             standard_settings: StandardSettings = None) -> dict:
+        """Find a route matching the given parameters"""
 
         time = datetime.now() if time is None else time
         is_arrival = False if is_arrival is None else is_arrival
