@@ -22,7 +22,8 @@ class PartialRoute(JSONBase):
 
     @property
     def regular_stops(self) -> [RegularStop]:
-        regular_stops = [RegularStop(rs) for rs in self._get('RegularStops')]
+        raw_regular_stops = self._get('RegularStops') if self._get('RegularStops') is not None else []
+        regular_stops = [RegularStop(rs) for rs in raw_regular_stops]
         return regular_stops
 
     @property
