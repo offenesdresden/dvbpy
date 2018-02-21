@@ -1,6 +1,7 @@
-from .stop import *
 from .departure import *
-from .mode import *
+from .mot_type import *
+from .route import *
+from .stop import *
 
 """
 An unofficial python module giving you a few options to query a
