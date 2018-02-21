@@ -1,8 +1,9 @@
 from datetime import datetime
 
-from .util.date import sap_date_to_datetime
+from .diva import Diva
 from .mot_type import MotType
 from .network import post
+from .util.date import sap_date_to_datetime
 
 
 class Departure:
@@ -85,7 +86,7 @@ class Departure:
 
     @property
     def diva(self) -> dict or None:
-        return self._dict.get('Diva')
+        return Diva(self._dict.get('Diva'))
 
     def eta(self, from_date: datetime = None) -> int:
         """Estimated time of arrival in minutes from now. Returns scheduled ETA if real time is unknown."""

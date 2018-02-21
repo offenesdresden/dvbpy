@@ -48,3 +48,13 @@ class MonitorTestCase(unittest.TestCase):
         self.assertEqual(departure.direction, 'Wilder Mann')
         self.assertEqual(departure.platform, {'Name': '3', 'Type': 'Platform'})
         self.assertEqual(departure.state, Departure.State.IN_TIME)
+
+    def test_diva(self):
+        departure = Departure(dict(
+            Diva=dict(
+                Network='voe',
+                Number='11006'
+            )
+        ))
+        self.assertEqual(departure.diva.network, 'voe')
+        self.assertEqual(departure.diva.number, '11006')
