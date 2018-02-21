@@ -3,7 +3,7 @@ import unittest
 from datetime import datetime
 
 from dvb.departure import Departure
-from dvb.mode import Mode
+from dvb.mot_type import MotType
 
 
 class MonitorTestCase(unittest.TestCase):
@@ -43,7 +43,7 @@ class MonitorTestCase(unittest.TestCase):
                                    'Type': 'Platform'
                                },
                                'State': 'InTime'})
-        self.assertEqual(departure.mode, Mode.TRAM)
+        self.assertEqual(departure.mot, MotType.TRAM)
         self.assertEqual(departure.line_name, '3')
         self.assertEqual(departure.direction, 'Wilder Mann')
         self.assertEqual(departure.platform, {'Name': '3', 'Type': 'Platform'})
