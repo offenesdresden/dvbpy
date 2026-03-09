@@ -27,7 +27,7 @@ Homepage = "https://github.com/kiliankoe/dvbpy"
 Repository = "https://github.com/kiliankoe/dvbpy"
 
 [dependency-groups]
-dev = ["pytest>=8", "responses>=0.25", "mypy>=1.14", "ruff>=0.9"]
+dev = ["pytest>=8", "responses>=0.25", "mypy>=1.14", "ruff>=0.9", "types-requests>=2.32"]
 
 [tool.hatch.version]
 path = "dvb/__init__.py"
