@@ -1,0 +1,52 @@
+{
+  "Lines": [
+    {
+      "Name": "3",
+      "Mot": "Tram",
+      "Changes": ["5482"],
+      "Directions": [
+        {
+          "Name": "Dresden Wilder Mann",
+          "TimeTables": [
+            {
+              "Id": "voe:11003: :H:j19",
+              "Name": "Normalfahrplan"
+            }
+          ]
+        },
+        {
+          "Name": "Dresden Coschütz",
+          "TimeTables": [
+            {
+              "Id": "voe:11003: :R:j19",
+              "Name": "Normalfahrplan"
+            }
+          ]
+        }
+      ],
+      "Diva": {
+        "Number": "11003",
+        "Network": "voe"
+      }
+    },
+    {
+      "Name": "66",
+      "Mot": "CityBus",
+      "Changes": [],
+      "Directions": [
+        {
+          "Name": "Dresden Lockwitz",
+          "TimeTables": []
+        }
+      ],
+      "Diva": {
+        "Number": "21066",
+        "Network": "voe"
+      }
+    }
+  ],
+  "Status": {
+    "Code": "Ok"
+  },
+  "ExpirationTime": "/Date(1563544805289+0200)/"
+}

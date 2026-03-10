@@ -1,0 +1,12 @@
+{
+  "PointStatus": "List",
+  "Status": {
+    "Code": "Ok"
+  },
+  "Points": [
+    "33000742|||Helmholtzstraße|5655904|4621157|0||",
+    "36030083||Chemnitz|Helmholtzstr|5635837|4566835|0||",
+    "9022020||Bonn|Helmholtzstraße|0|0|0||"
+  ],
+  "ExpirationTime": "\/Date(1487859556456+0100)\/"
+}

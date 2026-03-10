@@ -1,0 +1,49 @@
+{
+  "Stops": [
+    {
+      "Id": "33000076",
+      "Place": "Dresden",
+      "Name": "Laibacher Straße",
+      "Position": "Previous",
+      "Platform": {
+        "Name": "2",
+        "Type": "Platform"
+      },
+      "Time": "\/Date(1512563021000+0100)\/",
+      "RealTime": "\/Date(1512563035000+0100)\/",
+      "State": "InTime",
+      "Latitude": 5654321,
+      "Longitude": 4621234,
+      "Occupancy": "Unknown"
+    },
+    {
+      "Id": "33000077",
+      "Place": "Dresden",
+      "Name": "Großglocknerstraße",
+      "Position": "Current",
+      "Platform": {
+        "Name": "2",
+        "Type": "Platform"
+      },
+      "Time": "\/Date(1512563081000+0100)\/",
+      "RealTime": "\/Date(1512563095000+0100)\/",
+      "State": "InTime",
+      "Occupancy": "ManySeats"
+    },
+    {
+      "Id": "33000078",
+      "Place": "Dresden",
+      "Name": "Friedhof Leuben",
+      "Position": "Next",
+      "Platform": {
+        "Name": "2",
+        "Type": "Platform"
+      },
+      "Time": "\/Date(1512563141000+0100)\/"
+    }
+  ],
+  "Status": {
+    "Code": "Ok"
+  },
+  "ExpirationTime": "\/Date(1512565171371+0100)\/"
+}
