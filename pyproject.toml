@@ -6,7 +6,7 @@ build-backend = "hatchling.build"
 name = "dvb"
 dynamic = ["version"]
 description = "An unofficial Python module for Dresden's public transport system (VVO/DVB)"
-readme = "README.rst"
+readme = "README.md"
 license = "MIT"
 requires-python = ">=3.10"
 authors = [{ name = "kiliankoe", email = "me@kilian.io" }]
