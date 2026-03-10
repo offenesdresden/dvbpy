@@ -1,0 +1,10 @@
+{
+  "Pins": [
+    "33000028||Dresden|Hauptbahnhof|5657497|4621685|",
+    "pf:1234||Dresden|Hauptbahnhof Gleis 3|5657500|4621690|3",
+    "pr:5678||Dresden|P+R Hauptbahnhof|5657400|4621600|"
+  ],
+  "Status": {
+    "Code": "Ok"
+  }
+}

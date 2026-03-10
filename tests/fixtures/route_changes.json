@@ -1,0 +1,37 @@
+{
+  "Changes": [
+    {
+      "Id": "511595",
+      "Title": "Dresden - Mengsstraße, Vollsperrung wegen Asphaltarbeiten",
+      "Description": "<p>Wegen Asphaltarbeiten ist die Mengsstraße voll gesperrt.</p>",
+      "Type": "Scheduled",
+      "TripRequestInclude": true,
+      "PublishDate": "/Date(1512400560000+0100)/",
+      "LineIds": ["428296"],
+      "ValidityPeriods": [
+        {
+          "Begin": "/Date(1512529200000+0100)/",
+          "End": "/Date(1512788400000+0100)/"
+        }
+      ]
+    },
+    {
+      "Id": "511600",
+      "Title": "Störung Linie 4",
+      "Description": "<p>Kurzfristige Störung.</p>",
+      "Type": "ShortTerm",
+      "TripRequestInclude": false,
+      "PublishDate": "/Date(1512500000000+0100)/",
+      "LineIds": ["428300", "428301"],
+      "ValidityPeriods": [
+        {
+          "Begin": "/Date(1512530000000+0100)/",
+          "End": "/Date(1512540000000+0100)/"
+        }
+      ]
+    }
+  ],
+  "Status": {
+    "Code": "Ok"
+  }
+}

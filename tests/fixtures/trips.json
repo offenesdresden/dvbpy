@@ -1,0 +1,76 @@
+{
+  "Routes": [
+    {
+      "RouteId": 1,
+      "Duration": 11,
+      "Interchanges": 0,
+      "Price": "2,30",
+      "PriceLevel": 1,
+      "FareZoneOrigin": 10,
+      "FareZoneDestination": 10,
+      "FareZoneNames": "TZ 10 (Dresden)",
+      "NumberOfFareZones": "1",
+      "RouteCancelled": false,
+      "MapData": ["Tram|5657496|4621684|5657555|4621712"],
+      "PartialRoutes": [
+        {
+          "PartialRouteId": 0,
+          "Duration": 11,
+          "MapDataIndex": 0,
+          "Shift": "None",
+          "TripCancelled": false,
+          "ChangeoverEndangered": false,
+          "Mot": {
+            "Name": "3",
+            "Type": "Tram",
+            "Direction": " Btf Trachenberge",
+            "Changes": ["510690"],
+            "Diva": {
+              "Network": "voe",
+              "Number": "11003"
+            }
+          },
+          "RegularStops": [
+            {
+              "DataId": "33000028",
+              "Name": "Hauptbahnhof",
+              "Place": "Dresden",
+              "Type": "Stop",
+              "Platform": {
+                "Name": "3",
+                "Type": "Railtrack"
+              },
+              "Latitude": 5657497,
+              "Longitude": 4621685,
+              "ArrivalTime": "/Date(1512769800000-0000)/",
+              "DepartureTime": "/Date(1512769800000-0000)/",
+              "ArrivalRealTime": "/Date(1512769800000-0000)/",
+              "DepartureRealTime": "/Date(1512769800000-0000)/",
+              "ArrivalState": "InTime",
+              "DepartureState": "InTime",
+              "Occupancy": "Unknown"
+            },
+            {
+              "DataId": "33000016",
+              "Name": "Bahnhof Neustadt",
+              "Place": "Dresden",
+              "Type": "Stop",
+              "Platform": {
+                "Name": "2",
+                "Type": "Platform"
+              },
+              "Latitude": 5660290,
+              "Longitude": 4622151,
+              "ArrivalTime": "/Date(1512770460000-0000)/",
+              "DepartureTime": "/Date(1512770460000-0000)/"
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "SessionId": "367417461:efa4",
+  "Status": {
+    "Code": "Ok"
+  }
+}

@@ -1,0 +1,49 @@
+{
+  "Name": "Helmholtzstraße",
+  "Status": {
+    "Code": "Ok"
+  },
+  "Place": "Dresden",
+  "ExpirationTime": "\/Date(1487778279147+0100)\/",
+  "Departures": [
+    {
+      "Id": "voe:11003: :H:j26",
+      "DlId": "de:vvo:11-3",
+      "LineName": "3",
+      "Direction": "Wilder Mann",
+      "Platform": {
+        "Name": "1",
+        "Type": "Platform"
+      },
+      "Mot": "Tram",
+      "RealTime": "\/Date(1487778230000+0100)\/",
+      "ScheduledTime": "\/Date(1487778060000+0100)\/",
+      "State": "Delayed",
+      "RouteChanges": ["509223"],
+      "Diva": {
+        "Number": "11003",
+        "Network": "voe"
+      },
+      "CancelReasons": [],
+      "Occupancy": "ManySeats"
+    },
+    {
+      "Id": "voe:11008: :H:j26",
+      "DlId": "de:vvo:11-8",
+      "LineName": "8",
+      "Direction": "Südvorstadt",
+      "Platform": {
+        "Name": "2",
+        "Type": "Platform"
+      },
+      "Mot": "Tram",
+      "ScheduledTime": "\/Date(1487778300000+0100)\/",
+      "State": "InTime",
+      "Diva": {
+        "Number": "11008",
+        "Network": "voe"
+      },
+      "Occupancy": "Unknown"
+    }
+  ]
+}
