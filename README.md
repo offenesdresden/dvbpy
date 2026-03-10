@@ -134,10 +134,11 @@ dvb.route_changes()
 
 ## Trip details
 
-Get all stops for a specific departure (using the ID from a monitor response).
+Get all stops for a specific departure (using the ID and time from a monitor response).
 
 ```python
-dvb.trip_details(trip_id="71313709", time="/Date(1512563081000+0100)/", stop_id="33000077")
+departure = dvb.monitor("Helmholtzstraße")[0]
+dvb.trip_details(trip_id=departure.id, time=departure.scheduled, stop_id="33000742")
 ```
 
 ## Reverse geocoding

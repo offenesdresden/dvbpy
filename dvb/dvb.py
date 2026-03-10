@@ -7,7 +7,7 @@ from typing import Any
 
 import requests
 
-from ._utils import coords_gk4_to_wgs, coords_wgs_to_gk4, parse_date, parse_point
+from ._utils import coords_gk4_to_wgs, coords_wgs_to_gk4, format_date, parse_date, parse_point
 from .exceptions import APIError
 from .exceptions import ConnectionError as DVBConnectionError
 from .models import (
@@ -510,7 +510,7 @@ def route_changes(*, raw: bool = False) -> list[RouteChange] | dict[str, Any]:
 
 def trip_details(
     trip_id: str,
-    time: str,
+    time: datetime,
     stop_id: str,
     *,
     raw: bool = False,
@@ -519,7 +519,7 @@ def trip_details(
 
     Args:
         trip_id: The departure ID from a monitor response.
-        time: Timestamp in /Date(...)/ format from the departure response.
+        time: Departure time (e.g. from Departure.scheduled).
         stop_id: ID of a stop on the route.
         raw: If True, return the raw API response dict.
 
@@ -532,7 +532,7 @@ def trip_details(
     """
     data = _post(
         "dm/trip",
-        {"tripid": trip_id, "time": time, "stopid": stop_id, "mapdata": True},
+        {"tripid": trip_id, "time": format_date(time), "stopid": stop_id, "mapdata": True},
     )
 
     if raw:

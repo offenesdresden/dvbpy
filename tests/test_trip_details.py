@@ -1,5 +1,7 @@
 from __future__ import annotations
 
+from datetime import datetime, timezone
+
 import dvb
 from dvb.models import RegularStop
 
@@ -11,7 +13,7 @@ class TestTripDetails:
         mock_post(mocked_responses, "dm/trip", fixture="trip_details.json")  # type: ignore[arg-type]
         results = dvb.trip_details(
             trip_id="71313709",
-            time="/Date(1512563081000+0100)/",
+            time=datetime(2017, 12, 6, 13, 24, 41, tzinfo=timezone.utc),
             stop_id="33000077",
         )
         assert isinstance(results, list)
@@ -29,7 +31,7 @@ class TestTripDetails:
         mock_post(mocked_responses, "dm/trip", fixture="trip_details.json")  # type: ignore[arg-type]
         results = dvb.trip_details(
             trip_id="71313709",
-            time="/Date(1512563081000+0100)/",
+            time=datetime(2017, 12, 6, 13, 24, 41, tzinfo=timezone.utc),
             stop_id="33000077",
         )
         assert isinstance(results, list)
@@ -41,7 +43,7 @@ class TestTripDetails:
         mock_post(mocked_responses, "dm/trip", fixture="trip_details.json")  # type: ignore[arg-type]
         results = dvb.trip_details(
             trip_id="71313709",
-            time="/Date(1512563081000+0100)/",
+            time=datetime(2017, 12, 6, 13, 24, 41, tzinfo=timezone.utc),
             stop_id="33000077",
         )
         assert isinstance(results, list)
@@ -53,7 +55,7 @@ class TestTripDetails:
         mock_post(mocked_responses, "dm/trip", fixture="trip_details.json")  # type: ignore[arg-type]
         results = dvb.trip_details(
             trip_id="71313709",
-            time="/Date(1512563081000+0100)/",
+            time=datetime(2017, 12, 6, 13, 24, 41, tzinfo=timezone.utc),
             stop_id="33000077",
         )
         assert isinstance(results, list)
@@ -66,7 +68,7 @@ class TestTripDetails:
         mock_post(mocked_responses, "dm/trip", fixture="trip_details.json")  # type: ignore[arg-type]
         results = dvb.trip_details(
             trip_id="71313709",
-            time="/Date(1512563081000+0100)/",
+            time=datetime(2017, 12, 6, 13, 24, 41, tzinfo=timezone.utc),
             stop_id="33000077",
         )
         assert isinstance(results, list)
@@ -78,7 +80,7 @@ class TestTripDetails:
         mock_post(mocked_responses, "dm/trip", fixture="trip_details.json")  # type: ignore[arg-type]
         results = dvb.trip_details(
             trip_id="71313709",
-            time="/Date(1512563081000+0100)/",
+            time=datetime(2017, 12, 6, 13, 24, 41, tzinfo=timezone.utc),
             stop_id="33000077",
         )
         assert isinstance(results, list)
@@ -89,7 +91,7 @@ class TestTripDetails:
         mock_post(mocked_responses, "dm/trip", fixture="trip_details.json")  # type: ignore[arg-type]
         result = dvb.trip_details(
             trip_id="71313709",
-            time="/Date(1512563081000+0100)/",
+            time=datetime(2017, 12, 6, 13, 24, 41, tzinfo=timezone.utc),
             stop_id="33000077",
             raw=True,
         )

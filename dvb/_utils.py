@@ -24,6 +24,12 @@ def parse_date(s: str) -> datetime:
     return datetime.fromtimestamp(ms / 1000, tz=timezone.utc)
 
 
+def format_date(dt: datetime) -> str:
+    """Format a datetime as Microsoft JSON date format: /Date(milliseconds-0000)/."""
+    ms = int(dt.timestamp() * 1000)
+    return f"/Date({ms}-0000)/"
+
+
 def parse_point(s: str) -> Stop:
     """Parse a pipe-delimited point string into a Stop.
 

@@ -1,6 +1,8 @@
+from datetime import datetime, timezone
+
 import pytest
 
-from dvb._utils import coords_gk4_to_wgs, coords_wgs_to_gk4, parse_date, parse_point
+from dvb._utils import coords_gk4_to_wgs, coords_wgs_to_gk4, format_date, parse_date, parse_point
 from dvb.models import Coords
 
 
@@ -22,6 +24,20 @@ class TestParseDate:
     def test_embedded_in_string(self) -> None:
         dt = parse_date('{"time": "/Date(1487778279147+0100)/"}')
         assert dt.year == 2017
+
+
+class TestFormatDate:
+    def test_basic(self) -> None:
+        dt = datetime(2017, 12, 6, 13, 24, 41, tzinfo=timezone.utc)
+        result = format_date(dt)
+        assert result.startswith("/Date(")
+        assert result.endswith(")/")
+
+    def test_round_trip(self) -> None:
+        dt = datetime(2017, 12, 6, 13, 24, 41, tzinfo=timezone.utc)
+        formatted = format_date(dt)
+        parsed = parse_date(formatted)
+        assert abs((parsed - dt).total_seconds()) < 1
 
 
 class TestParsePoint:
