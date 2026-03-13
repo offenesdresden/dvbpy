@@ -32,7 +32,7 @@ class Departure:
 
     id: str
     line: str # e.g. 3, 8, RE80
-    direction: str  # destination name
+    direction: str  # Most commonly name of last Station
     scheduled: datetime
     real_time: datetime | None = None
     state: str = ""  # real-time state, e.g. "InTime", "Delayed"
