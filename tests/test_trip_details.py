@@ -2,16 +2,16 @@ from __future__ import annotations
 
 from datetime import datetime, timezone
 
-import dvb
+from dvb import Client
 from dvb.models import RegularStop
 
 from .conftest import mock_post
 
 
 class TestTripDetails:
-    def test_parses_stops(self, mocked_responses: object) -> None:
+    def test_parses_stops(self, mocked_responses: object, client: Client) -> None:
         mock_post(mocked_responses, "dm/trip", fixture="trip_details.json")  # type: ignore[arg-type]
-        results = dvb.trip_details(
+        results = client.trip_details(
             trip_id="71313709",
             time=datetime(2017, 12, 6, 13, 24, 41, tzinfo=timezone.utc),
             stop_id="33000077",
@@ -27,9 +27,9 @@ class TestTripDetails:
         assert stop.platform is not None
         assert stop.platform.name == "2"
 
-    def test_stop_with_coords(self, mocked_responses: object) -> None:
+    def test_stop_with_coords(self, mocked_responses: object, client: Client) -> None:
         mock_post(mocked_responses, "dm/trip", fixture="trip_details.json")  # type: ignore[arg-type]
-        results = dvb.trip_details(
+        results = client.trip_details(
             trip_id="71313709",
             time=datetime(2017, 12, 6, 13, 24, 41, tzinfo=timezone.utc),
             stop_id="33000077",
@@ -39,9 +39,9 @@ class TestTripDetails:
         assert stop.coords is not None
         assert abs(stop.coords.lat - 51.0) < 0.1
 
-    def test_stop_without_coords(self, mocked_responses: object) -> None:
+    def test_stop_without_coords(self, mocked_responses: object, client: Client) -> None:
         mock_post(mocked_responses, "dm/trip", fixture="trip_details.json")  # type: ignore[arg-type]
-        results = dvb.trip_details(
+        results = client.trip_details(
             trip_id="71313709",
             time=datetime(2017, 12, 6, 13, 24, 41, tzinfo=timezone.utc),
             stop_id="33000077",
@@ -51,9 +51,9 @@ class TestTripDetails:
         stop = results[1]
         assert stop.coords is None
 
-    def test_time_parsing(self, mocked_responses: object) -> None:
+    def test_time_parsing(self, mocked_responses: object, client: Client) -> None:
         mock_post(mocked_responses, "dm/trip", fixture="trip_details.json")  # type: ignore[arg-type]
-        results = dvb.trip_details(
+        results = client.trip_details(
             trip_id="71313709",
             time=datetime(2017, 12, 6, 13, 24, 41, tzinfo=timezone.utc),
             stop_id="33000077",
@@ -64,9 +64,9 @@ class TestTripDetails:
         assert stop.arrival.year == 2017
         assert stop.arrival_real_time is not None
 
-    def test_stop_without_realtime(self, mocked_responses: object) -> None:
+    def test_stop_without_realtime(self, mocked_responses: object, client: Client) -> None:
         mock_post(mocked_responses, "dm/trip", fixture="trip_details.json")  # type: ignore[arg-type]
-        results = dvb.trip_details(
+        results = client.trip_details(
             trip_id="71313709",
             time=datetime(2017, 12, 6, 13, 24, 41, tzinfo=timezone.utc),
             stop_id="33000077",
@@ -76,9 +76,9 @@ class TestTripDetails:
         stop = results[2]
         assert stop.arrival_real_time is None
 
-    def test_occupancy(self, mocked_responses: object) -> None:
+    def test_occupancy(self, mocked_responses: object, client: Client) -> None:
         mock_post(mocked_responses, "dm/trip", fixture="trip_details.json")  # type: ignore[arg-type]
-        results = dvb.trip_details(
+        results = client.trip_details(
             trip_id="71313709",
             time=datetime(2017, 12, 6, 13, 24, 41, tzinfo=timezone.utc),
             stop_id="33000077",
@@ -87,9 +87,9 @@ class TestTripDetails:
         assert results[0].occupancy == "Unknown"
         assert results[1].occupancy == "ManySeats"
 
-    def test_raw_returns_dict(self, mocked_responses: object) -> None:
+    def test_raw_returns_dict(self, mocked_responses: object, client: Client) -> None:
         mock_post(mocked_responses, "dm/trip", fixture="trip_details.json")  # type: ignore[arg-type]
-        result = dvb.trip_details(
+        result = client.trip_details(
             trip_id="71313709",
             time=datetime(2017, 12, 6, 13, 24, 41, tzinfo=timezone.utc),
             stop_id="33000077",

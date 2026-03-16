@@ -7,6 +7,8 @@ from typing import Any
 import pytest
 import responses
 
+from dvb import Client
+
 FIXTURES = Path(__file__).parent / "fixtures"
 BASE_URL = "https://webapi.vvo-online.de"
 
@@ -21,6 +23,11 @@ def mocked_responses() -> responses.RequestsMock:
     """Activate responses mocking for the duration of a test."""
     with responses.RequestsMock() as rsps:
         yield rsps
+
+
+@pytest.fixture()
+def client() -> Client:
+    return Client(user_agent="dvb-test-suite/1.0 (test@test)")
 
 
 def mock_get(
