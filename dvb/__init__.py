@@ -2,19 +2,9 @@
 An unofficial Python module for querying Dresden's public transport system (VVO/DVB).
 """
 
-__version__ = "2.0.0"
+__version__ = "3.0.0"
 
-from .dvb import (
-    address,
-    earlier_later,
-    find,
-    lines,
-    monitor,
-    pins,
-    route,
-    route_changes,
-    trip_details,
-)
+from .dvb import Client
 from .exceptions import APIError, ConnectionError, DVBError
 from .models import (
     Coords,
@@ -31,16 +21,8 @@ from .models import (
 )
 
 __all__ = [
-    # Functions
-    "address",
-    "earlier_later",
-    "find",
-    "lines",
-    "monitor",
-    "pins",
-    "route",
-    "route_changes",
-    "trip_details",
+    # Client
+    "Client",
     # Exceptions
     "APIError",
     "ConnectionError",
