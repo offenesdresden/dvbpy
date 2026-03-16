@@ -9,13 +9,17 @@ pip install dvb
 ```
 
 ```python
-import dvb
+from dvb import Client
+
+client = Client(user_agent="my-app/1.0 (me@example.com)")
 ```
+
+All API access goes through a `Client` instance, which requires a `user_agent` string identifying your project and providing contact details.
 
 ## Find stops
 
 ```python
-dvb.find("Helmholtzstraße")
+client.find("Helmholtzstraße")
 ```
 
 ```python
@@ -29,7 +33,7 @@ dvb.find("Helmholtzstraße")
 ## Monitor a stop
 
 ```python
-dvb.monitor("Helmholtzstraße", limit=2)
+client.monitor("Helmholtzstraße", limit=2)
 ```
 
 ```python
@@ -54,7 +58,7 @@ Stop names are automatically resolved to IDs. You can also pass a numeric stop I
 ## Plan a route
 
 ```python
-dvb.route("Helmholtzstraße", "Postplatz")
+client.route("Helmholtzstraße", "Postplatz")
 ```
 
 ```python
@@ -80,14 +84,14 @@ dvb.route("Helmholtzstraße", "Postplatz")
 ]
 ```
 
-Use the `session_id` to paginate with `dvb.earlier_later()`.
+Use the `session_id` to paginate with `client.earlier_later()`.
 
 ## Map pins
 
 Search for stops, POIs, and other points of interest within a bounding box.
 
 ```python
-dvb.pins(51.04, 13.70, 51.05, 13.72, pin_types=("Stop", "Platform"))
+client.pins(51.04, 13.70, 51.05, 13.72, pin_types=("Stop", "Platform"))
 ```
 
 ```python
@@ -101,7 +105,7 @@ dvb.pins(51.04, 13.70, 51.05, 13.72, pin_types=("Stop", "Platform"))
 ## Lines at a stop
 
 ```python
-dvb.lines("33000742")
+client.lines("33000742")
 ```
 
 ```python
@@ -115,7 +119,7 @@ dvb.lines("33000742")
 ## Route changes
 
 ```python
-dvb.route_changes()
+client.route_changes()
 ```
 
 ```python
@@ -137,14 +141,14 @@ dvb.route_changes()
 Get all stops for a specific departure (using the ID and time from a monitor response).
 
 ```python
-departure = dvb.monitor("Helmholtzstraße")[0]
-dvb.trip_details(trip_id=departure.id, time=departure.scheduled, stop_id="33000742")
+departure = client.monitor("Helmholtzstraße")[0]
+client.trip_details(trip_id=departure.id, time=departure.scheduled, stop_id="33000742")
 ```
 
 ## Reverse geocoding
 
 ```python
-dvb.address(51.04373, 13.70320)
+client.address(51.04373, 13.70320)
 ```
 
 ```python
@@ -153,29 +157,39 @@ Stop(id='33000144', name='Tharandter Straße', city='Dresden', coords=Coords(...
 
 ## Raw responses
 
-All functions accept `raw=True` to get the unprocessed API response as a dict:
+All methods accept `raw=True` to get the unprocessed API response as a dict:
 
 ```python
-dvb.monitor("Helmholtzstraße", raw=True)
+client.monitor("Helmholtzstraße", raw=True)
 # Returns the raw JSON dict from the WebAPI
 ```
 
 ## Error handling
 
 ```python
-from dvb import APIError, ConnectionError
+from dvb import Client, APIError, ConnectionError
+
+client = Client(user_agent="my-app/1.0 (me@example.com)")
 
 try:
-    dvb.monitor("Helmholtzstraße")
+    client.monitor("Helmholtzstraße")
 except ConnectionError:
     print("Network error or timeout")
 except APIError:
     print("API returned an error")
 ```
 
+## Migrating from 2.x
+
+dvb 3.0 introduces a `Client` class that requires a `user_agent` string. This helps the DVB/VVO identify API consumers and provides them with a way to reach out if needed.
+
+- All functions have moved from `dvb.function()` to `client.function()` on a `Client` instance
+- `import dvb` + `dvb.monitor(...)` → `from dvb import Client` + `Client(user_agent="...").monitor(...)`
+- All method signatures remain the same
+
 ## Migrating from 1.x
 
-dvb 2.0 is a complete rewrite with breaking changes:
+dvb 2.0 was a complete rewrite with breaking changes:
 
 - All functions return frozen dataclasses instead of dicts/lists
 - Functions raise `APIError`/`ConnectionError` instead of printing errors and returning `None`
