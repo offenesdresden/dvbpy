@@ -1,15 +1,15 @@
 from __future__ import annotations
 
-import dvb
+from dvb import Client
 from dvb.models import Route
 
 from .conftest import mock_get, mock_post
 
 
 class TestRoute:
-    def test_parses_routes(self, mocked_responses: object) -> None:
+    def test_parses_routes(self, mocked_responses: object, client: Client) -> None:
         mock_post(mocked_responses, "tr/trips", fixture="trips.json")  # type: ignore[arg-type]
-        results = dvb.route("33000028", "33000016")
+        results = client.route("33000028", "33000016")
         assert isinstance(results, list)
         assert len(results) == 1
 
@@ -22,9 +22,9 @@ class TestRoute:
         assert r.cancelled is False
         assert r.session_id == "367417461:efa4"
 
-    def test_parses_legs(self, mocked_responses: object) -> None:
+    def test_parses_legs(self, mocked_responses: object, client: Client) -> None:
         mock_post(mocked_responses, "tr/trips", fixture="trips.json")  # type: ignore[arg-type]
-        results = dvb.route("33000028", "33000016")
+        results = client.route("33000028", "33000016")
         assert isinstance(results, list)
 
         leg = results[0].legs[0]
@@ -35,9 +35,9 @@ class TestRoute:
         assert leg.cancelled is False
         assert leg.changeover_endangered is False
 
-    def test_parses_regular_stops(self, mocked_responses: object) -> None:
+    def test_parses_regular_stops(self, mocked_responses: object, client: Client) -> None:
         mock_post(mocked_responses, "tr/trips", fixture="trips.json")  # type: ignore[arg-type]
-        results = dvb.route("33000028", "33000016")
+        results = client.route("33000028", "33000016")
         assert isinstance(results, list)
 
         stops = results[0].legs[0].stops
@@ -51,9 +51,9 @@ class TestRoute:
         assert stops[0].arrival is not None
         assert stops[0].departure is not None
 
-    def test_parses_path(self, mocked_responses: object) -> None:
+    def test_parses_path(self, mocked_responses: object, client: Client) -> None:
         mock_post(mocked_responses, "tr/trips", fixture="trips.json")  # type: ignore[arg-type]
-        results = dvb.route("33000028", "33000016")
+        results = client.route("33000028", "33000016")
         assert isinstance(results, list)
 
         path = results[0].legs[0].path
@@ -61,17 +61,16 @@ class TestRoute:
         assert len(path) == 2
         assert abs(path[0].lat - 51.0) < 0.1
 
-    def test_resolves_stop_names(self, mocked_responses: object) -> None:
-        # Two pointfinder calls (origin + dest), then trips
+    def test_resolves_stop_names(self, mocked_responses: object, client: Client) -> None:
         mock_get(mocked_responses, "tr/pointfinder", fixture="pointfinder.json")  # type: ignore[arg-type]
         mock_get(mocked_responses, "tr/pointfinder", fixture="pointfinder.json")  # type: ignore[arg-type]
         mock_post(mocked_responses, "tr/trips", fixture="trips.json")  # type: ignore[arg-type]
-        results = dvb.route("Helmholtzstraße", "Postplatz")
+        results = client.route("Helmholtzstraße", "Postplatz")
         assert isinstance(results, list)
         assert len(results) == 1
 
-    def test_raw_returns_dict(self, mocked_responses: object) -> None:
+    def test_raw_returns_dict(self, mocked_responses: object, client: Client) -> None:
         mock_post(mocked_responses, "tr/trips", fixture="trips.json")  # type: ignore[arg-type]
-        result = dvb.route("33000028", "33000016", raw=True)
+        result = client.route("33000028", "33000016", raw=True)
         assert isinstance(result, dict)
         assert "Routes" in result
