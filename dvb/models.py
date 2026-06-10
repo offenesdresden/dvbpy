@@ -31,8 +31,8 @@ class Departure:
     """A single upcoming departure from a stop."""
 
     id: str
-    line: str
-    direction: str  # destination name
+    line: str # e.g. 3, 8, RE80
+    direction: str  # Most commonly name of last Station
     scheduled: datetime
     real_time: datetime | None = None
     state: str = ""  # real-time state, e.g. "InTime", "Delayed"
@@ -62,9 +62,9 @@ class PartialRoute:
     """A single leg of a planned route, e.g. one tram ride within a multi-transfer journey."""
 
     duration: int  # in minutes
-    line: str
+    line: str # e.g. 3, 8, RE80
     mode: str  # e.g. "Tram", "CityBus", "Footpath", "StayForConnection"
-    direction: str
+    direction: str # Most commonly name of last Station
     stops: list[RegularStop]
     cancelled: bool = False
     changeover_endangered: bool = False  # transfer to the next leg is at risk
